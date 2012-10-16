@@ -25,6 +25,12 @@ file "promise-tests/lib/adapters/rsvp.js" => ["promise-tests", :update] do
   cp "tests/test-adapter.js", "promise-tests/lib/adapters/rsvp.js"
 end
 
+task :promise_test_dependencies => 'promise-tests' do
+  cd 'promise-tests' do
+    sh "npm install"
+  end
+end
+
 task :prepare_tests => "promise-tests/lib/adapters/rsvp.js"
 
 %w(promises-a.js always-async.js resolution-races.js returning-a-promise.js).each do |test|
@@ -35,7 +41,7 @@ task :prepare_tests => "promise-tests/lib/adapters/rsvp.js"
   task :prepare_tests => test
 end
 
-task :test do
+task :test => 'promise_test_dependencies' do
   cd "promise-tests" do
     sh "./node_modules/mocha/bin/mocha lib/promises-a.js lib/always-async.js lib/resolution-races.js lib/returning-a-promise.js --reporter spec"
   end
