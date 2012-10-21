@@ -1,35 +1,39 @@
-define(function(require, exports, module) { "use strict";
+define(function(require, exports, module) { 'use strict';
 
 var browserGlobal = (typeof window !== 'undefined') ? window : {};
 
-var MutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver;
+var postMessageSupport = ('postMessage' in browserGlobal) && (!browserGlobal.document.documentMode || browserGlobal.document.documentMode >= 9);
 var async;
 
-if (typeof process !== 'undefined') {
+if (typeof process !== 'undefined' &&
+  {}.toString.call(process) === '[object process]') {
   async = function(callback, binding) {
     process.nextTick(function() {
       callback.call(binding);
     });
   };
-} else if (MutationObserver) {
-  var queue = [];
+} else if (postMessageSupport) {
+  var queue = [], msg = 'drainQueue';
 
-  var observer = new MutationObserver(function() {
-    var toProcess = queue.slice();
-    queue = [];
+  var handler = function(e) {
+    if (e.source === browserGlobal && e.data === msg) {
+      e.stopPropagation();
 
-    toProcess.forEach(function(tuple) {
-      var callback = tuple[0], binding = tuple[1];
-      callback.call(binding);
-    });
-  });
+      var toProcess = queue.slice();
+      queue = [];
 
-  var element = document.createElement('div');
-  observer.observe(element, { attributes: true });
+      toProcess.forEach(function(tuple) {
+        var callback = tuple[0], binding = tuple[1];
+        callback.call(binding);
+      });
+    }
+  };
+
+  browserGlobal.addEventListener('message', handler);
 
   async = function(callback, binding) {
     queue.push([callback, binding]);
-    element.setAttribute('drainQueue', 'drainQueue');
+    browserGlobal.postMessage(msg, '*');
   };
 } else {
   async = function(callback, binding) {
