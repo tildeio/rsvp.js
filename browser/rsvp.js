@@ -128,7 +128,9 @@ var EventTarget = exports.EventTarget = {
   }
 };
 
-var Promise = exports.Promise = function() {
+var Promise = exports.Promise = function(binding) {
+  this.binding = binding || this;
+  
   this.on('promise:resolved', function(event) {
     this.trigger('success', { detail: event.detail });
   }, this);
@@ -145,7 +147,7 @@ var invokeCallback = function(type, promise, callback, event) {
 
   if (callback) {
     try {
-      value = callback(event.detail);
+      value = callback.call(promise.binding, event.detail);
     } catch(e) {
       error = e;
     }
@@ -170,7 +172,7 @@ var invokeCallback = function(type, promise, callback, event) {
 
 Promise.prototype = {
   then: function(done, fail) {
-    var thenPromise = new Promise();
+    var thenPromise = new Promise(this.binding);
 
     this.on('promise:resolved', function(event) {
       invokeCallback('resolve', thenPromise, done, event);
