@@ -1,42 +1,73 @@
-define(function(require, exports, module) { "use strict";
+define(function(require, exports, module) { 'use strict';
 
 var browserGlobal = (typeof window !== 'undefined') ? window : {};
 
 var MutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver;
+var _toString = {}.toString;
 var async;
 
-if (typeof process !== 'undefined') {
+var isPostMessageAsync = function() {
+  var isAsync = true;
+
+  if (!('postMessage' in browserGlobal)) return false;
+
+  var reciver = function() {
+    isAsync = false;
+  };
+
+  browserGlobal.addEventListener('message', reciver);
+  browserGlobal.postMessage('test', '*');
+  browserGlobal.removeEventListener('message', reciver);
+
+  return isAsync;
+};
+
+if (typeof process !== 'undefined' &&
+  _toString.call(process) === '[object process]') {
   async = function(callback, binding) {
     process.nextTick(function() {
       callback.call(binding);
     });
   };
-} else if (MutationObserver) {
-  var queue = [];
-
-  var observer = new MutationObserver(function() {
-    var toProcess = queue.slice();
-    queue = [];
-
-    toProcess.forEach(function(tuple) {
-      var callback = tuple[0], binding = tuple[1];
-      callback.call(binding);
-    });
-  });
-
-  var element = document.createElement('div');
-  observer.observe(element, { attributes: true });
-
-  async = function(callback, binding) {
-    queue.push([callback, binding]);
-    element.setAttribute('drainQueue', 'drainQueue');
-  };
 } else {
-  async = function(callback, binding) {
-    setTimeout(function() {
-      callback.call(binding);
-    }, 1);
+  var queue = [], msg = 'drainQueue';
+
+  var handler = function(e) {
+    if ((_toString.call(e) === '[object Array]' && e[0].type === 'attributes') || (e.source === browserGlobal && e.data === msg)) {
+      var toProcess = queue.slice();
+      queue = [];
+
+      toProcess.forEach(function(tuple) {
+        var callback = tuple[0], binding = tuple[1];
+        callback.call(binding);
+      });
+    }
   };
+
+  if (MutationObserver) {
+    var observer = new MutationObserver(handler);
+
+    var element = document.createElement('div');
+    observer.observe(element, { attributes: true });
+
+    async = function(callback, binding) {
+      queue.push([callback, binding]);
+      element.setAttribute(msg, msg);
+    };
+  } else if (isPostMessageAsync()) {
+    browserGlobal.addEventListener('message', handler);
+
+    async = function(callback, binding) {
+      queue.push([callback, binding]);
+      browserGlobal.postMessage(msg, '*');
+    };
+  } else {
+    async = function(callback, binding) {
+      setTimeout(function() {
+        callback.call(binding);
+      }, 1);
+    };
+  }
 }
 
 exports.async = async;
