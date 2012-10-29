@@ -3,9 +3,24 @@ define(function(require, exports, module) { 'use strict';
 var browserGlobal = (typeof window !== 'undefined') ? window : {};
 
 var MutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver;
-var postMessageSupport = ('postMessage' in browserGlobal) && (!document.documentMode || document.documentMode >= 9);
 var _toString = {}.toString;
 var async;
+
+var isPostMessageAsync = function() {
+  var isAsync = true;
+
+  if (!('postMessage' in browserGlobal)) return false;
+
+  var reciver = function() {
+    isAsync = false;
+  };
+
+  browserGlobal.addEventListener('message', reciver);
+  browserGlobal.postMessage('test', '*');
+  browserGlobal.removeEventListener('message', reciver);
+
+  return isAsync;
+};
 
 if (typeof process !== 'undefined' &&
   _toString.call(process) === '[object process]') {
@@ -39,7 +54,7 @@ if (typeof process !== 'undefined' &&
       queue.push([callback, binding]);
       element.setAttribute(msg, msg);
     };
-  } else if (postMessageSupport) {
+  } else if (isPostMessageAsync()) {
     browserGlobal.addEventListener('message', handler);
 
     async = function(callback, binding) {
