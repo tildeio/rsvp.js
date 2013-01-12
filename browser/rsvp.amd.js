@@ -153,6 +153,18 @@ define(
       }, this);
     };
 
+    Promise.fromDeferred = function(deferred) {
+      var promise = new Promise();
+      $.when(deferred)
+        .done(function() {
+          promise.resolve(Array.prototype.slice.call(arguments));
+        })
+        .fail(function() {
+          promise.reject(Array.prototype.slice.call(arguments));
+        });
+      return promise;
+    };
+
     var noop = function() {};
 
     var invokeCallback = function(type, promise, callback, event) {
