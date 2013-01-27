@@ -212,12 +212,13 @@
       return thenPromise;
     },
 
-    all: function(promises) {
-      return new PromiseSet(promises);
-    },
+    all: function(promises, done, fail) {
+      var promiseSet = new PromiseSet(promises);
 
-    thenAll: function(promises, done, fail) {
-      return this.all(promises).then(done, fail);
+      if (arguments.length === 1)
+        return promiseSet;
+
+      return promiseSet.then(done, fail);
     },
 
     resolve: function(value) {
