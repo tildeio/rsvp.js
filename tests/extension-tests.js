@@ -1,8 +1,8 @@
 /*global RSVP, describe, specify, assert */
 describe("RSVP extensions", function() {
-  describe("RSVP.all", function() {
+  describe("RSVP.PromiseSet", function() {
     specify('it should exist', function() {
-      assert(RSVP.all);
+      assert(RSVP.PromiseSet);
     });
 
     specify('fulfilled only after all of the other promises are fulfilled', function(done) {
@@ -17,7 +17,9 @@ describe("RSVP extensions", function() {
         second.resolve(true);
       }, 0);
 
-      RSVP.all([first, second]).then(function() {
+      var promiseSet = new RSVP.PromiseSet([first, second]);
+
+      promiseSet.then(function() {
         assert(first.isResolved);
         assert(second.isResolved);
         done();
@@ -36,7 +38,9 @@ describe("RSVP extensions", function() {
         second.resolve(true);
       }, 5000);
 
-      RSVP.all([first, second]).then(function() {
+      var promiseSet = new RSVP.PromiseSet([first, second]);
+
+      promiseSet.then(function() {
         assert(false);
       }, function() {
         assert(first.isRejected);
@@ -54,7 +58,9 @@ describe("RSVP extensions", function() {
       first.resolve(1);
       second.resolve(2);
 
-      RSVP.all([first, second, third]).then(function(results) {
+      var promiseSet = new RSVP.PromiseSet([first, second, third]);
+
+      promiseSet.then(function(results) {
         assert(results.length === 3);
         assert(results[0] === 1);
         assert(results[1] === 2);
@@ -64,7 +70,9 @@ describe("RSVP extensions", function() {
     });
 
     specify('resolves an empty array passed to RSVP.all()', function(done) {
-      RSVP.all([]).then(function(results) {
+      var promiseSet = new RSVP.PromiseSet([]);
+
+      promiseSet.then(function(results) {
         assert(results.length === 0);
         done();
       });
