@@ -244,7 +244,7 @@
         accum = [];
 
     if (count === 0)
-      this.resolve([]);
+      this.resolve(accum);
 
     function checkIn(index, event) {
       accum[index] = event;
