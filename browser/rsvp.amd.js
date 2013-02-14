@@ -6,7 +6,7 @@ define(
 
     var browserGlobal = (typeof window !== 'undefined') ? window : {};
 
-    var MutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver;
+    var MutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver || browserGlobal.MozMutationObserver;
     var RSVP;
 
     if (typeof process !== 'undefined' &&
