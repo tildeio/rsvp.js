@@ -212,6 +212,15 @@
       return thenPromise;
     },
 
+    all: function(promises, done, fail) {
+      var promiseSet = new PromiseSet(promises);
+
+      if (arguments.length === 1)
+        return promiseSet;
+
+      return promiseSet.then(done, fail);
+    },
+
     resolve: function(value) {
       resolve(this, value);
 
@@ -226,6 +235,42 @@
       this.reject = noop;
     }
   };
+
+  var PromiseSet = function(promises) {
+    Promise.apply(this);
+
+    var self = this,
+        count = promises.length,
+        accum = [];
+
+    if (count === 0)
+      this.resolve(accum);
+
+    function checkIn(index, event) {
+      accum[index] = event;
+
+      if (--count == 0)
+        self.resolve(accum);
+    }
+
+    for (var i in promises) {
+      promises[i].on('promise:resolved', function(index) {
+        return function(event) {
+          checkIn(index, event.detail);
+        };
+      }(i));
+
+      promises[i].on('promise:failed', function(index) {
+        return function(event) {
+          accum = [];
+          self.reject(event.detail);
+        };
+      }(i));
+    }
+  };
+
+  PromiseSet.prototype = Object.create(Promise.prototype);
+  PromiseSet.prototype.constructor = Promise;
 
   function resolve(promise, value) {
     config.async(function() {
@@ -243,38 +288,6 @@
     });
   }
 
-  function all(promises) {
-    var i, results = [];
-    var allPromise = new Promise();
-    var remaining = promises.length;
-
-    if (remaining === 0) {
-      allPromise.resolve([]);
-    }
-
-    var resolver = function(index) {
-      return function(value) {
-        resolve(index, value);
-      };
-    };
-
-    var resolve = function(index, value) {
-      results[index] = value;
-      if (--remaining === 0) {
-        allPromise.resolve(results);
-      }
-    };
-
-    var reject = function(error) {
-      allPromise.reject(error);
-    };
-
-    for (i = 0; i < remaining; i++) {
-      promises[i].then(resolver(i), reject);
-    }
-    return allPromise;
-  }
-
   EventTarget.mixin(Promise.prototype);
 
   function configure(name, value) {
@@ -282,8 +295,8 @@
   }
 
   exports.Promise = Promise;
+  exports.PromiseSet = PromiseSet;
   exports.Event = Event;
   exports.EventTarget = EventTarget;
-  exports.all = all;
   exports.configure = configure;
 })(window.RSVP = {});
