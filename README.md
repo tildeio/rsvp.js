@@ -49,6 +49,31 @@ promise.reject(error) // triggers second callback
 Once a promise has been resolved or rejected, it cannot be resolved or
 rejected again.
 
+Functions can make Promises and return them directly, but they can also return a Future,
+which works the same way but can't be resolved or rejected directly.  This makes it a bit
+more explicit about who has responsibility for resolving the Promise.
+
+```javascript
+var rememberName = function() {
+  var promise = new Promise();
+  
+  setTimeout(function() {
+    promise.resolve('Newman');
+  }, 1000);
+
+  return promise.future;
+});
+
+var nameFuture = rememberName();
+
+nameFuture.then(function(name) {
+  console.log('Hello... ' + name + '.');
+});
+
+//nameFuture.resolve() -> error
+//Error, can't resolve Future directly
+
+```
 Here is an example of a simple XHR2 wrapper written using RSVP.js:
 
 ```javascript

@@ -5,7 +5,7 @@ describe("RSVP extensions", function() {
       assert(RSVP.all);
     });
 
-    specify('fulfilled only after all of the other promises are fulfilled', function(done) {
+    specify('fulfilled only after all of the other promises are fulfilled, using futures', function(done) {
       var first = new RSVP.Promise();
       var second = new RSVP.Promise();
 
@@ -17,9 +17,29 @@ describe("RSVP extensions", function() {
         second.resolve(true);
       }, 0);
 
+      var firstFuture = first.future;
+      var secondFuture = second.future;
+      RSVP.all([firstFuture, secondFuture]).then(function() {
+        assert(firstFuture.wasResolved);
+        assert(secondFuture.wasResolved);
+        done();
+      });
+    });
+
+    specify('fulfilled only after all of the other promises are fulfilled', function(done) {
+      var first = new RSVP.Promise();
+      var second = new RSVP.Promise();
+      setTimeout(function() {
+        first.resolve(true);
+      }, 0);
+
+      setTimeout(function() {
+        second.resolve(true);
+      }, 0);
+
       RSVP.all([first, second]).then(function() {
-        assert(first.isResolved);
-        assert(second.isResolved);
+        assert(first.future.wasResolved);
+        assert(second.future.wasResolved);
         done();
       });
     });
@@ -39,8 +59,8 @@ describe("RSVP extensions", function() {
       RSVP.all([first, second]).then(function() {
         assert(false);
       }, function() {
-        assert(first.isRejected);
-        assert(!second.isResolved);
+        assert(first.future.wasRejected);
+        assert(!second.future.wasResolved);
         done();
       });
     });
