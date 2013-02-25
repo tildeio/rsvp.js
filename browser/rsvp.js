@@ -282,9 +282,30 @@
     config[name] = value;
   }
 
+  function wrap(thenable){
+    var promise = new Promise();
+
+    config.async(function(){
+      try {
+
+        thenable.then(function(value){
+          promise.resolve(value);
+        }, function(error){
+          promise.reject(error)
+        });
+
+      } catch(e) {
+        promise.reject(e)
+      }
+    });
+
+    return promise;
+  }
+
   exports.Promise = Promise;
   exports.Event = Event;
   exports.EventTarget = EventTarget;
   exports.all = all;
   exports.configure = configure;
+  exports.wrap = wrap;
 })(window.RSVP = {});
