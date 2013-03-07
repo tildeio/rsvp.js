@@ -1,150 +1,30 @@
 define(
-  ["exports"],
-  function(__exports__) {
+  ["rsvp/async","rsvp/events","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
+    var async = __dependency1__.async;
+    var EventTarget = __dependency2__.EventTarget;
+
     var config = {};
+    config.async = async;
 
-    var browserGlobal = (typeof window !== 'undefined') ? window : {};
+    var noop = function() {};
 
-    var MutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver;
-    var RSVP;
+    var Promise = function(resolver) {
+      var promise = this;
 
-    if (typeof process !== 'undefined' &&
-      {}.toString.call(process) === '[object process]') {
-      config.async = function(callback, binding) {
-        process.nextTick(function() {
-          callback.call(binding);
-        });
+      var resolvePromise = function(value) {
+        resolve(promise, value);
+        resolvePromise = noop;
+        rejectPromise = noop;
       };
-    } else if (MutationObserver) {
-      var queue = [];
 
-      var observer = new MutationObserver(function() {
-        var toProcess = queue.slice();
-        queue = [];
-
-        toProcess.forEach(function(tuple) {
-          var callback = tuple[0], binding = tuple[1];
-          callback.call(binding);
-        });
-      });
-
-      var element = document.createElement('div');
-      observer.observe(element, { attributes: true });
-
-      // Chrome Memory Leak: https://bugs.webkit.org/show_bug.cgi?id=93661
-      window.addEventListener('unload', function(){
-        observer.disconnect();
-        observer = null;
-      });
-
-      config.async = function(callback, binding) {
-        queue.push([callback, binding]);
-        element.setAttribute('drainQueue', 'drainQueue');
+      var rejectPromise = function(value) {
+        reject(promise, value);
+        resolvePromise = noop;
+        rejectPromise = noop;
       };
-    } else {
-      config.async = function(callback, binding) {
-        setTimeout(function() {
-          callback.call(binding);
-        }, 1);
-      };
-    }
 
-    var Event = function(type, options) {
-      this.type = type;
-
-      for (var option in options) {
-        if (!options.hasOwnProperty(option)) { continue; }
-
-        this[option] = options[option];
-      }
-    };
-
-    var indexOf = function(callbacks, callback) {
-      for (var i=0, l=callbacks.length; i<l; i++) {
-        if (callbacks[i][0] === callback) { return i; }
-      }
-
-      return -1;
-    };
-
-    var callbacksFor = function(object) {
-      var callbacks = object._promiseCallbacks;
-
-      if (!callbacks) {
-        callbacks = object._promiseCallbacks = {};
-      }
-
-      return callbacks;
-    };
-
-    var EventTarget = {
-      mixin: function(object) {
-        object.on = this.on;
-        object.off = this.off;
-        object.trigger = this.trigger;
-        return object;
-      },
-
-      on: function(eventNames, callback, binding) {
-        var allCallbacks = callbacksFor(this), callbacks, eventName;
-        eventNames = eventNames.split(/\s+/);
-        binding = binding || this;
-
-        while (eventName = eventNames.shift()) {
-          callbacks = allCallbacks[eventName];
-
-          if (!callbacks) {
-            callbacks = allCallbacks[eventName] = [];
-          }
-
-          if (indexOf(callbacks, callback) === -1) {
-            callbacks.push([callback, binding]);
-          }
-        }
-      },
-
-      off: function(eventNames, callback) {
-        var allCallbacks = callbacksFor(this), callbacks, eventName, index;
-        eventNames = eventNames.split(/\s+/);
-
-        while (eventName = eventNames.shift()) {
-          if (!callback) {
-            allCallbacks[eventName] = [];
-            continue;
-          }
-
-          callbacks = allCallbacks[eventName];
-
-          index = indexOf(callbacks, callback);
-
-          if (index !== -1) { callbacks.splice(index, 1); }
-        }
-      },
-
-      trigger: function(eventName, options) {
-        var allCallbacks = callbacksFor(this),
-            callbacks, callbackTuple, callback, binding, event;
-
-        if (callbacks = allCallbacks[eventName]) {
-          // Don't cache the callbacks.length since it may grow
-          for (var i=0; i<callbacks.length; i++) {
-            callbackTuple = callbacks[i];
-            callback = callbackTuple[0];
-            binding = callbackTuple[1];
-
-            if (typeof options !== 'object') {
-              options = { detail: options };
-            }
-
-            event = new Event(eventName, options);
-            callback.call(binding, event);
-          }
-        }
-      }
-    };
-
-    var Promise = function() {
       this.on('promise:resolved', function(event) {
         this.trigger('success', { detail: event.detail });
       }, this);
@@ -152,9 +32,11 @@ define(
       this.on('promise:failed', function(event) {
         this.trigger('error', { detail: event.detail });
       }, this);
-    };
 
-    var noop = function() {};
+      if (resolver) {
+        resolver(resolvePromise, rejectPromise);
+      }
+    };
 
     var invokeCallback = function(type, promise, callback, event) {
       var hasCallback = typeof callback === 'function',
@@ -175,16 +57,18 @@ define(
 
       if (value && typeof value.then === 'function') {
         value.then(function(value) {
-          promise.resolve(value);
+          resolve(promise, value);
         }, function(error) {
-          promise.reject(error);
+          reject(promise, error);
         });
       } else if (hasCallback && succeeded) {
-        promise.resolve(value);
+        resolve(promise, value);
       } else if (failed) {
-        promise.reject(error);
-      } else {
-        promise[type](value);
+        reject(promise, error);
+      } else if (type === 'resolve') {
+        resolve(promise, value);
+      } else if (type === 'reject') {
+        reject(promise, value);
       }
     };
 
@@ -192,15 +76,15 @@ define(
       then: function(done, fail) {
         var thenPromise = new Promise();
 
-        if (this.isResolved) {
+        if (this.isFulfilled) {
           config.async(function() {
-            invokeCallback('resolve', thenPromise, done, { detail: this.resolvedValue });
+            invokeCallback('resolve', thenPromise, done, { detail: this.fulfillmentValue });
           }, this);
         }
 
         if (this.isRejected) {
           config.async(function() {
-            invokeCallback('reject', thenPromise, fail, { detail: this.rejectedValue });
+            invokeCallback('reject', thenPromise, fail, { detail: this.rejectedReason });
           }, this);
         }
 
@@ -213,28 +97,14 @@ define(
         });
 
         return thenPromise;
-      },
-
-      resolve: function(value) {
-        resolve(this, value);
-
-        this.resolve = noop;
-        this.reject = noop;
-      },
-
-      reject: function(value) {
-        reject(this, value);
-
-        this.resolve = noop;
-        this.reject = noop;
       }
     };
 
     function resolve(promise, value) {
       config.async(function() {
         promise.trigger('promise:resolved', { detail: value });
-        promise.isResolved = true;
-        promise.resolvedValue = value;
+        promise.isFulfilled = true;
+        promise.fulfillmentValue = value;
       });
     }
 
@@ -242,7 +112,7 @@ define(
       config.async(function() {
         promise.trigger('promise:failed', { detail: value });
         promise.isRejected = true;
-        promise.rejectedValue = value;
+        promise.rejectedReason = value;
       });
     }
 
@@ -252,28 +122,28 @@ define(
       var remaining = promises.length;
 
       if (remaining === 0) {
-        allPromise.resolve([]);
+        resolve(allPromise, []);
       }
 
       var resolver = function(index) {
         return function(value) {
-          resolve(index, value);
+          resolveAll(index, value);
         };
       };
 
-      var resolve = function(index, value) {
+      var resolveAll = function(index, value) {
         results[index] = value;
         if (--remaining === 0) {
-          allPromise.resolve(results);
+          resolve(allPromise, results);
         }
       };
 
-      var reject = function(error) {
-        allPromise.reject(error);
+      var rejectAll = function(error) {
+        reject(allPromise, error);
       };
 
       for (i = 0; i < remaining; i++) {
-        promises[i].then(resolver(i), reject);
+        promises[i].then(resolver(i), rejectAll);
       }
       return allPromise;
     }
@@ -284,9 +154,21 @@ define(
       config[name] = value;
     }
 
+    function defer() {
+      var deferred = {};
+
+      var promise = new Promise(function(resolve, reject) {
+        deferred.resolve = resolve;
+        deferred.reject = reject;
+      });
+
+      deferred.promise = promise;
+      return deferred;
+    }
+
+
     __exports__.Promise = Promise;
-    __exports__.Event = Event;
-    __exports__.EventTarget = EventTarget;
     __exports__.all = all;
+    __exports__.defer = defer;
     __exports__.configure = configure;
   });
