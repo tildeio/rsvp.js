@@ -1,5 +1,87 @@
 /*global RSVP, describe, specify, assert */
 describe("RSVP extensions", function() {
+  describe("RSVP.wrap", function(){
+    specify("it should exist", function(){
+      assert(RSVP.wrap);
+    });
+
+    specify("async", function(done){
+      var callCount = 0,
+      thenable = {
+        then: function(){
+          callCount++;
+        }
+      },
+      wrapped = RSVP.wrap(thenable);
+
+      assert(callCount === 0, 'expected async, was sync');
+
+      setTimeout(function(){
+        assert(callCount === 1, 'timeout');
+        done();
+      }, 50);
+
+    });
+
+    specify("reject on setup failure", function(){
+      var callCount = 0,
+      theError = 'the error',
+      thenable = {
+        then: function(){
+          callCount++;
+          throw theError;
+        }
+      },
+      wrapped = RSVP.wrap(thenable);
+
+      assert(callCount === 0, 'expected async, was sync');
+
+      wrapped.then(null, function(error){
+        assert(callCount === 1, 'timeout');
+        assert(error === theError, 'expect error was thrown');
+        done();
+      })
+    });
+
+    specify("resolves foreign promise", function(){
+      var callCount = 0,
+      theValue = 'the value',
+      thenable = {
+        then: function(success, failure){
+          success(theValue)
+        }
+      },
+      wrapped = RSVP.wrap(thenable);
+
+      assert(callCount === 0, 'expected async, was sync');
+
+      wrapped.then(function(value){
+        assert(callCount === 1, 'timeout');
+        assert(value === theValue);
+        done();
+      })
+    });
+
+    specify("rejects foreign promise", function(){
+      var callCount = 0,
+      theError = 'the error',
+      thenable = {
+        then: function(success, failure){
+          failure(theError);
+        }
+      },
+      wrapped = RSVP.wrap(thenable);
+
+      assert(callCount === 0, 'expected async, was sync');
+
+      wrapped.then(function(value){
+        assert(callCount === 1, 'timeout');
+        assert(value === 'success');
+        done();
+      })
+    });
+  });
+
   describe("RSVP.all", function() {
     specify('it should exist', function() {
       assert(RSVP.all);

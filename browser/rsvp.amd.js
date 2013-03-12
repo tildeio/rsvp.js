@@ -284,9 +284,30 @@ define(
       config[name] = value;
     }
 
+    function wrap(thenable){
+      var promise = new Promise();
+
+      config.async(function(){
+        try {
+
+          thenable.then(function(value){
+            promise.resolve(value);
+          }, function(error){
+            promise.reject(error)
+          });
+
+        } catch(e) {
+          promise.reject(e)
+        }
+      });
+
+      return promise;
+    }
+
     __exports__.Promise = Promise;
     __exports__.Event = Event;
     __exports__.EventTarget = EventTarget;
     __exports__.all = all;
     __exports__.configure = configure;
+    __exports__.wrap = wrap;
   });
