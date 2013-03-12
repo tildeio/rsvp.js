@@ -166,8 +166,24 @@ define(
       return deferred;
     }
 
+    function wrap(thenable){
+      var promise = new Promise(function(resolve, reject){
+        config.async(function(){
+
+          try {
+            thenable.then(resolve, reject);
+          } catch(error) {
+            reject(error);
+          }
+
+        });
+      });
+      return promise;
+    }
+
     __exports__.Promise = Promise;
     __exports__.all = all;
     __exports__.defer = defer;
     __exports__.configure = configure;
+    __exports__.wrap = wrap;
   });
