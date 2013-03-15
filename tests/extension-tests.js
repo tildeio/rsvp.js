@@ -1,5 +1,105 @@
 /*global RSVP, describe, specify, assert */
 describe("RSVP extensions", function() {
+  function isPromise(value) {
+    return value && typeof value.then === 'function';
+  }
+
+  describe('RSVP.resolve', function() {
+    it('exists', function() {
+      assert(RSVP.resolve);
+    });
+
+    it('returns a resolved promise for a value', function(done) {
+      var value = new Object();
+
+      RSVP.resolve(value).then(function(arg) {
+        assert(arg === value);
+        done();
+      });
+    });
+  });
+
+  describe('RSVP.reject', function() {
+    it('exists', function() {
+      assert(RSVP.reject);
+    });
+
+    it('returns a rejected promise for a value', function(done) {
+      var value = new Object();
+
+      RSVP.reject(value).then(function() {
+        assert(false);
+      }, function (arg) {
+        assert(arg === value);
+        done();
+      });
+    });
+  });
+
+  describe('RSVP.when', function() {
+    it('exists', function() {
+      assert(RSVP.when);
+    });
+
+    describe('when given a value', function() {
+      it('returns a promise', function() {
+        var value = new Object();
+        assert(isPromise(RSVP.when(value)));
+      });
+
+      it('calls the success handler with that value', function(done) {
+        var value = new Object();
+
+        RSVP.when(value, function(arg) {
+          assert(arg === value);
+          done();
+        });
+      });
+    });
+
+    describe('when given a resolved promise', function() {
+      it('returns a promise', function() {
+        var promise = new RSVP.Promise();
+        promise.resolve(1);
+        var returnValue = RSVP.when(promise);
+        assert(returnValue);
+        assert(isPromise(returnValue));
+      });
+
+      it('calls the success handler with the resolved value of that promise', function(done) {
+        var promise = new RSVP.Promise();
+        var value = new Object();
+        promise.resolve(value);
+
+        RSVP.when(promise, function (arg) {
+          assert(arg === value);
+          done();
+        });
+      });
+    });
+
+    describe('when given a rejected promise', function() {
+      it('returns a promise', function() {
+        var promise = new RSVP.Promise();
+        promise.reject(1);
+        var returnValue = RSVP.when(promise);
+        assert(returnValue);
+        assert(isPromise(returnValue));
+      });
+
+      it('calls the rejection handler with the value of that promise', function(done) {
+        var promise = new RSVP.Promise();
+        var value = new Object();
+        promise.resolve(value);
+
+        RSVP.when(promise, function (arg) {
+          assert(arg === value);
+          done();
+        });
+      });
+    });
+  });
+
   describe("RSVP.all", function() {
     specify('it should exist', function() {
       assert(RSVP.all);
@@ -60,6 +160,25 @@ describe("RSVP extensions", function() {
         assert(results[1] === 2);
         assert(results[2] === 3);
         done();
+      });
+    });
+
+    describe('when given an array of values and promises', function() {
+      it('resolves with all values in the correct order', function(done) {
+        var first = new RSVP.Promise();
+        var second = new RSVP.Promise();
+        var third = 3;
+
+        second.resolve(2);
+        first.resolve(1);
+
+        RSVP.all([first, second, third]).then(function(results) {
+          assert(results.length === 3);
+          assert(results[0] === 1);
+          assert(results[1] === 2);
+          assert(results[2] === 3);
+          done();
+        });
       });
     });
 
