@@ -163,6 +163,25 @@ describe("RSVP extensions", function() {
       });
     });
 
+    describe('when given an array of values and promises', function() {
+      it('resolves with all values in the correct order', function(done) {
+        var first = new RSVP.Promise();
+        var second = new RSVP.Promise();
+        var third = 3;
+
+        second.resolve(2);
+        first.resolve(1);
+
+        RSVP.all([first, second, third]).then(function(results) {
+          assert(results.length === 3);
+          assert(results[0] === 1);
+          assert(results[1] === 2);
+          assert(results[2] === 3);
+          done();
+        });
+      });
+    });
+
     specify('resolves an empty array passed to RSVP.all()', function(done) {
       RSVP.all([]).then(function(results) {
         assert(results.length === 0);
