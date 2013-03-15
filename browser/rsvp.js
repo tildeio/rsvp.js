@@ -214,21 +214,21 @@
     },
 
     resolve: function(value) {
-      resolve(this, value);
+      resolvePromise(this, value);
 
       this.resolve = noop;
       this.reject = noop;
     },
 
     reject: function(value) {
-      reject(this, value);
+      rejectPromise(this, value);
 
       this.resolve = noop;
       this.reject = noop;
     }
   };
 
-  function resolve(promise, value) {
+  function resolvePromise(promise, value) {
     config.async(function() {
       promise.trigger('promise:resolved', { detail: value });
       promise.isResolved = true;
@@ -236,12 +236,36 @@
     });
   }
 
-  function reject(promise, value) {
+  function rejectPromise(promise, value) {
     config.async(function() {
       promise.trigger('promise:failed', { detail: value });
       promise.isRejected = true;
       promise.rejectedValue = value;
     });
+  }
+
+  function resolve(value) {
+    var promise = new Promise();
+    promise.resolve(value);
+    return promise;
+  }
+
+  function reject(value) {
+    var promise = new Promise();
+    promise.reject(value);
+    return promise;
+  }
+
+  function isPromise(value) {
+    return value && typeof value.then === 'function';
+  }
+
+  function when(promise, done, fail) {
+    if (!isPromise(promise)) {
+      promise = resolve(promise);
+    }
+
+    return promise.then(done, fail);
   }
 
   function all(promises) {
@@ -271,8 +295,13 @@
     };
 
     for (i = 0; i < remaining; i++) {
-      promises[i].then(resolver(i), reject);
+      if (isPromise(promises[i])) {
+        promises[i].then(resolver(i), reject);
+      } else {
+        resolve(i, promises[i]);
+      }
     }
+
     return allPromise;
   }
 
@@ -285,6 +314,9 @@
   exports.Promise = Promise;
   exports.Event = Event;
   exports.EventTarget = EventTarget;
+  exports.resolve = resolve;
+  exports.reject = reject;
+  exports.when = when;
   exports.all = all;
   exports.configure = configure;
 })(window.RSVP = {});
