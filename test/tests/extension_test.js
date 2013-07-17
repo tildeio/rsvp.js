@@ -658,6 +658,67 @@ describe("RSVP extensions", function() {
     });
   });
 
+  function catchExceptions(test, errorHandler) {
+    if(typeof module !== 'undefined' && module.exports) {
+      var Domain = require('domain');
+      var domain = Domain.create();
+
+      domain.on('error', errorHandler);
+
+      domain.run(test);
+    } else {
+      var previousOnError = window.onerror;
+
+      window.onerror = function(error) {
+        errorHandler(error);
+        window.onerror = previousOnError;
+        return false;
+      };
+
+      test();
+    }
+  }
+
+
+  describe("done()", function() {
+    specify('it prevents catching erorrs in failure callback', function(done) {
+      catchExceptions(function() {
+        new RSVP.Promise(function(resolve, reject) {
+          reject();
+        }).then(null, function() {
+          throw "foobar";
+        }).done();
+      }, function(error) {
+        assert.equal("foobar", error, "The thrown error was not caught");
+        done();
+      });
+    });
+
+    specify('it prevents catching erorrs in success callback', function(done) {
+      catchExceptions(function() {
+        new RSVP.Promise(function(resolve) {
+          resolve();
+        }).then(function() {
+          throw "foobar";
+        }).done();
+      }, function(error) {
+        assert.equal("foobar", error, "The thrown error was not caught");
+        done();
+      });
+    });
+
+    specify('it allows to still run success callbacks if they succeed', function(done) {
+      new RSVP.Promise(function(resolve, reject) {
+        resolve();
+      }).then(function() {
+        assert(true, 'It ran the first resolve callback');
+      }).done().then(function() {
+        assert(true, 'It ran the first resolve callback');
+        done();
+      });
+    });
+  });
+
   describe("RSVP.onerror", function(){
     var onerror;
 
