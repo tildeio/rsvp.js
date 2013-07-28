@@ -542,6 +542,112 @@ describe("RSVP extensions", function() {
 
   });
 
+  describe("RSVP.any", function () {
+    it('should exist', function() {
+      assert(RSVP.any);
+    });
+
+    it('throws when not passed an array', function() {
+      assert.throws(function () {
+        var any = RSVP.any();
+      }, TypeError);
+
+      assert.throws(function () {
+        var any = RSVP.any('');
+      }, TypeError);
+
+      assert.throws(function () {
+        var any = RSVP.any({});
+      }, TypeError);
+    });
+
+    specify('fulfilled after one of the other promises are fulfilled', function(done) {
+      var firstResolved, secondResolved, firstResolver, secondResolver;
+
+      var first = new RSVP.Promise(function(resolve) {
+        firstResolver = resolve;
+      });
+      first.then(function() {
+        firstResolved = true;
+      });
+
+      var second = new RSVP.Promise(function(resolve) {
+        secondResolver = resolve;
+      });
+      second.then(function() {
+        secondResolved = true;
+      });
+
+      setTimeout(function() {
+        firstResolver(true);
+      }, 0);
+
+      setTimeout(function() {
+        secondResolver(true);
+      }, 100);
+
+      RSVP.any([first, second]).then(function() {
+        assert(firstResolved);
+        assert.equal(secondResolved, undefined);
+        done();
+      });
+    });
+
+    specify('rejected as soon as a promise is rejected', function(done) {
+      var firstResolver, secondResolver;
+
+      var first = new RSVP.Promise(function(resolve, reject) {
+        firstResolver = { resolve: resolve, reject: reject };
+      });
+
+      var second = new RSVP.Promise(function(resolve, reject) {
+        secondResolver = { resolve: resolve, reject: reject };
+      });
+
+      setTimeout(function() {
+        firstResolver.reject({});
+      }, 0);
+
+      setTimeout(function() {
+        secondResolver.resolve(true);
+      }, 5000);
+
+      RSVP.any([first, second]).then(function() {
+        assert(false);
+      }, function() {
+        assert(first.isRejected);
+        assert(!second.isResolved);
+        done();
+      });
+    });
+
+    specify('resolves an empty array passed to RSVP.any()', function(done) {
+      RSVP.any([]).then(function(result) {
+        assert.equal(result, undefined);
+        done();
+      });
+    });
+
+    specify('works with a mix of promises and thenables', function(done) {
+      var promise = new RSVP.Promise(function(resolve) { setTimeout(function() { resolve(1); }, 10); }),
+          syncThenable = { then: function (onFulfilled) { onFulfilled(2); } };
+
+      RSVP.any([promise, syncThenable]).then(function(result) {
+        assert(result, 2);
+        done();
+      });
+    });
+
+    specify('works with a mix of thenables and non-promises', function (done) {
+      var asyncThenable = { then: function (onFulfilled) { setTimeout(function() { onFulfilled(3); }, 0); } },
+          nonPromise = 4;
+      RSVP.any([nonPromise, asyncThenable]).then(function(result) {
+        assert(result, 4);
+        done();
+      });
+    });
+  });
+
   describe("RSVP.all", function() {
     it('should exist', function() {
       assert(RSVP.all);
