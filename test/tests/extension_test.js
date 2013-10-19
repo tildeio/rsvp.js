@@ -1056,6 +1056,13 @@ describe("RSVP extensions", function() {
       });
     });
   });
+
+  describe("RSVP.configure", function(){
+    it("can get or set config variables depending on the number of arguments", function() {
+      RSVP.configure('someValue', 123);
+      assert(RSVP.configure('someValue') === 123, "passing a single arg to configure returns the previously set value");
+    });
+  });
 });
 
 
