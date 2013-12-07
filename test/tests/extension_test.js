@@ -1707,6 +1707,90 @@ describe("RSVP extensions", function() {
     });
   });
 
+  describe("RSVP.filter", function(){
+
+    var filterFn = function(item){
+      return item > 1;
+    };
+
+    it("exists", function(){
+      assert(RSVP.filter);
+    });
+
+    it("returns results that filterFn returns truthy values", function(done){
+      var promises = [
+        RSVP.resolve(1),
+        RSVP.resolve(2),
+        RSVP.resolve(3)
+      ];
+
+      RSVP.filter(promises, filterFn).then(function(results){
+        assert.deepEqual([2, 3], results);
+        done();
+      }, done);
+    });
+
+    it("throws an error if an array is not passed", function(){
+      assert.throws(function(){
+        RSVP.filter();
+      }, TypeError);
+    });
+
+    it("throws an error if a filterFn is not passed", function(){
+      assert.throws(function(){
+        RSVP.filter([]);
+      }, TypeError);
+    });
+
+    it("works with non-promise values and promises", function(done){
+      var promises = [
+        RSVP.resolve(1),
+        RSVP.resolve(2),
+        3
+      ];
+
+      RSVP.filter(promises, filterFn).then(function(results){
+        assert.deepEqual([2, 3], results);
+        done();
+      }, done);
+    });
+
+    it("waits if filterFn returns a promise", function(done){
+
+      var filterFn = function(item){
+        if (item === 1 ) {
+          return RSVP.resolve(true);
+        }
+        return true;
+      };
+      var promises = [
+        RSVP.resolve(1),
+        RSVP.resolve(2),
+        3
+      ];
+
+      var results1 = RSVP.filter(promises, filterFn);
+
+      filterFn = function(item){
+        if (item === 1) {
+          return RSVP.resolve(false);
+        }
+        return true;
+      }
+
+      var results2 = RSVP.filter(promises, filterFn);
+
+      RSVP.all([results1, results2]).then(function(results){
+        var results1 = results[0];
+        var results2 = results[1];
+        assert.deepEqual(results1, [1, 2, 3]);
+        assert.deepEqual(results2, [ 2, 3 ]);
+        done();
+      }, done);
+
+    });
+  });
+
   describe("RSVP.map", function(){
     var mapFn = function(item){
       return item + 1;
