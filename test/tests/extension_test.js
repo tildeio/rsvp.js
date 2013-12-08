@@ -733,6 +733,27 @@ describe("RSVP extensions", function() {
         done();
       });
     });
+
+    specify('allows a promise to be passed instead of an array if promise is resolved with array', function(done){
+      var array = [];
+      var promise = RSVP.resolve(array);
+      RSVP.all(promise).then(function(arr){
+        assert.deepEqual(array, arr);
+        done();
+      }, done);
+    });
+
+    specify('rejects its return promise if the promise passed is not resolved with an array', function(done){
+      var object = { type: 'robot' };
+      var promise = RSVP.resolve(object);
+
+      RSVP.all(promise).then(function(){
+        done(new Error("Promise should not have been resolved!"));
+      }, function(reason){
+        assert(reason.message === 'You must pass an array to all.');
+        done();
+      });
+    });
   });
 
   describe("RSVP.reject", function(){
