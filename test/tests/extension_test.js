@@ -1729,6 +1729,93 @@ describe("RSVP extensions", function() {
       });
     });
   });
+
+  describe("RSVP.map", function(){
+    var mapFn = function(item){
+      return item + 1;
+    };
+
+    it("exists", function(){
+      assert(RSVP.map);
+    });
+
+    it("calls mapFn on all the promises that are resolved", function(done){
+      var promise1 = RSVP.resolve(1);
+      var promise2 = RSVP.resolve(2);
+      var promise3 = RSVP.resolve(3);
+      var promises = [ promise1, promise2, promise3 ];
+
+      RSVP.map(promises, mapFn).then(function(results){
+        assert.deepEqual([ 2, 3, 4], results);
+        done();
+      });
+    });
+
+    it("throws an error if an array is not passed", function(){
+      assert.throws(function(){
+        RSVP.map();
+      }, TypeError);
+    });
+
+    it("throws an error if a mapFn is not passed", function(){
+      assert.throws(function(){
+        RSVP.map([]);
+      }, TypeError);
+    });
+
+    it("works with non-promise values and promises", function(done){
+
+      var values = [ 1, RSVP.resolve(2) ];
+
+      RSVP.map(values, mapFn).then(function(results){
+        assert.deepEqual([2, 3], results);
+        done();
+      });
+    });
+
+    it("becomes rejected with the first promise that becomes rejected", function(done){
+
+      var promises = [
+        RSVP.reject(new Error("1")),
+        RSVP.reject(new Error("2")),
+        1
+      ];
+
+      RSVP.map(promises, mapFn).then(function(){
+        done(new Error("Promise was resolved when it shouldn't have been!"));
+      }, function(reason){
+        assert(reason.message === "1");
+        done();
+      });
+    });
+
+    it("waits if a promise is returned from mapFn", function(done){
+      var values = [ 1, 2, 3 ];
+      var mapFn = function(value){
+        return RSVP.resolve(value + 1);
+      };
+
+      RSVP.map(values, mapFn).then(function(values){
+        assert.deepEqual(values, [ 2, 3, 4 ]);
+        done();
+      }, done);
+    });
+
+    it("becomes rejected if a promise returned from mapFn becomes rejected", function(done){
+
+      var values = [ 1, 2, 3 ];
+      var mapFn = function(value){
+        return RSVP.reject(new Error(value.toString()));
+      };
+
+      RSVP.map(values, mapFn).then(function(){
+        done(new Error("Promise should not be resolved!"));
+      }, function (reason) {
+        assert(reason.message === "1");
+        done();
+      });
+    });
+  });
 });
 
 // thanks to @wizardwerdna for the test case -> https://github.com/tildeio/rsvp.js/issues/66
