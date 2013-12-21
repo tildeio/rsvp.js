@@ -873,7 +873,7 @@ describe("RSVP extensions", function() {
       });
     });
 
-    specify('if one of the promises is not thenable fulfills with it first', function(done) {
+    specify('if one of the promises is not thenable fulfill with it first', function(done) {
       var firstResolver, secondResolver, nonPromise = 5;
 
       var first = new RSVP.Promise(function(resolve, reject) {
