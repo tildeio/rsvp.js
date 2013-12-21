@@ -966,7 +966,7 @@ describe("RSVP extensions", function() {
 
   describe("RSVP.Promise.race", function() {
     testRace(function(){
-      RSVP.Promise.race.apply(RSVP.Promise, arguments);
+      return RSVP.Promise.race.apply(RSVP.Promise, arguments);
     });
   });
 
