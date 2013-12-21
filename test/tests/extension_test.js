@@ -596,21 +596,31 @@ describe("RSVP extensions", function() {
   });
 
   describe("RSVP.all", function() {
+    testAll(RSVP.all);
+  });
+
+  describe("RSVP.Promise.all", function() {
+    testAll(function(){
+      return RSVP.Promise.all.apply(RSVP.Promise, arguments);
+    });
+  });
+
+  function testAll(all) {
     it('should exist', function() {
-      assert(RSVP.all);
+      assert(all);
     });
 
     it('throws when not passed an array', function() {
       assert.throws(function () {
-        var all = RSVP.all();
+        var all = all();
       }, TypeError);
 
       assert.throws(function () {
-        var all = RSVP.all('');
+        var all = all('');
       }, TypeError);
 
       assert.throws(function () {
-        var all = RSVP.all({});
+        var all = all({});
       }, TypeError);
     });
 
@@ -639,7 +649,7 @@ describe("RSVP extensions", function() {
         secondResolver(true);
       }, 0);
 
-      RSVP.all([first, second]).then(function() {
+      all([first, second]).then(function() {
         assert(firstResolved);
         assert(secondResolved);
         done();
@@ -671,7 +681,7 @@ describe("RSVP extensions", function() {
         secondCompleted = true;
       });
 
-      RSVP.all([first, second]).then(function() {
+      all([first, second]).then(function() {
         assert(false);
       }, function() {
         assert(firstWasRejected);
@@ -699,7 +709,7 @@ describe("RSVP extensions", function() {
       firstResolver.resolve(1);
       secondResolver.resolve(2);
 
-      RSVP.all([first, second, third]).then(function(results) {
+      all([first, second, third]).then(function(results) {
         assert(results.length === 3);
         assert(results[0] === 1);
         assert(results[1] === 2);
@@ -708,15 +718,15 @@ describe("RSVP extensions", function() {
       });
     });
 
-    specify('resolves an empty array passed to RSVP.all()', function(done) {
-      RSVP.all([]).then(function(results) {
+    specify('resolves an empty array passed to all()', function(done) {
+      all([]).then(function(results) {
         assert(results.length === 0);
         done();
       });
     });
 
     specify('works with null', function(done) {
-      RSVP.all([null]).then(function(results) {
+      all([null]).then(function(results) {
         assert.equal(results[0], null);
         done();
       });
@@ -728,12 +738,12 @@ describe("RSVP extensions", function() {
       var asyncThenable = { then: function (onFulfilled) { setTimeout(function() { onFulfilled(3); }, 0); } };
       var nonPromise = 4;
 
-      RSVP.all([promise, syncThenable, asyncThenable, nonPromise]).then(function(results) {
+      all([promise, syncThenable, asyncThenable, nonPromise]).then(function(results) {
         assert(objectEquals(results, [1, 2, 3, 4]));
         done();
       });
     });
-  });
+  }
 
   describe("RSVP.reject", function(){
     specify("it should exist", function(){
@@ -812,22 +822,22 @@ describe("RSVP extensions", function() {
     });
   });
 
-  describe("RSVP.race", function() {
+  function testRace(race) {
     it("should exist", function() {
-      assert(RSVP.race);
+      assert(race);
     });
 
     it("throws when not passed an array", function() {
       assert.throws(function () {
-        var race = RSVP.race();
+        race();
       }, TypeError);
 
       assert.throws(function () {
-        var race = RSVP.race('');
+        var race = race('');
       }, TypeError);
 
       assert.throws(function () {
-        var race = RSVP.race({});
+        race({});
       }, TypeError);
     });
 
@@ -856,7 +866,7 @@ describe("RSVP extensions", function() {
         secondResolver(true);
       }, 0);
 
-      RSVP.race([first, second]).then(function() {
+      race([first, second]).then(function() {
         assert(secondResolved);
         assert.equal(firstResolved, undefined);
         done();
@@ -874,7 +884,7 @@ describe("RSVP extensions", function() {
         resolve(false);
       });
 
-      RSVP.race([first, second, nonPromise]).then(function(value) {
+      race([first, second, nonPromise]).then(function(value) {
         assert.equal(value, 5);
         done();
       });
@@ -905,7 +915,7 @@ describe("RSVP extensions", function() {
         secondCompleted = true;
       });
 
-      RSVP.race([first, second]).then(function() {
+      race([first, second]).then(function() {
         assert(false);
       }, function() {
         assert(firstWasRejected);
@@ -934,7 +944,7 @@ describe("RSVP extensions", function() {
       var promise = new RSVP.Promise(function(resolve) { setTimeout(function() { resolve(1); }, 10); }),
           syncThenable = { then: function (onFulfilled) { onFulfilled(2); } };
 
-      RSVP.race([promise, syncThenable]).then(function(result) {
+      race([promise, syncThenable]).then(function(result) {
         assert(result, 2);
         done();
       });
@@ -943,10 +953,20 @@ describe("RSVP extensions", function() {
     specify('works with a mix of thenables and non-promises', function (done) {
       var asyncThenable = { then: function (onFulfilled) { setTimeout(function() { onFulfilled(3); }, 0); } },
           nonPromise = 4;
-      RSVP.race([asyncThenable, nonPromise]).then(function(result) {
+      race([asyncThenable, nonPromise]).then(function(result) {
         assert(result, 4);
         done();
       });
+    });
+  }
+
+  describe("RSVP.race", function() {
+    testRace(RSVP.race);
+  });
+
+  describe("RSVP.Promise.race", function() {
+    testRace(function(){
+      RSVP.Promise.race.apply(RSVP.Promise, arguments);
     });
   });
 
