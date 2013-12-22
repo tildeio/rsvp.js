@@ -1,5 +1,44 @@
 # master
 
+* align with the promise spec
+  https://github.com/domenic/promises-unwrapping
+* idiomatic es6 usage
+* RSVP.all: now now casts rather then resolves, and doesn't touch the
+  "then"
+* RSVP.hash: now now casts rather then resolves, and doesn't touch the
+  "then"
+* MutationObserver: prefer text mutation, this fixes interop with
+  MutationObserver polyfils
+* Removing asap unload listener. Allows back/forward page cache, chrome
+  bug is old. Fixes #168
+* add grunt docs task
+* document: Promise.cast
+* document: Promise.resolve/Promise.reject
+* document: Promise.race
+* document: Promise.all
+* document: Promise.hash
+* document: RSVP.denodeify
+* document: RSVP.EventTarget
+* document: RSVP.rethrow
+* document: RSVP.defer
+* Document: RSVP.on('error'
+* Add Instrumentation hooks for tooling
+* Significant internal cleanup and performance improvements
+* require Promise constructor to be new'd (aligned with es6 spec)
+* Prefer tasks + config inline within project
+* Add Promise#finally
+* Add Promise.cast
+* Add Promise.resolve
+* Add Promise.reject
+* Add Promise.all
+* Add Promise.race
+* Add RSVP.map
+* Support promise inheritance
+* optimize onerror and reduce promise creation cost by 20x
+* promise/a+ 2.0.3 compliant
+* RSVP.async to schedule callbacks on internal queue
+* Optimization: only enforce a single nextTick for each queue flush.
+
 # 2.0.4
 
 * Fix npm package
