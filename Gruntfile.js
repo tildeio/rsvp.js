@@ -36,6 +36,8 @@ module.exports = function(grunt) {
 
   this.registerTask('test', ['build', 'tests', 'mocha_phantomjs', 'mochaTest']);
 
+  this.registerTask('release', [ 'clean:build', 'browser:distNoVersion', 'concat:amdNoVersion', 'uglify', 'release-it' ]);
+
   // Custom YUIDoc task
   this.registerTask('docs', ['yuidoc']);
 
@@ -47,6 +49,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-phantomjs');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
+  grunt.loadNpmTasks('grunt-release-it');
 
   // Merge config into emberConfig, overwriting existing settings
   grunt.initConfig(config);

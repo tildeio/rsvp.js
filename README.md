@@ -14,6 +14,14 @@ It works in node and the browser.
 
 ## Promises
 
+## Bower
+
+`bower install -S rsvp`
+
+## NPM
+
+`npm install --save rsvp`
+
 `RSVP.Promise` is an implementation of
 [Promises/A+](http://promises-aplus.github.com/promises-spec/) that passes the
 [test suite](https://github.com/promises-aplus/promises-tests).
