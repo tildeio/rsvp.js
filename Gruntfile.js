@@ -36,7 +36,7 @@ module.exports = function(grunt) {
 
   this.registerTask('test', ['build', 'tests', 'mocha_phantomjs', 'mochaTest']);
 
-  this.registerTask('release', [ 'clean:build', 'browser:distNoVersion', 'concat:amdNoVersion', 'uglify', 'release-it' ]);
+  this.registerTask('build-release', ['clean:build', 'transpile:amd', 'transpile:commonjs', 'concat:browser', 'browser:distNoVersion', 'concat:amdNoVersion', 'uglify:browserNoVersion'])
 
   // Custom YUIDoc task
   this.registerTask('docs', ['yuidoc']);
