@@ -1,4 +1,8 @@
-# master
+# Master
+
+* Optimization: promises with noop resolvers now don't bother try to handle them.
+
+# 3.0.0
 
 * align with the promise spec
   https://github.com/domenic/promises-unwrapping
