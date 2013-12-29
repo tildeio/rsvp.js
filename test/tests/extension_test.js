@@ -1345,7 +1345,7 @@ describe("RSVP extensions", function() {
         return {
           key: matches[1],
           index: parseInt(matches[2], 10)
-        } 
+        }
       } else {
         throw new Error('unknown guid:' + guid);
       }
@@ -1491,13 +1491,78 @@ describe("RSVP extensions", function() {
         promise.then();
       });
     });
+
+    describe("Queued events", function(done) {
+      beforeEach(function() {
+        RSVP.configure('queueEvents', true);
+      });
+
+      specify('Queues events for later use', function(done) {
+        var firedEvents = [],
+            queuedEvents = [];
+
+        function storeFired(event) {
+          firedEvents.push(event);
+          if (firedEvents.length === 2) {
+            flush();
+          }
+        }
+        function storeQueued(event) {
+          queuedEvents.push(event);
+        }
+
+        function flush(event) {
+          RSVP.off('created');
+          RSVP.off('fulfilled');
+          RSVP.on('created', storeQueued);
+          RSVP.on('fulfilled', storeQueued);
+          RSVP.flushEvents();
+          assert.equal(queuedEvents.length, 2);
+          assert.deepEqual(firedEvents, queuedEvents);
+
+          // cleanup
+          RSVP.off('created');
+          RSVP.off('fulfilled');
+          done();
+        }
+
+        RSVP.on('created', storeFired);
+        RSVP.on('fulfilled', storeFired);
+
+        RSVP.resolve(null, 'label');
+      });
+
+      specify('Events are not queued when queuedEvents is false', function(done) {
+        RSVP.configure('queueEvents', false);
+
+        function flush() {
+          assert(false, 'Events should not be queued');
+        }
+
+        RSVP.on('created', function() {
+          RSVP.off('created');
+          RSVP.on('created', flush);
+          RSVP.flushEvents();
+          // cleanup
+          RSVP.off('created');
+          done();
+        });
+
+        var promise = new RSVP.Promise(function(){});
+
+      });
+
+      afterEach(function() {
+        RSVP.configure('queueEvents', false);
+      });
+    });
   });
 
   describe("RSVP.async", function() {
 
     var values, originalAsync;
     beforeEach(function() {
-      originalAsync = RSVP.configure('async'); 
+      originalAsync = RSVP.configure('async');
       values = [];
     });
 
