@@ -29,7 +29,7 @@
     "promises-aplus-tests": "git://github.com/stefanpenner/promises-tests.git",
     "connect-redirection": "0.0.1",
     "grunt-contrib-yuidoc": "~0.5.0",
-    "grunt-release-it": "0.0.2"
+    "grunt-release-it": "0.0.3"
   },
   "scripts": {
     "test": "grunt test",
