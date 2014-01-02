@@ -144,13 +144,13 @@ getJSON("/post/1.json").then(function(post) {
 });
 ```
 
-You can also use `fail` for error handling, which is a shortcut for
+You can also use `catch` for error handling, which is a shortcut for
 `then(null, rejection)`, like so:
 
 ```javascript
 getJSON("/post/1.json").then(function(post) {
   return getJSON(post.commentURL);
-}).fail(function(error) {
+}).catch(function(error) {
   // handle errors
 });
 ```
