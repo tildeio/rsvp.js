@@ -598,17 +598,15 @@ describe("RSVP extensions", function() {
     });
 
     it('throws when not passed an array', function() {
-      assert.throws(function () {
-        var all = all();
-      }, TypeError);
+      var nothing = assertRejection(all());
+      var string  = assertRejection(all(''));
+      var object  = assertRejection(all({}));
 
-      assert.throws(function () {
-        var all = all('');
-      }, TypeError);
-
-      assert.throws(function () {
-        var all = all({});
-      }, TypeError);
+      RSVP.Promise.all([
+        nothing,
+        string,
+        object
+      ]).then(function(){ done(); });
     });
 
     specify('fulfilled only after all of the other promises are fulfilled', function(done) {
@@ -809,23 +807,29 @@ describe("RSVP extensions", function() {
     });
   });
 
+  function assertRejection(promise) {
+    return promise.then(function(){
+      assert(false, 'expected rejection, but got fulfillment');
+    }, function(reason){
+      assert(reason instanceof Error);
+    });
+  }
+
   function testRace(race) {
     it("should exist", function() {
       assert(race);
     });
 
-    it("throws when not passed an array", function() {
-      assert.throws(function () {
-        race();
-      }, TypeError);
+    it("throws when not passed an array", function(done) {
+      var nothing = assertRejection(race());
+      var string  = assertRejection(race(''));
+      var object  = assertRejection(race({}));
 
-      assert.throws(function () {
-        var race = race('');
-      }, TypeError);
-
-      assert.throws(function () {
-        race({});
-      }, TypeError);
+      RSVP.Promise.all([
+        nothing,
+        string,
+        object
+      ]).then(function(){ done(); });
     });
 
     specify('fulfilled after one of the other promises are fulfilled', function(done) {
