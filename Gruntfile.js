@@ -15,17 +15,33 @@ module.exports = function(grunt) {
   ]);
 
   // Run a server. This is ideal for running the QUnit tests in the browser.
-  this.registerTask('server', ['build', 'tests', 'connect', 'watch:server']);
-
+  this.registerTask('server', [
+    'build',
+    'tests',
+    'connect',
+    'watch:server'
+  ]);
 
   // Build test files
-  this.registerTask('tests', 'Builds the test package', ['concat:deps', 'browserify:tests',
-                    'transpile:testsAmd', 'transpile:testsCommonjs', 'buildTests:dist']);
+  this.registerTask('tests', 'Builds the test package', [
+    'concat:deps',
+    'browserify:tests',
+    'transpile:testsAmd',
+    'transpile:testsCommonjs',
+    'buildTests:dist'
+  ]);
 
   // Build a new version of the library
-  this.registerTask('build', 'Builds a distributable version of <%= cfg.name %>',
-                    ['clean', 'transpile:amd', 'transpile:commonjs', 'concat:amd',
-                      'concat:browser', 'browser:dist', 'jshint', 'uglify:browser']);
+  this.registerTask('build', 'Builds a distributable version of <%= cfg.name %>', [
+    'clean',
+    'transpile:amd',
+    'transpile:commonjs',
+    'concat:amd',
+    'concat:browser',
+    'browser:distNoVersion',
+    'jshint',
+    'uglify:browser'
+  ]);
 
   // Custom phantomjs test task
   this.registerTask('test:phantom', "Runs tests through the command line using PhantomJS", [
@@ -36,7 +52,15 @@ module.exports = function(grunt) {
 
   this.registerTask('test', ['build', 'tests', 'mocha_phantomjs', 'mochaTest']);
 
-  this.registerTask('build-release', ['clean:build', 'transpile:amd', 'transpile:commonjs', 'concat:browser', 'browser:distNoVersion', 'concat:amdNoVersion', 'uglify:browserNoVersion'])
+  this.registerTask('build-release', [
+    'clean:build',
+    'transpile:amd',
+    'transpile:commonjs',
+    'concat:browser',
+    'browser:distNoVersion',
+    'concat:amdNoVersion',
+    'uglify:browserNoVersion'
+  ]);
 
   // Custom YUIDoc task
   this.registerTask('docs', ['yuidoc']);
