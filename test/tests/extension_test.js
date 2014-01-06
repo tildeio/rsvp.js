@@ -1824,15 +1824,11 @@ describe("RSVP extensions", function() {
     });
 
     it("throws an error if an array is not passed", function(){
-      assert.throws(function(){
-        RSVP.filter();
-      }, TypeError);
+      assertRejection(RSVP.filter())
     });
 
     it("throws an error if a filterFn is not passed", function(){
-      assert.throws(function(){
-        RSVP.filter([]);
-      }, TypeError);
+      assertRejection(RSVP.filter([]))
     });
 
     it("works with non-promise values and promises", function(done){
@@ -1906,15 +1902,11 @@ describe("RSVP extensions", function() {
     });
 
     it("throws an error if an array is not passed", function(){
-      assert.throws(function(){
-        RSVP.map();
-      }, TypeError);
+      assertRejection(RSVP.map());
     });
 
     it("throws an error if a mapFn is not passed", function(){
-      assert.throws(function(){
-        RSVP.map([]);
-      }, TypeError);
+      assertRejection(RSVP.map([]));
     });
 
     it("works with non-promise values and promises", function(done){
