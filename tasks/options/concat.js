@@ -18,7 +18,13 @@ module.exports = {
       'tmp/<%= pkg.name %>/**/*.amd.js',
       'tmp/<%= pkg.name %>.amd.js'
     ],
-    dest: 'dist/<%= pkg.name %>.amd.js'
+    dest: 'dist/<%= pkg.name %>.amd.js',
+    options: {
+      banner: '/**\n' +
+              '  @class RSVP\n' +
+              '  @module RSVP\n' +
+              '  */\n'
+    }
   },
 
   deps: {
@@ -32,6 +38,13 @@ module.exports = {
       'tmp/<%= pkg.name %>/**/*.amd.js',
       'tmp/<%= pkg.name %>.amd.js'
     ],
-    dest: 'tmp/<%= pkg.name %>.browser1.js'
+    dest: 'tmp/<%= pkg.name %>.browser1.js',
+    options: {
+      banner: '/**\n' +
+              '  @class RSVP\n' +
+              '  @module RSVP\n' +
+              '  */\n'
+    }
+
   }
 };
