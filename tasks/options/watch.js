@@ -1,6 +1,13 @@
 module.exports = {
   server: {
-    files: ['lib/**', 'vendor/*', 'test/**/*'],
-    tasks: ['build', 'tests']
+    files: [
+      'lib/**',
+      'vendor/*',
+      'test/**/*'
+    ],
+    tasks: [
+      'build',
+      'tests'
+    ]
   },
 };

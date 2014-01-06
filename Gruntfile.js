@@ -48,9 +48,18 @@ module.exports = function(grunt) {
                     'build', 'tests', 'mocha_phantomjs']);
 
   // Custom Node test task
-  this.registerTask('test:node', ['build', 'tests', 'mochaTest']);
+  this.registerTask('test:node', [
+    'build',
+    'tests',
+    'mochaTest'
+  ]);
 
-  this.registerTask('test', ['build', 'tests', 'mocha_phantomjs', 'mochaTest']);
+  this.registerTask('test', [
+    'build',
+    'tests',
+    'mocha_phantomjs',
+    'mochaTest'
+  ]);
 
   this.registerTask('build-release', [
     'clean:build',

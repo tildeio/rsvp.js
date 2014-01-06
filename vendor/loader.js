@@ -1,4 +1,4 @@
-var define, requireModule, require, requirejs;
+var define, require;
 
 (function() {
   var registry = {}, seen = {};
@@ -7,8 +7,7 @@ var define, requireModule, require, requirejs;
     registry[name] = { deps: deps, callback: callback };
   };
 
-  requirejs = require = requireModule = function(name) {
-  requirejs._eak_seen = registry;
+  require = function(name) {
 
     if (seen[name]) { return seen[name]; }
     seen[name] = {};
@@ -27,7 +26,7 @@ var define, requireModule, require, requirejs;
       if (deps[i] === 'exports') {
         reified.push(exports = {});
       } else {
-        reified.push(requireModule(resolve(deps[i])));
+        reified.push(require(resolve(deps[i])));
       }
     }
 
@@ -50,4 +49,6 @@ var define, requireModule, require, requirejs;
       return parentBase.join("/");
     }
   };
+
+  require.entries = registry;
 })();

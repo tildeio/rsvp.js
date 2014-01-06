@@ -1,7 +1,7 @@
 module.exports = {
   dist: {
     src: [
-      'node_modules/grunt-microlib/assets/loader.js',
+      'vendor/loader.js',
       'tmp/tests.amd.js',
       'tmp/<%= pkg.name %>/**/*.amd.js',
       'tmp/<%= pkg.name %>.amd.js'

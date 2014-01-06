@@ -1,6 +1,9 @@
 module.exports = {
   amd: {
-    src: ['tmp/<%= pkg.name %>/**/*.amd.js', 'tmp/<%= pkg.name %>.amd.js'],
+    src: [
+      'tmp/<%= pkg.name %>/**/*.amd.js',
+      'tmp/<%= pkg.name %>.amd.js'
+    ],
     dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.amd.js',
     options: {
       banner: '/**\n' +
@@ -11,7 +14,10 @@ module.exports = {
   },
 
   amdNoVersion: {
-    src: ['tmp/<%= pkg.name %>/**/*.amd.js', 'tmp/<%= pkg.name %>.amd.js'],
+    src: [
+      'tmp/<%= pkg.name %>/**/*.amd.js',
+      'tmp/<%= pkg.name %>.amd.js'
+    ],
     dest: 'dist/<%= pkg.name %>.amd.js'
   },
 
@@ -21,7 +27,11 @@ module.exports = {
   },
 
   browser: {
-    src: ['vendor/loader.js', 'tmp/<%= pkg.name %>/**/*.amd.js', 'tmp/<%= pkg.name %>.amd.js'],
+    src: [
+      'vendor/loader.js',
+      'tmp/<%= pkg.name %>/**/*.amd.js',
+      'tmp/<%= pkg.name %>.amd.js'
+    ],
     dest: 'tmp/<%= pkg.name %>.browser1.js'
   }
 };
