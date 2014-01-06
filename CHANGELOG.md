@@ -1,6 +1,15 @@
 # Master
 
+# 3.0.2
+
+* [Spec compliance] Promise.all and Promise.race should reject, not throw on invalid input
+* Add RSVP.allSettled
+
+# 3.0.1
+
 * Optimization: promises with noop resolvers now don't bother try to handle them.
+* [perf] skip costly resolver invocation if it is known not to be needed.
+* improve promise inspector interopt
 
 # 3.0.0
 
