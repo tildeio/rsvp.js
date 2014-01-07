@@ -124,7 +124,7 @@ Errors also propagate:
 ```javascript
 getJSON("/posts.json").then(function(posts) {
 
-}).then(null, function(error) {
+}).catch(function(error) {
   // since no rejection handler was passed to the
   // first `.then`, the error propagates.
 });
@@ -139,7 +139,7 @@ getJSON("/post/1.json").then(function(post) {
   return getJSON(post.commentURL);
 }).then(function(comments) {
   // proceed with access to posts and comments
-}).then(null, function(error) {
+}).catch(function(error) {
   // handle errors in either of the two requests
 });
 ```
@@ -184,15 +184,16 @@ have been fulfilled; or rejected immediately if any promise in the array
 is rejected.
 
 ```javascript
-var postIds = [2, 3, 5, 7, 11, 13];
+var promises = [2, 3, 5, 7, 11, 13].map(function(id){
+  return getJSON("/post/" + id + ".json";
+});
+
 var promises = [];
 
-for(var i = 0; i < postIds.length; i++) {
-	promises.push(getJSON("/post/" + postIds[i] + ".json"));
-}
-
 RSVP.all(promises).then(function(posts) {
-	// posts contains an array of results for the given promises
+  // posts contains an array of results for the given promises
+}).catch(function(reason){
+  // if any of the promises fails.
 });
 ```
 
@@ -242,7 +243,7 @@ getJSON("/post/1.json").then(function(post) {
   return getJSON(post.commentURL);
 }).then(function(comments) {
   // proceed with access to posts and comments
-}).then(null, function(error) {
+}).catch(function(reason) {
   // handle errors in either of the two requests
 });
 ```
@@ -272,57 +273,6 @@ The cool thing here is the same promises that work with current
 JavaScript using `.then` will work seamlessly with TaskJS once a browser
 has implemented it!
 
-## Event Target
-
-RSVP also provides a mixin that you can use to convert any object into
-an event target. The promises implementation uses `RSVP.EventTarget`, so
-`RSVP` exposes it for your own use.
-
-### Basic Usage
-
-The basic usage of `RSVP.EventTarget` is to mix it into an object, then
-use `on` and `trigger` to register listeners and trigger them.
-
-```javascript
-var object = {};
-
-RSVP.EventTarget.mixin(object);
-
-object.on("finished", function(event) {
-  // handle event
-});
-
-object.trigger("finished", { detail: value });
-```
-
-### Prototypes
-
-You can mix `RSVP.EventTarget` into a prototype and it will work as
-expected.
-
-```javascript
-var Person = function() {};
-RSVP.EventTarget.mixin(Person.prototype);
-
-var yehuda = new Person();
-var tom = new Person();
-
-yehuda.on("poke", function(event) {
-  console.log("Yehuda says OW");
-});
-
-tom.on("poke", function(event) {
-  console.log("Tom says OW");
-});
-
-yehuda.trigger("poke");
-tom.trigger("poke");
-```
-
-The example will work as expected. If you mix `RSVP.EventTarget` into a
-constructor's prototype, each instance of that constructor will get its
-own callbacks.
-
 ## Instrumentation
 
 ```js
@@ -346,8 +296,6 @@ Events are only triggered when `RSVP.configure('instrument')` is true, although
 listeners can be registered at any time.
 
 ## Building & Testing
-
-This package uses the [grunt-microlib](https://github.com/thomasboyt/grunt-microlib) package for building.
 
 Custom tasks:
 
