@@ -222,6 +222,24 @@ RSVP.hash(promises).then(function(results) {
 });
 ```
 
+## All settled and hash settled
+
+Sometimes you want to work with several promises at once, but instead of
+rejecting immediately if any promise is rejected, as with `all()` or `hash()`,
+you want to be able to inspect the results of all your promises, whether
+they fulfill or reject. For this purpose, you can use `allSettled()` and
+`hashSettled()`. These work exactly like `all()` and `hash()`, except that
+they fulfill with an array or hash (respectively) of the constituent promises'
+result states. Each state object will either indicate fulfillment or
+rejection, and provide the corresponding value or reason. The states will take
+one of the following formats:
+
+```javascript
+{ state: 'fulfilled', value: value }
+  or
+{ state: 'rejected', reason: reason }
+```
+
 ## Deferred
 
 RSVP also has a RSVP.defer() method that returns a deferred object of the form 
