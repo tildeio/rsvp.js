@@ -582,6 +582,102 @@ describe("RSVP extensions", function() {
 
   });
 
+  describe("RSVP.hashSettled", function() {
+    it('should exist', function() {
+      assert(RSVP.hashSettled);
+    });
+
+    specify('fulfilled only after all of the promise values are fulfilled', function(done) {
+      var firstResolved, secondResolved, firstResolver, secondResolver;
+
+      var first = new RSVP.Promise(function(resolve) {
+        firstResolver = resolve;
+      });
+      first.then(function() {
+        firstResolved = true;
+      });
+
+      var second = new RSVP.Promise(function(resolve) {
+        secondResolver = resolve;
+      });
+      second.then(function() {
+        secondResolved = true;
+      });
+
+      setTimeout(function() {
+        firstResolver(true);
+      }, 0);
+
+      setTimeout(function() {
+        secondResolver(true);
+      }, 0);
+
+      RSVP.hashSettled({ first: first, second: second }).then(function(values) {
+        assert(values.first);
+        assert(values.second);
+        done();
+      });
+    });
+
+    specify('fulfills correctly when constituent promises reject', function(done) {
+      var rejectedPromise = new RSVP.Promise(function(resolve, reject) {
+        reject(new Error('WHOOPS'));
+      });
+      var entries = { rejectedPromise: rejectedPromise };
+      RSVP.hashSettled(entries).then(function(results) {
+        assert(results.rejectedPromise.state, 'rejected' );
+        assert(results.rejectedPromise.reason.message, 'WHOOPS' );
+        done();
+      }, function(reason) {
+        assert(false);
+        done();
+      });
+    });
+
+    specify('resolves an empty hash passed to RSVP.hashSettled()', function(done) {
+      RSVP.hashSettled({}).then(function(results) {
+        assert(objectEquals(results, {}), 'expected fulfillment');
+        done();
+      });
+    });
+
+    specify('works with null', function(done) {
+      RSVP.hashSettled({foo: null}).then(function(results) {
+        assert(objectEquals(results.foo, {state: 'fulfilled', value: null} ));
+        done();
+      });
+    });
+
+    specify('works with a truthy value', function(done) {
+      RSVP.hashSettled({foo: 1}).then(function(results) {
+        assert(objectEquals(results.foo, {state: 'fulfilled', value: true} ));
+        done();
+      });
+    });
+
+    specify('works with promises, thenables, non-promises and rejected promises', function(done) {
+      var promise = new RSVP.Promise(function(resolve) { resolve(1); });
+      var syncThenable = { then: function (onFulfilled) { onFulfilled(2); } };
+      var asyncThenable = { then: function (onFulfilled) { setTimeout(function() { onFulfilled(3); }, 0); } };
+      var nonPromise = 4;
+      var rejectedPromise = new RSVP.Promise(function(resolve, reject) {
+        reject(new Error('WHOOPS'));
+      });
+      var entries = { promise: promise, syncThenable: syncThenable, asyncThenable: asyncThenable, nonPromise: nonPromise, rejectedPromise: rejectedPromise};
+
+      RSVP.hashSettled(entries).then(function(results) {
+        assert(objectEquals(results.promise,       {state: 'fulfilled', value: 1} ));
+        assert(objectEquals(results.syncThenable,  {state: 'fulfilled', value: 2} ));
+        assert(objectEquals(results.asyncThenable, {state: 'fulfilled', value: 3} ));
+        assert(objectEquals(results.nonPromise,    {state: 'fulfilled', value: 4} ));
+        assert(results.rejectedPromise.state, 'rejected' );
+        assert(results.rejectedPromise.reason.message, 'WHOOPS' );
+        done();
+      });
+    });
+  });
+
+
   describe("RSVP.all", function() {
     testAll(RSVP.all);
   });
@@ -767,7 +863,6 @@ describe("RSVP extensions", function() {
         var rejectedPromise = new RSVP.Promise(function(resolve, reject) {
           reject(new Error('WHOOPS'));
         });
-
 
         var entries = new Array(
           promise, syncThenable, asyncThenable, nonPromise, rejectedPromise
