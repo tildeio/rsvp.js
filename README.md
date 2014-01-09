@@ -188,8 +188,6 @@ var promises = [2, 3, 5, 7, 11, 13].map(function(id){
   return getJSON("/post/" + id + ".json";
 });
 
-var promises = [];
-
 RSVP.all(promises).then(function(posts) {
   // posts contains an array of results for the given promises
 }).catch(function(reason){
