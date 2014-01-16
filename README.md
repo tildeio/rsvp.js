@@ -38,7 +38,9 @@ section below on TaskJS for more information.
 ### Basic Usage
 
 ```javascript
-var promise = new RSVP.Promise(function(resolve, reject){
+var RSVP = require('rsvp');
+
+var promise = new RSVP.Promise(function(resolve, reject) {
   // succeed
   resolve(value);
   // or reject
