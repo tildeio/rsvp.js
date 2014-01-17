@@ -186,7 +186,7 @@ is rejected.
 
 ```javascript
 var promises = [2, 3, 5, 7, 11, 13].map(function(id){
-  return getJSON("/post/" + id + ".json";
+  return getJSON("/post/" + id + ".json");
 });
 
 RSVP.all(promises).then(function(posts) {
