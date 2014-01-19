@@ -168,10 +168,13 @@ within your promises. These callback functions can be anything, but a common
 practice is to call `console.assert` to dump the error to the console.
 
 ```javascript
-RSVP.on('error', function(event) {
-  console.assert(false, event.detail);
+RSVP.on('error', function(reason) {
+  console.assert(false, reason);
 });
 ```
+
+**NOTE:** promises do allow for errors to be handled asynchronously, so
+this callback may result in false positives.
 
 **NOTE:** Usage of `RSVP.configure('onerror', yourCustomFunction);` is
 deprecated in favor of using `RSVP.on`.
