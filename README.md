@@ -168,8 +168,8 @@ within your promises. These callback functions can be anything, but a common
 practice is to call `console.assert` to dump the error to the console.
 
 ```javascript
-RSVP.on('error', function(reason) {
-  console.assert(false, reason);
+RSVP.on('error', function(event) {
+  console.assert(false, event.detail);
 });
 ```
 
@@ -261,7 +261,7 @@ getJSON("/post/1.json").then(function(post) {
 }).then(function(comments) {
   // proceed with access to posts and comments
 }).catch(function(reason) {
-  // handle details in either of the two requests
+  // handle errors in either of the two requests
 });
 ```
 
