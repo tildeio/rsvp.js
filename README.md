@@ -255,7 +255,7 @@ a promise, whilst providing late access to the `resolve()` and `reject()` method
 A deferred object has this form: `{ promise, resolve(x), reject(r) }`.
 
 ```javascript
-var deferred = new RSVP.defer();
+var deferred = RSVP.defer();
 // ...
 deferred.promise // access the promise
 // ...
