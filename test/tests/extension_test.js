@@ -402,15 +402,43 @@ describe("RSVP extensions", function() {
       });
     });
 
-    specify('fulfilled with array if node function calls back with multiple arguments', function(done) {
+    specify('fulfilled with array if if user called RSVP.denodeify(nodeFunc, true)', function(done) {
       function nodeFunc(cb) {
         cb(null, 1, 2, 3);
+      }
+
+      var denodeifiedFunc = RSVP.denodeify(nodeFunc, true);
+
+      denodeifiedFunc().then(function(value) {
+        assert(objectEquals(value, [1, 2, 3]));
+        done();
+      });
+    });
+
+    specify('fulfilled with hash if if user called RSVP.denodeify with an array as second argument', function(done) {
+      function nodeFunc(cb) {
+        cb(null, 1, 2, 3);
+      }
+
+      var denodeifiedFunc = RSVP.denodeify(nodeFunc, ['a', 'b', 'c']);
+
+      denodeifiedFunc().then(function(value) {
+        assert.equal(value.a, '1');
+        assert.equal(value.b, '2');
+        assert.equal(value.c, '3');
+        done();
+      });
+    });
+
+    specify('fulfilled with just the first value if node function returns an array', function(done) {
+      function nodeFunc(cb) {
+        cb(null, 42, 2, 3);
       }
 
       var denodeifiedFunc = RSVP.denodeify(nodeFunc);
 
       denodeifiedFunc().then(function(value) {
-        assert(objectEquals(value, [1, 2, 3]));
+        assert.equal(value, 42);
         done();
       });
     });
