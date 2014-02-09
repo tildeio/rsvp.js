@@ -1,5 +1,4 @@
 module.exports = function(grunt) {
-  require('load-grunt-tasks')(grunt);
   var config = require('load-grunt-config')(grunt, {
     configPath: 'tasks/options',
     init: false
