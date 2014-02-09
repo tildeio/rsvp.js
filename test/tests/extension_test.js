@@ -474,6 +474,22 @@ describe("RSVP extensions", function() {
         done();
       });
     });
+    
+    specify('should inherit from node function', function() {
+      function nodeFunc(cb) { cb('hello'); }
+      nodeFunc.something = 'test123'
+
+      var denodeifiedFunc = RSVP.denodeify(nodeFunc);
+
+      assert.equal(denodeifiedFunc.something, 'test123');
+      
+      denodeifiedFunc().then(function(result) {
+        assert.equal(result, 'hello');
+        assert.equal(denodeifiedFunc.something, 'test123');
+      }, function() {
+        assert.equal(false);
+      });
+    });
 
     specify('integration test showing how awesome this can be', function(done) {
       function readFile(fileName, cb) {

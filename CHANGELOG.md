@@ -1,5 +1,9 @@
 # Master
 
+* Changes to RSVP.denodeify: Behaviour for multiple success callback parameters
+  has been improved and the denodefied function now inherits from the original
+  node function.
+
 # 3.0.2
 
 * [Spec compliance] Promise.all and Promise.race should reject, not throw on invalid input
@@ -88,7 +92,7 @@
 * correctly test and fix self fulfillment
 * remove promise coercion.
 * Fix infinite recursion with deep self fulfilling promises
-* doc fixes 
+* doc fixes
 
 # 2.0.0
 
