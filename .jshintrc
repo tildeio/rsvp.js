@@ -16,6 +16,8 @@
         "expect"
     ],
 
+    "esnext": true,
+
     "node" : true,
     "browser" : true,
 
