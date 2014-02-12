@@ -46,9 +46,8 @@
   },
   "keywords": [
     "promises",
-    "futures",
-    "events"
+    "futures"
   ],
-  "author": "Tilde, Inc.",
+  "author": "Tilde, Inc. & Stefan Penner",
   "license": "MIT"
 }
