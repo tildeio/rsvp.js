@@ -39,7 +39,7 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/tildeio/rsvp.js.git",
-    "dist": "git@github.com:components/rsvp.git"
+    "dist": "git@github.com:components/rsvp.js.git"
   },
   "bugs": {
     "url": "https://github.com/tildeio/rsvp.js/issues"
