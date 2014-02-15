@@ -1,7 +1,7 @@
 module.exports = {
   options: {
     modules: [
-      './macros/a_slice.sjs'
+      'sweet-a_slice'
     ],
     readableNames: true
   },
