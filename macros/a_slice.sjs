@@ -1,11 +1,13 @@
-macro $a_slice {
-  rule { ($args, $arguments); } => {
+let var = macro {
+  rule { $args = a_slice($arguments)} => {
     var length = $arguments.length;
-    $args = new Array(length);
-    for ( var i = 0; i < length; i++) {
+    var $args = new Array(length);
+    for (var i = 0; i < length; i++ ){
       $args[i] = arguments[i];
-    };
+    }
   }
+
+  rule { } => { var }
 }
 
-export $a_slice;
+export var;
