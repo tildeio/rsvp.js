@@ -30,7 +30,7 @@
     "grunt-contrib-yuidoc": "~0.5.0",
     "grunt-release-it": "0.0.3",
     "grunt-sweet.js": "~0.1.4",
-    "sweet-array-slice": "0.0.x"
+    "sweet-array-slice": "~0.0.4"
   },
   "scripts": {
     "test": "grunt test",
