@@ -11,7 +11,7 @@ function nameFor(path) {
 
 module.exports = function(grunt) {
   grunt.registerMultiTask('buildTests', 'Execute the tests', function() {
-    var testFiles = grunt.file.expand('test/tests/**/*_test.js');
+    var testFiles = grunt.file.expand('test/tests/**/*test.js');
 
     this.files.forEach(function(f) {
       var output = ["(function(globals) {"];

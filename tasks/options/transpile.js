@@ -41,14 +41,14 @@ module.exports = {
   testsAmd: {
     moduleName: nameFor,
     type: 'amd',
-    src: ['test/test_helpers.js', 'test/tests.js', 'test/tests/**/*_test.js'],
+    src: ['test/test_helpers.js', 'test/tests.js', 'test/tests/**/*test.js'],
     dest: 'tmp/tests.amd.js'
   },
 
   testsCommonjs: {
     moduleName: nameFor,
     type: 'cjs',
-    src: ['test/test_helpers.js', 'test/tests.js', 'test/tests/**/*_test.js'],
+    src: ['test/test_helpers.js', 'test/tests.js', 'test/tests/**/*test.js'],
     dest: 'tmp/tests.cjs.js'
   }
 };
