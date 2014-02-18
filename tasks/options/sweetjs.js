@@ -1,7 +1,7 @@
 module.exports = {
   options: {
     modules: [
-      'sweet-a_slice'
+      'sweet-array-slice'
     ],
     readableNames: true
   },
