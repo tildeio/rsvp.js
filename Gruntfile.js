@@ -65,6 +65,7 @@ module.exports = function(grunt) {
     'clean:build',
     'transpile:amd',
     'transpile:commonjs',
+    'sweetjs',
     'concat:browser',
     'browser:distNoVersion',
     'concat:amdNoVersion',
