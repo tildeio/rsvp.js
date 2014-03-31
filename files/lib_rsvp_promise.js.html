@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>lib/rsvp/promise.js - rsvp</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="rsvp"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 3.0.6</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/RSVP.html">RSVP</a></li>
+            
+                <li><a href="../classes/RSVP.EventTarget.html">RSVP.EventTarget</a></li>
+            
+                <li><a href="../classes/RSVP.Promise.html">RSVP.Promise</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: lib/rsvp/promise.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+import { config } from &quot;./config&quot;;
+import EventTarget from &quot;./events&quot;;
+import instrument from &#x27;./instrument&#x27;;
+import {
+  objectOrFunction,
+  isFunction,
+  now
+} from &#x27;./utils&#x27;;
+import cast from &#x27;./promise/cast&#x27;;
+import all from &#x27;./promise/all&#x27;;
+import race from &#x27;./promise/race&#x27;;
+import Resolve from &#x27;./promise/resolve&#x27;;
+import Reject from &#x27;./promise/reject&#x27;;
+
+var guidKey = &#x27;rsvp_&#x27; + now() + &#x27;-&#x27;;
+var counter = 0;
+
+function noop() {}
+
+export default Promise;
+
+/**
+  Promise objects represent the eventual result of an asynchronous operation. The
+  primary way of interacting with a promise is through its &#x60;then&#x60; method, which
+  registers callbacks to receive either a promise’s eventual value or the reason
+  why the promise cannot be fulfilled.
+
+  Terminology
+  -----------
+
+  - &#x60;promise&#x60; is an object or function with a &#x60;then&#x60; method whose behavior conforms to this specification.
+  - &#x60;thenable&#x60; is an object or function that defines a &#x60;then&#x60; method.
+  - &#x60;value&#x60; is any legal JavaScript value (including undefined, a thenable, or a promise).
+  - &#x60;exception&#x60; is a value that is thrown using the throw statement.
+  - &#x60;reason&#x60; is a value that indicates why a promise was rejected.
+  - &#x60;settled&#x60; the final resting state of a promise, fulfilled or rejected.
+
+  A promise can be in one of three states: pending, fulfilled, or rejected.
+
+  Promises that are fulfilled have a fulfillment value and are in the fulfilled
+  state.  Promises that are rejected have a rejection reason and are in the
+  rejected state.  A fulfillment value is never a thenable.
+
+  Promises can also be said to *resolve* a value.  If this value is also a
+  promise, then the original promise&#x27;s settled state will match the value&#x27;s
+  settled state.  So a promise that *resolves* a promise that rejects will
+  itself reject, and a promise that *resolves* a promise that fulfills will
+  itself fulfill.
+
+
+  Basic Usage:
+  ------------
+
+  &#x60;&#x60;&#x60;js
+  var promise = new Promise(function(resolve, reject) {
+    // on success
+    resolve(value);
+
+    // on failure
+    reject(reason);
+  });
+
+  promise.then(function(value) {
+    // on fulfillment
+  }, function(reason) {
+    // on rejection
+  });
+  &#x60;&#x60;&#x60;
+
+  Advanced Usage:
+  ---------------
+
+  Promises shine when abstracting away asynchronous interactions such as
+  &#x60;XMLHttpRequest&#x60;s.
+
+  &#x60;&#x60;&#x60;js
+  function getJSON(url) {
+    return new Promise(function(resolve, reject){
+      var xhr = new XMLHttpRequest();
+
+      xhr.open(&#x27;GET&#x27;, url);
+      xhr.onreadystatechange = handler;
+      xhr.responseType = &#x27;json&#x27;;
+      xhr.setRequestHeader(&#x27;Accept&#x27;, &#x27;application/json&#x27;);
+      xhr.send();
+
+      function handler() {
+        if (this.readyState === this.DONE) {
+          if (this.status === 200) {
+            resolve(this.response);
+          } else {
+            reject(new Error(&quot;getJSON: &#x60;&quot; + url + &quot;&#x60; failed with status: [&quot; + this.status + &quot;]&quot;));
+          }
+        }
+      };
+    });
+  }
+
+  getJSON(&#x27;/posts.json&#x27;).then(function(json) {
+    // on fulfillment
+  }, function(reason) {
+    // on rejection
+  });
+  &#x60;&#x60;&#x60;
+
+  Unlike callbacks, promises are great composable primitives.
+
+  &#x60;&#x60;&#x60;js
+  Promise.all([
+    getJSON(&#x27;/posts&#x27;),
+    getJSON(&#x27;/comments&#x27;)
+  ]).then(function(values){
+    values[0] // =&gt; postsJSON
+    values[1] // =&gt; commentsJSON
+
+    return values;
+  });
+  &#x60;&#x60;&#x60;
+
+  @class RSVP.Promise
+  @param {function}
+  @param {String} label optional string for labeling the promise.
+  Useful for tooling.
+  @constructor
+*/
+function Promise(resolver, label) {
+  if (!isFunction(resolver)) {
+    throw new TypeError(&#x27;You must pass a resolver function as the first argument to the promise constructor&#x27;);
+  }
+
+  if (!(this instanceof Promise)) {
+    throw new TypeError(&quot;Failed to construct &#x27;Promise&#x27;: Please use the &#x27;new&#x27; operator, this object constructor cannot be called as a function.&quot;);
+  }
+
+  this._id = counter++;
+  this._label = label;
+  this._subscribers = [];
+
+  if (config.instrument) {
+    instrument(&#x27;created&#x27;, this);
+  }
+
+  if (noop !== resolver) {
+    invokeResolver(resolver, this);
+  }
+}
+
+function invokeResolver(resolver, promise) {
+  function resolvePromise(value) {
+    resolve(promise, value);
+  }
+
+  function rejectPromise(reason) {
+    reject(promise, reason);
+  }
+
+  try {
+    resolver(resolvePromise, rejectPromise);
+  } catch(e) {
+    rejectPromise(e);
+  }
+}
+
+Promise.cast = cast;
+Promise.all = all;
+Promise.race = race;
+Promise.resolve = Resolve;
+Promise.reject = Reject;
+
+var PENDING   = void 0;
+var SEALED    = 0;
+var FULFILLED = 1;
+var REJECTED  = 2;
+
+function subscribe(parent, child, onFulfillment, onRejection) {
+  var subscribers = parent._subscribers;
+  var length = subscribers.length;
+
+  subscribers[length] = child;
+  subscribers[length + FULFILLED] = onFulfillment;
+  subscribers[length + REJECTED]  = onRejection;
+
+  if (length === 0 &amp;&amp; parent._state) {
+    config.async(parent._state === FULFILLED ? publishFulfillment : publishRejection, parent);
+  }
+}
+
+function publish(promise, settled) {
+  var child, callback, subscribers = promise._subscribers, detail = promise._detail;
+
+  if (config.instrument) {
+    instrument(settled === FULFILLED ? &#x27;fulfilled&#x27; : &#x27;rejected&#x27;, promise);
+  }
+
+  for (var i = 0; i &lt; subscribers.length; i += 3) {
+    child = subscribers[i];
+    callback = subscribers[i + settled];
+
+    invokeCallback(settled, child, callback, detail);
+  }
+
+  promise._subscribers.length = 0;
+}
+
+Promise.prototype = {
+  constructor: Promise,
+
+  _id: undefined,
+  _guidKey: guidKey,
+  _label: undefined,
+
+  _state: undefined,
+  _detail: undefined,
+  _subscribers: undefined,
+
+  _onerror: function (reason) {
+    config.trigger(&#x27;error&#x27;, reason);
+  },
+
+/**
+  The primary way of interacting with a promise is through its &#x60;then&#x60; method,
+  which registers callbacks to receive either a promise&#x27;s eventual value or the
+  reason why the promise cannot be fulfilled.
+
+  &#x60;&#x60;&#x60;js
+  findUser().then(function(user){
+    // user is available
+  }, function(reason){
+    // user is unavailable, and you are given the reason why
+  });
+  &#x60;&#x60;&#x60;
+
+  Chaining
+  --------
+
+  The return value of &#x60;then&#x60; is itself a promise.  This second, &quot;downstream&quot;
+  promise is resolved with the return value of the first promise&#x27;s fulfillment
+  or rejection handler, or rejected if the handler throws an exception.
+
+  &#x60;&#x60;&#x60;js
+  findUser().then(function (user) {
+    return user.name;
+  }, function (reason) {
+    return &quot;default name&quot;;
+  }).then(function (userName) {
+    // If &#x60;findUser&#x60; fulfilled, &#x60;userName&#x60; will be the user&#x27;s name, otherwise it
+    // will be &#x60;&quot;default name&quot;&#x60;
+  });
+
+  findUser().then(function (user) {
+    throw new Error(&quot;Found user, but still unhappy&quot;);
+  }, function (reason) {
+    throw new Error(&quot;&#x60;findUser&#x60; rejected and we&#x27;re unhappy&quot;);
+  }).then(function (value) {
+    // never reached
+  }, function (reason) {
+    // if &#x60;findUser&#x60; fulfilled, &#x60;reason&#x60; will be &quot;Found user, but still unhappy&quot;.
+    // If &#x60;findUser&#x60; rejected, &#x60;reason&#x60; will be &quot;&#x60;findUser&#x60; rejected and we&#x27;re unhappy&quot;.
+  });
+  &#x60;&#x60;&#x60;
+  If the downstream promise does not specify a rejection handler, rejection reasons will be propagated further downstream.
+
+  &#x60;&#x60;&#x60;js
+  findUser().then(function (user) {
+    throw new PedagogicalException(&quot;Upstream error&quot;);
+  }).then(function (value) {
+    // never reached
+  }).then(function (value) {
+    // never reached
+  }, function (reason) {
+    // The &#x60;PedgagocialException&#x60; is propagated all the way down to here
+  });
+  &#x60;&#x60;&#x60;
+
+  Assimilation
+  ------------
+
+  Sometimes the value you want to propagate to a downstream promise can only be
+  retrieved asynchronously. This can be achieved by returning a promise in the
+  fulfillment or rejection handler. The downstream promise will then be pending
+  until the returned promise is settled. This is called *assimilation*.
+
+  &#x60;&#x60;&#x60;js
+  findUser().then(function (user) {
+    return findCommentsByAuthor(user);
+  }).then(function (comments) {
+    // The user&#x27;s comments are now available
+  });
+  &#x60;&#x60;&#x60;
+
+  If the assimliated promise rejects, then the downstream promise will also reject.
+
+  &#x60;&#x60;&#x60;js
+  findUser().then(function (user) {
+    return findCommentsByAuthor(user);
+  }).then(function (comments) {
+    // If &#x60;findCommentsByAuthor&#x60; fulfills, we&#x27;ll have the value here
+  }, function (reason) {
+    // If &#x60;findCommentsByAuthor&#x60; rejects, we&#x27;ll have the reason here
+  });
+  &#x60;&#x60;&#x60;
+
+  Simple Example
+  --------------
+
+  Synchronous Example
+
+  &#x60;&#x60;&#x60;javascript
+  var result;
+
+  try {
+    result = findResult();
+    // success
+  } catch(reason) {
+    // failure
+  }
+  &#x60;&#x60;&#x60;
+
+  Errback Example
+
+  &#x60;&#x60;&#x60;js
+  findResult(function(result, err){
+    if (err) {
+      // failure
+    } else {
+      // success
+    }
+  });
+  &#x60;&#x60;&#x60;
+
+  Promise Example;
+
+  &#x60;&#x60;&#x60;javascript
+  findResult().then(function(result){
+    // success
+  }, function(reason){
+    // failure
+  });
+  &#x60;&#x60;&#x60;
+
+  Advanced Example
+  --------------
+
+  Synchronous Example
+
+  &#x60;&#x60;&#x60;javascript
+  var author, books;
+
+  try {
+    author = findAuthor();
+    books  = findBooksByAuthor(author);
+    // success
+  } catch(reason) {
+    // failure
+  }
+  &#x60;&#x60;&#x60;
+
+  Errback Example
+
+  &#x60;&#x60;&#x60;js
+
+  function foundBooks(books) {
+
+  }
+
+  function failure(reason) {
+
+  }
+
+  findAuthor(function(author, err){
+    if (err) {
+      failure(err);
+      // failure
+    } else {
+      try {
+        findBoooksByAuthor(author, function(books, err) {
+          if (err) {
+            failure(err);
+          } else {
+            try {
+              foundBooks(books);
+            } catch(reason) {
+              failure(reason);
+            }
+          }
+        });
+      } catch(error) {
+        failure(err);
+      }
+      // success
+    }
+  });
+  &#x60;&#x60;&#x60;
+
+  Promise Example;
+
+  &#x60;&#x60;&#x60;javascript
+  findAuthor().
+    then(findBooksByAuthor).
+    then(function(books){
+      // found books
+  }).catch(function(reason){
+    // something went wrong
+  });
+  &#x60;&#x60;&#x60;
+
+  @method then
+  @param {Function} onFulfilled
+  @param {Function} onRejected
+  @param {String} label optional string for labeling the promise.
+  Useful for tooling.
+  @return {Promise}
+*/
+  then: function(onFulfillment, onRejection, label) {
+    var promise = this;
+    this._onerror = null;
+
+    var thenPromise = new this.constructor(noop, label);
+
+    subscribe(this, thenPromise, onFulfillment, onRejection);
+
+    if (config.instrument) {
+      instrument(&#x27;chained&#x27;, promise, thenPromise);
+    }
+
+    return thenPromise;
+  },
+
+/**
+  &#x60;catch&#x60; is simply sugar for &#x60;then(undefined, onRejection)&#x60; which makes it the same
+  as the catch block of a try/catch statement.
+
+  &#x60;&#x60;&#x60;js
+  function findAuthor(){
+    throw new Error(&quot;couldn&#x27;t find that author&quot;);
+  }
+
+  // synchronous
+  try {
+    findAuthor();
+  } catch(reason) {
+    // something went wrong
+  }
+
+  // async with promises
+  findAuthor().catch(function(reason){
+    // something went wrong
+  });
+  &#x60;&#x60;&#x60;
+
+  @method catch
+  @param {Function} onRejection
+  @param {String} label optional string for labeling the promise.
+  Useful for tooling.
+  @return {Promise}
+*/
+  &#x27;catch&#x27;: function(onRejection, label) {
+    return this.then(null, onRejection, label);
+  },
+
+/**
+  &#x60;finally&#x60; will be invoked regardless of the promise&#x27;s fate just as native
+  try/catch/finally behaves
+
+  Synchronous example:
+
+  &#x60;&#x60;&#x60;js
+  findAuthor() {
+    if (Math.random() &gt; 0.5) {
+      throw new Error();
+    }
+    return new Author();
+  }
+
+  try {
+    return findAuthor(); // succeed or fail
+  } catch(error) {
+    return findOtherAuther();
+  } finally {
+    // always runs
+    // doesn&#x27;t affect the return value
+  }
+  &#x60;&#x60;&#x60;
+
+  Asynchronous example:
+
+  &#x60;&#x60;&#x60;js
+  findAuthor().catch(function(reason){
+    return findOtherAuther();
+  }).finally(function(){
+    // author was either found, or not
+  });
+  &#x60;&#x60;&#x60;
+
+  @method finally
+  @param {Function} callback
+  @param {String} label optional string for labeling the promise.
+  Useful for tooling.
+  @return {Promise}
+*/
+  &#x27;finally&#x27;: function(callback, label) {
+    var constructor = this.constructor;
+
+    return this.then(function(value) {
+      return constructor.resolve(callback()).then(function(){
+        return value;
+      });
+    }, function(reason) {
+      return constructor.resolve(callback()).then(function(){
+        throw reason;
+      });
+    }, label);
+  }
+};
+
+function invokeCallback(settled, promise, callback, detail) {
+  var hasCallback = isFunction(callback),
+      value, error, succeeded, failed;
+
+  if (hasCallback) {
+    try {
+      value = callback(detail);
+      succeeded = true;
+    } catch(e) {
+      failed = true;
+      error = e;
+    }
+  } else {
+    value = detail;
+    succeeded = true;
+  }
+
+  if (handleThenable(promise, value)) {
+    return;
+  } else if (hasCallback &amp;&amp; succeeded) {
+    resolve(promise, value);
+  } else if (failed) {
+    reject(promise, error);
+  } else if (settled === FULFILLED) {
+    resolve(promise, value);
+  } else if (settled === REJECTED) {
+    reject(promise, value);
+  }
+}
+
+function handleThenable(promise, value) {
+  var then = null,
+  resolved;
+
+  try {
+    if (promise === value) {
+      throw new TypeError(&quot;A promises callback cannot return that same promise.&quot;);
+    }
+
+    if (objectOrFunction(value)) {
+      then = value.then;
+
+      if (isFunction(then)) {
+        then.call(value, function(val) {
+          if (resolved) { return true; }
+          resolved = true;
+
+          if (value !== val) {
+            resolve(promise, val);
+          } else {
+            fulfill(promise, val);
+          }
+        }, function(val) {
+          if (resolved) { return true; }
+          resolved = true;
+
+          reject(promise, val);
+        }, &#x27;Settle: &#x27; + (promise._label || &#x27; unknown promise&#x27;));
+
+        return true;
+      }
+    }
+  } catch (error) {
+    if (resolved) { return true; }
+    reject(promise, error);
+    return true;
+  }
+
+  return false;
+}
+
+function resolve(promise, value) {
+  if (promise === value) {
+    fulfill(promise, value);
+  } else if (!handleThenable(promise, value)) {
+    fulfill(promise, value);
+  }
+}
+
+function fulfill(promise, value) {
+  if (promise._state !== PENDING) { return; }
+  promise._state = SEALED;
+  promise._detail = value;
+
+  config.async(publishFulfillment, promise);
+}
+
+function reject(promise, reason) {
+  if (promise._state !== PENDING) { return; }
+  promise._state = SEALED;
+  promise._detail = reason;
+
+  config.async(publishRejection, promise);
+}
+
+function publishFulfillment(promise) {
+  publish(promise, promise._state = FULFILLED);
+}
+
+function publishRejection(promise) {
+  if (promise._onerror) {
+    promise._onerror(promise._detail);
+  }
+
+  publish(promise, promise._state = REJECTED);
+}
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
