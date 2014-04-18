@@ -2101,6 +2101,20 @@ describe("RSVP extensions", function() {
       });
     });
   });
+  if (typeof Worker !== 'undefined') {
+    describe('web worker', function () {
+      it ('should work', function (done) {
+        var worker = new Worker('tests/worker.js');
+        worker.addEventListener('error', done);
+        worker.addEventListener('message', function (e) {
+          worker.terminate();
+          assert.equal(e.data, 'pong');
+          done();
+        });
+        worker.postMessage('ping');
+      });
+    });
+  }
 });
 
 // thanks to @wizardwerdna for the test case -> https://github.com/tildeio/rsvp.js/issues/66
