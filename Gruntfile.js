@@ -33,14 +33,8 @@ module.exports = function(grunt) {
   // Build a new version of the library
   this.registerTask('build', 'Builds a distributable version of <%= cfg.name %>', [
     'clean',
-    'transpile:amd',
-    'transpile:commonjs',
-    'sweetjs',
-    'concat:amd',
-    'concat:browser',
-    'browser:distNoVersion',
     'jshint',
-    'uglify:browser'
+    'broccoli:dist:build'
   ]);
 
   // Custom phantomjs test task
@@ -79,6 +73,7 @@ module.exports = function(grunt) {
   config.pkg = grunt.file.readJSON('package.json');
 
   // Load custom tasks from NPM
+  grunt.loadNpmTasks('grunt-broccoli');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-mocha-phantomjs');
   grunt.loadNpmTasks('grunt-mocha-test');

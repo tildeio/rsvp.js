@@ -1,13 +1,15 @@
 module.exports = {
   test: {
     src: [
-      'test/vendor/assert.js',
-      'test/test-adapter.js',
+      'dist/tests/vendor/assert.js',
+      'dist/tests/test-adapter.js',
+      // 'dist/tests/promises-spec.js',
       'node_modules/promises-aplus-tests/lib/tests/**/*.js',
-      'tmp/tests.cjs.js'
+      'dist/tests/commonjs/**/*-test.js',
     ],
     options: {
-      reporter: 'spec'
+      reporter: 'spec',
+      timeout: 200
     }
   }
 };
