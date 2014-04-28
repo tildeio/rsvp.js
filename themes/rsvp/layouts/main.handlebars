@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{htmlTitle}}</title>
+  <link rel="stylesheet" href="{{yuiGridsUrl}}">
+  <link rel="stylesheet" href="{{projectAssets}}/vendor/prettify/prettify-min.css">
+  <link rel="stylesheet" href="{{projectAssets}}/css/bootstrap.css">
+  <link rel="stylesheet" href="{{projectAssets}}/css/main.css" id="site_styles">
+  <script src="{{yuiSeedUrl}}"></script>
+</head>
+<body>
+
+
+  <div class="content">
+    <div class="container">
+      <h1 class="uppercase">{{title}}</h1>
+      <em>API Docs for: {{projectVersion}}</em>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="sidebar">
+            {{>sidebar}}
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="content-section">
+            {{>layout_content}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="{{projectAssets}}/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="{{projectAssets}}/js/yui-prettify.js"></script>
+<script src="{{projectAssets}}/js/tabs.js"></script>
+</body>
+</html>
