@@ -1,0 +1,47 @@
+{
+  "name": "rsvp",
+  "namespace": "RSVP",
+  "version": "3.0.6",
+  "description": "A lightweight library that provides tools for organizing asynchronous code",
+  "main": "dist/commonjs/main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {
+    "brfs": "0.0.8",
+    "grunt": "~0.4.2",
+    "grunt-browserify": "~1.2.11",
+    "grunt-cli": "~0.1.11",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-jshint": "~0.7.0",
+    "grunt-contrib-uglify": "~0.2.4",
+    "grunt-es6-module-transpiler": "~0.5.0",
+    "grunt-mocha-phantomjs": "~0.3.1",
+    "jshint": "~0.9.1",
+    "load-grunt-config": "~0.5.0",
+    "mocha-phantomjs": "~3.1.6",
+    "grunt-contrib-yuidoc": "~0.5.0",
+    "grunt-sweet.js": "~0.1.4",
+    "sweet-array-slice": "~0.0.4"
+  },
+  "scripts": {
+    "test": "grunt test",
+    "lint": "jshint lib",
+    "prepublish": "grunt build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tildeio/rsvp.js.git",
+    "dist": "git@github.com:components/rsvp.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tildeio/rsvp.js/issues"
+  },
+  "keywords": [
+    "promises",
+    "futures"
+  ],
+  "author": "Tilde, Inc. & Stefan Penner",
+  "license": "MIT"
+}
