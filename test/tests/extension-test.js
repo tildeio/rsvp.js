@@ -1251,7 +1251,9 @@ describe("RSVP extensions", function() {
           done();
         });
 
-        resolver(expectedValue);
+        setTimeout(function(){
+          resolver(expectedValue);
+        }, 10);
       });
 
       specify("1.2 If/when x is fulfilled, fulfill promise with the same value.", function(done){
@@ -1366,11 +1368,13 @@ describe("RSVP extensions", function() {
             done();
           });
 
-          resolver(expectedSuccess);
+          setTimeout(function() {
+            resolver(expectedSuccess);
+          }, 20);
         });
 
         specify('2.3.2 If/when rejectPromise is called with a reason r, reject promise with r.', function(done){
-          var expectedError, resolver, rejector, thenable, wrapped, calledThis,
+          var expectedError, resolver, rejector, thenable, wrapped, calledThis;
 
           thenable = {
             then: function(resolve, reject){
@@ -1389,7 +1393,9 @@ describe("RSVP extensions", function() {
             done();
           });
 
-          rejector(expectedError);
+          setTimeout(function() {
+            rejector(expectedError);
+          }, 20);
         });
 
         specify("2.3.3 If both resolvePromise and rejectPromise are called, or multiple calls to the same argument are made, the first call takes precedence, and any further calls are ignored", function(done){
@@ -1420,13 +1426,15 @@ describe("RSVP extensions", function() {
             assert(error === expectedError, 'rejected promise with x');
           });
 
-          rejector(expectedError);
-          rejector(expectedError);
+          setTimeout(function() {
+            rejector(expectedError);
+            rejector(expectedError);
 
-          rejector('foo');
+            rejector('foo');
 
-          resolver('bar');
-          resolver('baz');
+            resolver('bar');
+            resolver('baz');
+          }, 20);
 
           setTimeout(function(){
             assert(calledRejected === 1, 'only rejected once');
@@ -2169,3 +2177,30 @@ if (typeof module !== 'undefined' && module.exports) {
   });
 
 }
+
+var Promise = RSVP.Promise;
+// Kudos to @Octane at https://github.com/getify/native-promise-only/issues/5 for this, and @getify for pinging me.
+describe("Thenables should not be able to run code during assimilation", function () {
+    specify("resolving to a thenable", function () {
+        var thenCalled = false;
+        var thenable = {
+            then: function () {
+                thenCalled = true;
+            }
+        };
+
+        Promise.resolve(thenable);
+        assert.strictEqual(thenCalled, false);
+    });
+
+    specify("resolving to an evil promise", function () {
+        var thenCalled = false;
+        var evilPromise = Promise.resolve();
+        evilPromise.then = function () {
+            thenCalled = true;
+        };
+
+        Promise.resolve(evilPromise);
+        assert.strictEqual(thenCalled, false);
+    });
+});
