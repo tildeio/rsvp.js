@@ -546,7 +546,10 @@ describe("RSVP extensions", function() {
         secondResolver(true);
       }, 0);
 
-      RSVP.hash({ first: first, second: second }).then(function(values) {
+      RSVP.hash({
+        first: first,
+        second: second
+      }).then(function(values) {
         assert(values.first);
         assert(values.second);
         done();
@@ -613,13 +616,38 @@ describe("RSVP extensions", function() {
     });
 
     specify('works with a mix of promises and thenables and non-promises', function(done) {
-      var promise = new RSVP.Promise(function(resolve) { resolve(1); });
-      var syncThenable = { then: function (onFulfilled) { onFulfilled(2); } };
-      var asyncThenable = { then: function (onFulfilled) { setTimeout(function() { onFulfilled(3); }, 0); } };
+      var promise = new RSVP.Promise(function(resolve) {
+        resolve(1);
+      });
+
+      var syncThenable = {
+        then: function (onFulfilled) {
+          onFulfilled(2);
+        }
+      };
+
+      var asyncThenable = {
+        then: function (onFulfilled) {
+          setTimeout(function() {
+            onFulfilled(3);
+          }, 0);
+        }
+      };
+
       var nonPromise = 4;
 
-      RSVP.hash({ promise: promise, syncThenable: syncThenable, asyncThenable: asyncThenable, nonPromise: nonPromise }).then(function(results) {
-        assert(objectEquals(results, { promise: 1, syncThenable: 2, asyncThenable: 3, nonPromise: 4 }));
+      RSVP.hash({
+        promise: promise,
+        syncThenable: syncThenable,
+        asyncThenable: asyncThenable,
+        nonPromise: nonPromise
+      }).then(function(results) {
+        assert(objectEquals(results, {
+          promise: 1,
+          syncThenable: 2,
+          asyncThenable: 3,
+          nonPromise: 4
+        }));
         done();
       });
     });
@@ -707,7 +735,14 @@ describe("RSVP extensions", function() {
       var rejectedPromise = new RSVP.Promise(function(resolve, reject) {
         reject(new Error('WHOOPS'));
       });
-      var entries = { promise: promise, syncThenable: syncThenable, asyncThenable: asyncThenable, nonPromise: nonPromise, rejectedPromise: rejectedPromise};
+
+      var entries = {
+        promise: promise,
+        syncThenable: syncThenable,
+        asyncThenable: asyncThenable,
+        nonPromise: nonPromise,
+        rejectedPromise: rejectedPromise
+      };
 
       RSVP.hashSettled(entries).then(function(results) {
         assert(objectEquals(results.promise,       {state: 'fulfilled', value: 1} ));
@@ -866,7 +901,7 @@ describe("RSVP extensions", function() {
       all([promise, syncThenable, asyncThenable, nonPromise]).then(function(results) {
         assert(objectEquals(results, [1, 2, 3, 4]));
         done();
-      });
+      })['catch'](done);
     });
   }
 

@@ -50,5 +50,8 @@
     "futures"
   ],
   "author": "Tilde, Inc. & Stefan Penner",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "promises-aplus-tests": "~2.0.2"
+  }
 }
