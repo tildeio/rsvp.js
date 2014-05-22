@@ -9,11 +9,11 @@ if (typeof RSVP !== 'undefined') {
   defer = RSVP.defer;
 } else {
   // Test the Node build
-  RSVP = require('../dist/commonjs/main');
+  RSVP = require('../commonjs/main');
   assert = require('./vendor/assert');
-  defer = require('../dist/commonjs/main').defer;
-  resolve = require('../dist/commonjs/main').resolve;
-  reject = require('../dist/commonjs/main').reject;
+  defer = RSVP.defer;
+  resolve = RSVP.resolve;
+  reject = RSVP.reject;
 }
 
 if (typeof window === 'undefined' && typeof global !== 'undefined') {

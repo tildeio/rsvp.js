@@ -30,7 +30,22 @@
     "grunt-contrib-yuidoc": "~0.5.0",
     "grunt-release-it": "0.0.3",
     "grunt-sweet.js": "~0.1.4",
-    "sweet-array-slice": "~0.0.4"
+    "sweet-array-slice": "~0.0.4",
+    "broccoli": "^0.9.0",
+    "broccoli-concat-filenames": "^0.1.1",
+    "broccoli-concat": "0.0.6",
+    "broccoli-es6-module-filter": "^0.1.9",
+    "broccoli-merge-trees": "^0.1.3",
+    "broccoli-file-mover": "^0.2.0",
+    "broccoli-static-compiler": "^0.1.4",
+    "broccoli-wrap": "0.0.2",
+    "broccoli-uglify-js": "^0.1.3",
+    "broccoli-cjs-wrap": "0.0.4",
+    "broccoli-browserify": "0.0.1",
+    "broccoli-sweetjs": "^0.2.0",
+    "grunt-sweet": "^0.2.2",
+    "sweet.js": "^0.5.0",
+    "grunt-broccoli": "^0.3.0"
   },
   "scripts": {
     "test": "grunt test",
