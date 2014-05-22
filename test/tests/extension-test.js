@@ -474,22 +474,24 @@ describe("RSVP extensions", function() {
         done();
       });
     });
-    
-    specify('should inherit from node function', function() {
-      function nodeFunc(cb) { cb('hello'); }
-      nodeFunc.something = 'test123'
 
-      var denodeifiedFunc = RSVP.denodeify(nodeFunc);
+    if (Object.prototype.hasOwnProperty('__proto__')) {
+      specify('should inherit from node function', function() {
+        function nodeFunc(cb) { cb('hello'); }
+        nodeFunc.something = 'test123';
 
-      assert.equal(denodeifiedFunc.something, 'test123');
-      
-      denodeifiedFunc().then(function(result) {
-        assert.equal(result, 'hello');
+        var denodeifiedFunc = RSVP.denodeify(nodeFunc);
+
         assert.equal(denodeifiedFunc.something, 'test123');
-      }, function() {
-        assert.equal(false);
+
+        denodeifiedFunc().then(function(result) {
+          assert.equal(result, 'hello');
+          assert.equal(denodeifiedFunc.something, 'test123');
+        }, function() {
+          assert.equal(false);
+        });
       });
-    });
+    }
 
     specify('integration test showing how awesome this can be', function(done) {
       function readFile(fileName, cb) {
@@ -2006,11 +2008,11 @@ describe("RSVP extensions", function() {
     });
 
     it("throws an error if an array is not passed", function(){
-      assertRejection(RSVP.filter())
+      assertRejection(RSVP.filter());
     });
 
     it("throws an error if a filterFn is not passed", function(){
-      assertRejection(RSVP.filter([]))
+      assertRejection(RSVP.filter([]));
     });
 
     it("works with non-promise values and promises", function(done){
@@ -2023,7 +2025,9 @@ describe("RSVP extensions", function() {
       RSVP.filter(promises, filterFn).then(function(results){
         assert.deepEqual([2, 3], results);
         done();
-      }, done);
+      },function(reason) {
+        done(reason);
+      });
     });
 
     it("waits if filterFn returns a promise", function(done){
@@ -2104,15 +2108,16 @@ describe("RSVP extensions", function() {
     it("becomes rejected with the first promise that becomes rejected", function(done){
 
       var promises = [
-        RSVP.reject(new Error("1")),
-        RSVP.reject(new Error("2")),
+        RSVP.reject(new Error("prefix:1")),
+        RSVP.reject(new Error("prefix:2")),
         1
       ];
 
       RSVP.map(promises, mapFn).then(function(){
+        alert('passed');
         done(new Error("Promise was resolved when it shouldn't have been!"));
       }, function(reason){
-        assert(reason.message === "1");
+        assert(reason.message === "prefix:1");
         done();
       });
     });
@@ -2131,15 +2136,17 @@ describe("RSVP extensions", function() {
 
     it("becomes rejected if a promise returned from mapFn becomes rejected", function(done){
 
+      var expectedErrorMessage = "must-be-prefixed-with-non-number-for-old-ie:1" 
       var values = [ 1, 2, 3 ];
       var mapFn = function(value){
-        return RSVP.reject(new Error(value.toString()));
+        // http://msdn.microsoft.com/en-us/library/ie/dww53sbt(v=vs.94).aspx
+        return RSVP.reject(new Error(expectedErrorMessage));
       };
 
       RSVP.map(values, mapFn).then(function(){
         done(new Error("Promise should not be resolved!"));
       }, function (reason) {
-        assert(reason.message === "1");
+        assert(reason.message === expectedErrorMessage);
         done();
       });
     });
