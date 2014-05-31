@@ -1127,7 +1127,7 @@ describe("RSVP extensions", function() {
       });
     });
 
-    specify('if one of the promises is not thenable fulfill with it first', function(done) {
+    specify('the race begins on nextTurn and prioritized by array entry', function(done) {
       var firstResolver, secondResolver, nonPromise = 5;
 
       var first = new RSVP.Promise(function(resolve, reject) {
@@ -1139,7 +1139,7 @@ describe("RSVP extensions", function() {
       });
 
       race([first, second, nonPromise]).then(function(value) {
-        assert.equal(value, 5);
+        assert.equal(value, true);
         done();
       });
     });
