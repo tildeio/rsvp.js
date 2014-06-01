@@ -1615,13 +1615,13 @@ describe("RSVP extensions", function() {
     });
 
     function parseGuid(guid){
-      var matches = guid.match(/rsvp_(\d+)-(\d+)/)
+      var matches = guid.match(/rsvp_(\d+)-(\d+)/);
 
       if (matches) {
         return {
           key: matches[1],
           index: parseInt(matches[2], 10)
-        }
+        };
       } else {
         throw new Error('unknown guid:' + guid);
       }
@@ -1630,6 +1630,11 @@ describe("RSVP extensions", function() {
     describe("creation", function(){
       afterEach(function(){
         RSVP.off('created');
+        RSVP.configure('instrument', false);
+      });
+
+      beforeEach(function () {
+        RSVP.configure('instrument', true);
       });
 
       specify("it emits a creation event", function(done){
@@ -2113,7 +2118,6 @@ describe("RSVP extensions", function() {
       ];
 
       RSVP.map(promises, mapFn).then(function(){
-        alert('passed');
         done(new Error("Promise was resolved when it shouldn't have been!"));
       }, function(reason){
         assert(reason.message === "prefix:1");
