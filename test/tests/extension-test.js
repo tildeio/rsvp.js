@@ -1013,7 +1013,7 @@ describe("RSVP extensions", function() {
   });
 
   describe("RSVP.on", function(){
-    after(function() {
+    afterEach(function() {
       RSVP.off('error');
     });
 
@@ -1050,9 +1050,6 @@ describe("RSVP extensions", function() {
 
       new RSVP.Promise(function(resolve, reject) {
         reject(thrownError);
-      }).then(function() {
-        // doesn't get here
-        assert(false);
       });
     });
 
@@ -1063,9 +1060,11 @@ describe("RSVP extensions", function() {
         assert(false, "Should not get here");
       });
 
-      new RSVP.Promise(function(resolve, reject) {
+      var promise = new RSVP.Promise(function(resolve, reject) {
         reject(thrownError);
-      }).then(null, function(error) {
+      });
+
+      promise.then(null, function(error) {
         assert.equal(error, thrownError, "The handler should handle the error");
         done();
       });
@@ -1229,7 +1228,7 @@ describe("RSVP extensions", function() {
   describe("RSVP.onerror", function(){
     var onerror;
 
-    after(function() {
+    afterEach(function() {
       RSVP.off('error');
     });
 
