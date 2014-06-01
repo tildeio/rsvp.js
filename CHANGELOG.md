@@ -2,26 +2,26 @@
 
 # 3.0.7
 
-improve tests in some older es5+ browsers
-[Bugfix] denodeify should not use console for deprecation warning unless console is defined
-[Enhancement] instrumentation should emit out-of-band. This should improve ember-extension performance
-[Bugfix] race should not be susceptible to zalgo
-[Perf] PromiseEnumerator increase performance of all enumerable methods all/allSettled/hash/hasSettled -> https://gist.github.com/stefanpenner/26465d5848f2924e2aca
-[Docfix] Fix small documentation inconsistency
-[Perf] an internal promise shouldn't bother validating `this` and `resolver`
-[Perf] flatten asap’s QUEUE structure
-[Perf] Reduce Constructor AST size.
-[Perf] some versions of v8, think keep marking these functions to be optimized. This hints to them not to be.
-[Perf] accidental resolve step, that merely needed to be a fulfill
-[Perf/Enhancement] simplify publishing
-[Spec ADdition]add spec test “Ensure `then` is always called with a clean stack.” ensure RSVP passes future a+ spec
-[Bugfix] web worker support
-[Docfix] Add a param name to make yuidoc happy
-[Enhancement] simplify async vs sync pub/sub code-paths
-[Bugfix] Passed the label through to the Promise object, as expected
-[Docfix] missing Parentheses on promise example in documentation
-[License] Add Stefan Penner to license
-[Docfix] document `var promises` in filter.js
+* improve tests in some older es5+ browsers
+* [Bugfix] denodeify should not use console for deprecation warning unless console is defined
+* [Enhancement] instrumentation should emit out-of-band. This should improve ember-extension performance
+* [Bugfix] race should not be susceptible to zalgo
+* [Perf] PromiseEnumerator increase performance of all enumerable methods all/allSettled/hash/hasSettled -> https://gist.github.com/stefanpenner/26465d5848f2924e2aca
+* [Docfix] Fix small documentation inconsistency
+* [Perf] an internal promise shouldn't bother validating `this` and `resolver`
+* [Perf] flatten asap’s QUEUE structure
+* [Perf] Reduce Constructor AST size.
+* [Perf] some versions of v8, think keep marking these functions to be optimized. This hints to them not to be.
+* [Perf] accidental resolve step, that merely needed to be a fulfill
+* [Perf/Enhancement] simplify publishing
+* [Spec ADdition]add spec test “Ensure `then` is always called with a clean stack.” ensure RSVP passes future a+ spec
+* [Bugfix] web worker support
+* [Docfix] Add a param name to make yuidoc happy
+* [Enhancement] simplify async vs sync pub/sub code-paths
+* [Bugfix] Passed the label through to the Promise object, as expected
+* [Docfix] missing Parentheses on promise example in documentation
+* [License] Add Stefan Penner to license
+* [Docfix] document `var promises` in filter.js
 
 # 3.0.3 -> 3.0.6 (missing changelog)
 
