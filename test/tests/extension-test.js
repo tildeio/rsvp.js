@@ -11,6 +11,32 @@ if (typeof Object.getPrototypeOf !== "function") {
     };
 }
 
+function keysOf(object) {
+  var results = [];
+
+  for (var key in object) {
+    if (object.hasOwnProperty(key)) {
+      results.push(key);
+    }
+  }
+
+  return results;
+}
+
+var o_create = Object.create || function(o, props) {
+  function F() {}
+  F.prototype = o;
+
+  if (typeof(props) === "object") {
+    for (var prop in props) {
+      if (props.hasOwnProperty((prop))) {
+        F[prop] = props[prop];
+      }
+    }
+  }
+  return new F();
+};
+
 function objectEquals(obj1, obj2) {
   for (var i in obj1) {
     if (obj1.hasOwnProperty(i)) {
@@ -1849,15 +1875,15 @@ describe("RSVP extensions", function() {
         RSVP.Promise.apply(this, arguments);
       }
 
-      PromiseSubclass.prototype = Object.create(RSVP.Promise.prototype);
+      PromiseSubclass.prototype = o_create(RSVP.Promise.prototype);
       PromiseSubclass.prototype.constructor = PromiseSubclass;
       PromiseSubclass.cast = RSVP.Promise.cast;
 
       var promise = RSVP.resolve(1);
       var casted = PromiseSubclass.cast(promise);
 
-      assert(casted instanceof RSVP.Promise);
-      assert(casted instanceof PromiseSubclass);
+      assert(casted instanceof RSVP.Promise, 'expected the casted to be instance of RSVP.Promise');
+      assert(casted instanceof PromiseSubclass, 'expected instance to also be instance of subclass');
       assert(casted !== promise);
 
       casted.then(function(value) {
