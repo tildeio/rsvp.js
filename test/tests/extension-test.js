@@ -11,6 +11,32 @@ if (typeof Object.getPrototypeOf !== "function") {
     };
 }
 
+function keysOf(object) {
+  var results = [];
+
+  for (var key in object) {
+    if (object.hasOwnProperty(key)) {
+      results.push(key);
+    }
+  }
+
+  return results;
+}
+
+var o_create = Object.create || function(o, props) {
+  function F() {}
+  F.prototype = o;
+
+  if (typeof(props) === "object") {
+    for (var prop in props) {
+      if (props.hasOwnProperty((prop))) {
+        F[prop] = props[prop];
+      }
+    }
+  }
+  return new F();
+};
+
 function objectEquals(obj1, obj2) {
   for (var i in obj1) {
     if (obj1.hasOwnProperty(i)) {
@@ -474,22 +500,24 @@ describe("RSVP extensions", function() {
         done();
       });
     });
-    
-    specify('should inherit from node function', function() {
-      function nodeFunc(cb) { cb('hello'); }
-      nodeFunc.something = 'test123'
 
-      var denodeifiedFunc = RSVP.denodeify(nodeFunc);
+    if (Object.prototype.hasOwnProperty('__proto__')) {
+      specify('should inherit from node function', function() {
+        function nodeFunc(cb) { cb('hello'); }
+        nodeFunc.something = 'test123';
 
-      assert.equal(denodeifiedFunc.something, 'test123');
-      
-      denodeifiedFunc().then(function(result) {
-        assert.equal(result, 'hello');
+        var denodeifiedFunc = RSVP.denodeify(nodeFunc);
+
         assert.equal(denodeifiedFunc.something, 'test123');
-      }, function() {
-        assert.equal(false);
+
+        denodeifiedFunc().then(function(result) {
+          assert.equal(result, 'hello');
+          assert.equal(denodeifiedFunc.something, 'test123');
+        }, function() {
+          assert.equal(false);
+        });
       });
-    });
+    }
 
     specify('integration test showing how awesome this can be', function(done) {
       function readFile(fileName, cb) {
@@ -1011,7 +1039,7 @@ describe("RSVP extensions", function() {
   });
 
   describe("RSVP.on", function(){
-    after(function() {
+    afterEach(function() {
       RSVP.off('error');
     });
 
@@ -1048,9 +1076,6 @@ describe("RSVP extensions", function() {
 
       new RSVP.Promise(function(resolve, reject) {
         reject(thrownError);
-      }).then(function() {
-        // doesn't get here
-        assert(false);
       });
     });
 
@@ -1061,9 +1086,11 @@ describe("RSVP extensions", function() {
         assert(false, "Should not get here");
       });
 
-      new RSVP.Promise(function(resolve, reject) {
+      var promise = new RSVP.Promise(function(resolve, reject) {
         reject(thrownError);
-      }).then(null, function(error) {
+      });
+
+      promise.then(null, function(error) {
         assert.equal(error, thrownError, "The handler should handle the error");
         done();
       });
@@ -1227,7 +1254,7 @@ describe("RSVP extensions", function() {
   describe("RSVP.onerror", function(){
     var onerror;
 
-    after(function() {
+    afterEach(function() {
       RSVP.off('error');
     });
 
@@ -1614,13 +1641,13 @@ describe("RSVP extensions", function() {
     });
 
     function parseGuid(guid){
-      var matches = guid.match(/rsvp_(\d+)-(\d+)/)
+      var matches = guid.match(/rsvp_(\d+)-(\d+)/);
 
       if (matches) {
         return {
           key: matches[1],
           index: parseInt(matches[2], 10)
-        }
+        };
       } else {
         throw new Error('unknown guid:' + guid);
       }
@@ -1629,6 +1656,11 @@ describe("RSVP extensions", function() {
     describe("creation", function(){
       afterEach(function(){
         RSVP.off('created');
+        RSVP.configure('instrument', false);
+      });
+
+      beforeEach(function () {
+        RSVP.configure('instrument', true);
       });
 
       specify("it emits a creation event", function(done){
@@ -1843,15 +1875,15 @@ describe("RSVP extensions", function() {
         RSVP.Promise.apply(this, arguments);
       }
 
-      PromiseSubclass.prototype = Object.create(RSVP.Promise.prototype);
+      PromiseSubclass.prototype = o_create(RSVP.Promise.prototype);
       PromiseSubclass.prototype.constructor = PromiseSubclass;
       PromiseSubclass.cast = RSVP.Promise.cast;
 
       var promise = RSVP.resolve(1);
       var casted = PromiseSubclass.cast(promise);
 
-      assert(casted instanceof RSVP.Promise);
-      assert(casted instanceof PromiseSubclass);
+      assert(casted instanceof RSVP.Promise, 'expected the casted to be instance of RSVP.Promise');
+      assert(casted instanceof PromiseSubclass, 'expected instance to also be instance of subclass');
       assert(casted !== promise);
 
       casted.then(function(value) {
@@ -2006,11 +2038,11 @@ describe("RSVP extensions", function() {
     });
 
     it("throws an error if an array is not passed", function(){
-      assertRejection(RSVP.filter())
+      assertRejection(RSVP.filter());
     });
 
     it("throws an error if a filterFn is not passed", function(){
-      assertRejection(RSVP.filter([]))
+      assertRejection(RSVP.filter([]));
     });
 
     it("works with non-promise values and promises", function(done){
@@ -2023,7 +2055,9 @@ describe("RSVP extensions", function() {
       RSVP.filter(promises, filterFn).then(function(results){
         assert.deepEqual([2, 3], results);
         done();
-      }, done);
+      },function(reason) {
+        done(reason);
+      });
     });
 
     it("waits if filterFn returns a promise", function(done){
@@ -2104,15 +2138,15 @@ describe("RSVP extensions", function() {
     it("becomes rejected with the first promise that becomes rejected", function(done){
 
       var promises = [
-        RSVP.reject(new Error("1")),
-        RSVP.reject(new Error("2")),
+        RSVP.reject(new Error("prefix:1")),
+        RSVP.reject(new Error("prefix:2")),
         1
       ];
 
       RSVP.map(promises, mapFn).then(function(){
         done(new Error("Promise was resolved when it shouldn't have been!"));
       }, function(reason){
-        assert(reason.message === "1");
+        assert(reason.message === "prefix:1");
         done();
       });
     });
@@ -2131,15 +2165,17 @@ describe("RSVP extensions", function() {
 
     it("becomes rejected if a promise returned from mapFn becomes rejected", function(done){
 
+      var expectedErrorMessage = "must-be-prefixed-with-non-number-for-old-ie:1" 
       var values = [ 1, 2, 3 ];
       var mapFn = function(value){
-        return RSVP.reject(new Error(value.toString()));
+        // http://msdn.microsoft.com/en-us/library/ie/dww53sbt(v=vs.94).aspx
+        return RSVP.reject(new Error(expectedErrorMessage));
       };
 
       RSVP.map(values, mapFn).then(function(){
         done(new Error("Promise should not be resolved!"));
       }, function (reason) {
-        assert(reason.message === "1");
+        assert(reason.message === expectedErrorMessage);
         done();
       });
     });

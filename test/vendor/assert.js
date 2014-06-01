@@ -1,3 +1,13 @@
+function keys(obj) {
+  var result = [];
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      result.push(prop);
+    }
+  }
+  return result;
+}
+
 // http://wiki.commonjs.org/wiki/Unit_Testing/1.0
 //
 // THIS IS NOT TESTED NOR LIKELY TO WORK OUTSIDE V8!
@@ -251,8 +261,8 @@ function objEquiv(a, b) {
     return _deepEqual(a, b);
   }
   try {
-    var ka = Object.keys(a),
-        kb = Object.keys(b),
+    var ka = keys(a),
+        kb = keys(b),
         key, i;
   } catch (e) {//happens when one is a string literal and the other isn't
     return false;
