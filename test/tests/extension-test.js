@@ -1288,6 +1288,94 @@ describe("RSVP extensions", function() {
         done();
       });
     });
+
+    it("Enumerator: When provided, any unhandled exceptions are sent to it", function(done) {
+      var thrownError = new Error();
+
+      RSVP.configure('onerror', function(error) {
+        assert.equal(error, thrownError, "The thrown error is passed in");
+        done();
+      });
+
+      var promise = new RSVP.Promise(function(resolve, reject) {
+        reject(thrownError);
+      });
+
+      RSVP.Promise.all([promise]).then(function() {
+        // doesn't get here
+        assert(false);
+      });
+    });
+
+    it("all When provided, handled exceptions are not sent to it", function(done) {
+      var thrownError = new Error();
+
+      RSVP.configure('onerror', function(error) {
+        assert(false, "Should not get here");
+      });
+
+      var promise = new RSVP.Promise(function(resolve, reject) {
+        reject(thrownError);
+      });
+
+      RSVP.Promise.all([promise]).then(undefined, function(reason) {
+        assert.equal(reason, thrownError, "The handler should handle the error");
+        done();
+      });
+    });
+
+    it("assimilation: When provided, handled exceptions are not sent to it", function(done) {
+      var thrownError = new Error();
+
+      RSVP.configure('onerror', function(error) {
+        assert(false, "Should not get here");
+      });
+
+      RSVP.Promise.resolve().then(function(){
+        return RSVP.Promise.reject(thrownError);
+      }).then(undefined, function(reason) {
+        assert.equal(reason, thrownError, "The handler should handle the error");
+        done();
+      });
+    });
+
+    it("zalgo: When provided, unhandled exceptions are sent to it", function(done) {
+      var thrownError = new Error();
+
+      var didOnError = false;
+
+      RSVP.configure('onerror', function(error) {
+        didOnError = true;
+      });
+
+      var rejected = RSVP.Promise.reject(thrownError);
+
+      RSVP.Promise.resolve().then(function(){
+        return rejected;
+      }).then(undefined, function(reason) {
+        assert(didOnError, "should also have emitted onerror");
+        assert.equal(reason, thrownError, "The handler should handle the error");
+        done();
+      });
+    });
+
+
+    it("assimilation: When provided, unhandled exceptions are sent to it", function(done) {
+      var thrownError = new Error();
+
+      RSVP.configure('onerror', function(error) {
+        assert(true, "Should get here");
+        done();
+      });
+
+      var promise = new RSVP.Promise(function(resolve, reject) {
+        reject(thrownError);
+      });
+
+      RSVP.Promise.resolve().then(function(){
+        return promise;
+      });
+    });
   });
 
   describe("RSVP.resolve", function(){
