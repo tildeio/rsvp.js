@@ -1,5 +1,10 @@
 # Master
 
+# 3.0.8
+* [Bugfix] custom onerror handler, for potentially unhandled errors
+  would report unhandled errors in some incorrect scenarios.
+[#255](https://github.com/tildeio/rsvp.js/pull/255)
+
 # 3.0.7
 
 * improve tests in some older es5+ browsers
