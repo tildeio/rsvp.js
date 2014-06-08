@@ -1,5 +1,12 @@
 # Master
 
+# 3.0.9
+* [Bugfix] no longer include promise-aplus tests as a production
+  dependency
+* [Enhancement] fast then path for both rejection/fulfilment [0d252](https://github.com/tildeio/rsvp.js/commit/0d252ed4831eabb82991584e2e3eaae2a3a2ba42)
+* [Enhancement] short-cut for faster then chaining in specific scenarios
+  [#256](https://github.com/tildeio/rsvp.js/pull/256)
+
 # 3.0.8
 * [Bugfix] custom onerror handler, for potentially unhandled errors
   would report unhandled errors in some incorrect scenarios.
