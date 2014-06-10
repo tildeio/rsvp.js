@@ -30,32 +30,19 @@ module.exports = function(grunt) {
     'buildTests:dist'
   ]);
 
-  // Build a new version of the library
-  this.registerTask('build', 'Builds a distributable version of <%= cfg.name %>', [
-    'clean',
-    'transpile:amd',
-    'transpile:commonjs',
-    'sweetjs',
-    'concat:amd',
-    'concat:browser',
-    'browser:distNoVersion',
-    'jshint',
-    'uglify:browser'
-  ]);
-
   // Custom phantomjs test task
   this.registerTask('test:phantom', "Runs tests through the command line using PhantomJS", [
                     'build', 'tests', 'mocha_phantomjs']);
 
   // Custom Node test task
   this.registerTask('test:node', [
-    'build',
+    // 'build',
     'tests',
     'mochaTest'
   ]);
 
   this.registerTask('test', [
-    'build',
+    // 'build',
     'tests',
     'mocha_phantomjs',
     'mochaTest'
