@@ -10,9 +10,12 @@
   "devDependencies": {
     "brfs": "0.0.8",
     "broccoli": "^0.12.2",
+    "broccoli-kitchen-sink-helpers": "^0.2.2",
     "broccoli-merge-trees": "^0.1.4",
     "broccoli-sweetjs": "^0.3.0",
+    "broccoli-writer": "^0.1.1",
     "connect-redirection": "0.0.1",
+    "ember-cli": "0.0.32",
     "es6-module-transpiler": "git://github.com/square/es6-module-transpiler#rewrite-with-bindings",
     "grunt": "~0.4.2",
     "grunt-browserify": "~1.2.11",
