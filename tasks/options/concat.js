@@ -1,32 +1,4 @@
 module.exports = {
-  amd: {
-    src: [
-      'tmp/<%= pkg.name %>/**/*.amd.js',
-      'tmp/<%= pkg.name %>.amd.js'
-    ],
-    dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.amd.js',
-    options: {
-      banner: '/**\n' +
-              '  @class RSVP\n' +
-              '  @module RSVP\n' +
-              '  */\n'
-    }
-  },
-
-  amdNoVersion: {
-    src: [
-      'tmp/<%= pkg.name %>/**/*.amd.js',
-      'tmp/<%= pkg.name %>.amd.js'
-    ],
-    dest: 'dist/<%= pkg.name %>.amd.js',
-    options: {
-      banner: '/**\n' +
-              '  @class RSVP\n' +
-              '  @module RSVP\n' +
-              '  */\n'
-    }
-  },
-
   deps: {
     src: ['vendor/deps/*.js'],
     dest: 'tmp/deps.amd.js'
