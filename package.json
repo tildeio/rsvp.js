@@ -9,7 +9,15 @@
   },
   "devDependencies": {
     "brfs": "0.0.8",
+    "broccoli": "^0.12.2",
+    "broccoli-kitchen-sink-helpers": "^0.2.2",
+    "broccoli-merge-trees": "^0.1.4",
+    "broccoli-writer": "^0.1.1",
+    "connect-redirection": "0.0.1",
+    "ember-cli": "0.0.32",
+    "broccoli-compile-modules": "eventualbuddha/broccoli-compile-modules",
     "grunt": "~0.4.2",
+    "grunt-broccoli": "^0.2.2",
     "grunt-browserify": "~1.2.11",
     "grunt-cli": "~0.1.11",
     "grunt-contrib-clean": "~0.5.0",
@@ -18,24 +26,19 @@
     "grunt-contrib-jshint": "~0.7.0",
     "grunt-contrib-uglify": "~0.2.4",
     "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-yuidoc": "~0.5.0",
     "grunt-es6-module-transpiler": "~0.5.0",
     "grunt-mocha-phantomjs": "~0.3.1",
     "grunt-mocha-test": "~0.5.0",
+    "grunt-release-it": "0.0.3",
     "grunt-s3": "~0.2.0-alpha.2",
     "jshint": "~0.9.1",
     "load-grunt-config": "~0.5.0",
     "mocha-phantomjs": "~3.1.6",
-    "promises-aplus-tests": "git://github.com/stefanpenner/promises-tests.git",
-    "connect-redirection": "0.0.1",
-    "grunt-contrib-yuidoc": "~0.5.0",
-    "grunt-release-it": "0.0.3",
-    "grunt-sweet.js": "~0.1.4",
-    "sweet-array-slice": "~0.0.4"
+    "promises-aplus-tests": "git://github.com/stefanpenner/promises-tests.git"
   },
   "scripts": {
-    "test": "grunt test",
-    "lint": "jshint lib",
-    "prepublish": "grunt build"
+    "lint": "jshint lib"
   },
   "repository": {
     "type": "git",
