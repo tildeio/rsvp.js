@@ -3,7 +3,7 @@
   "namespace": "RSVP",
   "version": "3.0.10",
   "description": "A lightweight library that provides tools for organizing asynchronous code",
-  "main": "dist/commonjs/main.js",
+  "main": "dist/commonjs/rsvp.js",
   "directories": {
     "lib": "lib"
   },
@@ -14,7 +14,7 @@
     "broccoli-merge-trees": "^0.1.4",
     "broccoli-writer": "^0.1.1",
     "connect-redirection": "0.0.1",
-    "ember-cli": "0.0.32",
+    "ember-cli": "0.0.37",
     "broccoli-compile-modules": "eventualbuddha/broccoli-compile-modules",
     "grunt": "~0.4.2",
     "grunt-broccoli": "^0.2.2",

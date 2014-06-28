@@ -5,8 +5,7 @@ var mergeTrees = require('broccoli-merge-trees');
 var browserDist = compileModules('lib', {
   inputFiles: ['rsvp.umd.js'],
   output: '/rsvp.js',
-  formatter: 'export-variable'
-  //formatter: 'module-variable'
+  formatter: 'bundle'
 });
 
 var nodeDist = compileModules('lib', {
@@ -15,4 +14,7 @@ var nodeDist = compileModules('lib', {
   formatter: 'commonjs'
 });
 
-module.exports = mergeTrees([ browserDist, nodeDist ]);
+module.exports = mergeTrees([
+  browserDist,
+  nodeDist
+]);
