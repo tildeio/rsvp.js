@@ -1,0 +1,6 @@
+{
+  "framework": "mocha",
+  "serve_files": [ "tmp/test-bundle.js" ],
+  "parallel": 5,
+  "before_tests": "npm run build-all"
+}
