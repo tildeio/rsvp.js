@@ -17,7 +17,7 @@ var bundle = compileModules('lib', {
 trees.push(bundle);
 trees.push(compileModules('lib', {
   inputFiles: ['**/*.js'],
-  output: '/amd/main.js',
+  output: '/amd/',
   formatter: new AMDFormatter()
 }));
 
