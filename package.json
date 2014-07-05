@@ -15,6 +15,7 @@
     "broccoli-jshint": "^0.5.1",
     "broccoli-merge-trees": "^0.1.4",
     "broccoli-static-compiler": "^0.1.4",
+    "browserify": "^4.2.0",
     "ember-cli": "0.0.37",
     "es6-module-transpiler-amd-formatter": "0.0.1",
     "jshint": "~0.9.1",
