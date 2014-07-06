@@ -18,6 +18,7 @@
     "browserify": "^4.2.0",
     "ember-cli": "0.0.37",
     "es6-module-transpiler-amd-formatter": "0.0.1",
+    "express": "^4.5.0",
     "jshint": "~0.9.1",
     "mkdirp": "^0.5.0",
     "mocha": "^1.20.1",
