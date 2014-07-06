@@ -1,5 +1,8 @@
 # Master
 
+* rework tooling (Broccoli, testem, no grunt)
+* utilize bundle format for super small UMD builds
+
 # 3.0.9
 * [Bugfix] no longer include promise-aplus tests as a production
   dependency

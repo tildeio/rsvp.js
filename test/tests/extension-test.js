@@ -23,6 +23,10 @@ function keysOf(object) {
   return results;
 }
 
+var g = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
+var RSVP = g.adapter.RSVP;
+var assert = require('../vendor/assert');
+
 var o_create = Object.create || function(o, props) {
   function F() {}
   F.prototype = o;
@@ -377,24 +381,24 @@ describe("RSVP extensions", function() {
       });
     });
 
-    //if (typeof window.navigator === "object" && window.navigator.userAgent.indexOf('PhantomJS') === -1) {
-    //  // don't run this node specific test in phantom. "use strict" + this has issues.
-    //  specify('allows rebinding thisArg via denodeify', function(done) {
-    //    var thisArg = null;
-    //    function nodeFunc(cb) {
-    //      thisArg = this;
-    //      cb();
-    //    }
+    if (typeof window !== 'undefined' && window.navigator && window.navigator.userAgent.indexOf('PhantomJS') === -1) {
+      // don't run this node specific test in phantom. "use strict" + this has issues.
+      specify('allows rebinding thisArg via denodeify', function(done) {
+        var thisArg = null;
+        function nodeFunc(cb) {
+          thisArg = this;
+          cb();
+        }
 
-    //    var expectedThis = { expect: "me" };
-    //    var denodeifiedFunc = RSVP.denodeify(nodeFunc, expectedThis);
+        var expectedThis = { expect: "me" };
+        var denodeifiedFunc = RSVP.denodeify(nodeFunc, expectedThis);
 
-    //    denodeifiedFunc().then(function() {
-    //      assert.equal(thisArg, expectedThis);
-    //      done();
-    //    });
-    //  });
-    //}
+        denodeifiedFunc().then(function() {
+          assert.equal(thisArg, expectedThis);
+          done();
+        });
+      });
+    }
 
     specify('waits for promise/thenable arguments to settle before passing them to the node function', function(done) {
       var args = null;
@@ -1939,60 +1943,6 @@ describe("RSVP extensions", function() {
         var action = actions.shift();
         action[0](action[1]);
       }
-    });
-  });
-
-  describe("Promise.cast", function () {
-    it("If SameValue(constructor, C) is true, return x.", function(){
-      var promise = RSVP.resolve(1);
-      var casted = RSVP.Promise.cast(promise);
-
-      assert.deepEqual(casted, promise);
-    });
-
-    it("If SameValue(constructor, C) is false, and isThenable(C) is true, return PromiseResolve(promise, x).", function(){
-      var promise = { then: function() { } };
-      var casted = RSVP.Promise.cast(promise);
-
-      assert(casted instanceof RSVP.Promise);
-      assert(casted !== promise);
-    });
-
-    it("If SameValue(constructor, C) is false, and isPromiseSubClass(C) is true, return PromiseResolve(promise, x).", function(done) {
-      function PromiseSubclass() {
-        RSVP.Promise.apply(this, arguments);
-      }
-
-      PromiseSubclass.prototype = o_create(RSVP.Promise.prototype);
-      PromiseSubclass.prototype.constructor = PromiseSubclass;
-      PromiseSubclass.cast = RSVP.Promise.cast;
-
-      var promise = RSVP.resolve(1);
-      var casted = PromiseSubclass.cast(promise);
-
-      assert(casted instanceof RSVP.Promise, 'expected the casted to be instance of RSVP.Promise');
-      assert(casted instanceof PromiseSubclass, 'expected instance to also be instance of subclass');
-      assert(casted !== promise);
-
-      casted.then(function(value) {
-        assert.equal(value, 1);
-        done();
-      });
-    });
-
-    it("If SameValue(constructor, C) is false, and isThenable(C) is false, return PromiseResolve(promise, x).", function(){
-      var value = 1;
-      var casted = RSVP.Promise.cast(value);
-
-      assert(casted instanceof RSVP.Promise);
-      assert(casted !== value);
-    });
-
-    it("casts null correctly", function(done){
-      RSVP.Promise.cast(null).then(function(value){
-        assert.equal(value, null);
-        done();
-      });
     });
   });
 
