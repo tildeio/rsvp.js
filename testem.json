@@ -1,5 +1,10 @@
 {
   "test_page": "test/index.html",
   "parallel": 5,
-  "before_tests": "npm run build-all"
+  "before_tests": "npm run build-all",
+  "launchers": {
+    "Mocha": {
+      "command": "mocha test/main.js"
+    }
+  }
 }
