@@ -7,13 +7,11 @@ var defer = RSVP.defer;
 var resolve = RSVP.resolve;
 var reject = RSVP.reject;
 
-if (typeof window === 'undefined' && typeof global !== 'undefined') {
-    window = global;
-}
-
-module.exports = global.adapter = {
+var g = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
+module.exports = g.adapter = {
   resolved: resolve,
   rejected: reject,
   deferred: defer,
   RSVP: RSVP
 };
+

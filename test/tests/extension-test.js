@@ -22,7 +22,10 @@ function keysOf(object) {
 
   return results;
 }
-var RSVP = adapter.RSVP;
+
+var g = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
+var RSVP = g.adapter.RSVP;
+var assert = require('../vendor/assert');
 
 var o_create = Object.create || function(o, props) {
   function F() {}
@@ -378,7 +381,7 @@ describe("RSVP extensions", function() {
       });
     });
 
-    if (typeof window.navigator === "object" && window.navigator.userAgent.indexOf('PhantomJS') === -1) {
+    if (typeof window !== 'undefined' && window.navigator && window.navigator.userAgent.indexOf('PhantomJS') === -1) {
       // don't run this node specific test in phantom. "use strict" + this has issues.
       specify('allows rebinding thisArg via denodeify', function(done) {
         var thisArg = null;
