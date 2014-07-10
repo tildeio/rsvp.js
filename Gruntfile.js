@@ -1,3 +1,5 @@
+var calculateVersion = require('./lib/calculateVersion');
+
 module.exports = function(grunt) {
   var config = require('load-grunt-config')(grunt, {
     configPath: 'tasks/options',
@@ -40,7 +42,8 @@ module.exports = function(grunt) {
     'concat:browser',
     'browser:distNoVersion',
     'jshint',
-    'uglify:browser'
+    'uglify:browser',
+    'versionFiles'
   ]);
 
   // Custom phantomjs test task
@@ -69,7 +72,8 @@ module.exports = function(grunt) {
     'concat:browser',
     'browser:distNoVersion',
     'concat:amdNoVersion',
-    'uglify:browserNoVersion'
+    'uglify:browserNoVersion',
+    'versionFiles'
   ]);
 
   // Custom YUIDoc task
@@ -87,4 +91,5 @@ module.exports = function(grunt) {
 
   // Merge config into emberConfig, overwriting existing settings
   grunt.initConfig(config);
+  grunt.config('versionStamp', calculateVersion());
 };
