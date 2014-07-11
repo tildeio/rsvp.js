@@ -6,6 +6,11 @@ var compileModules = require('broccoli-compile-modules');
 var mergeTrees = require('broccoli-merge-trees');
 var moveFile = require('broccoli-file-mover');
 
+var concat           = require('broccoli-concat');
+var replace          = require('broccoli-string-replace');
+var calculateVersion = require('./lib/calculateVersion');
+var path             = require('path');
+
 var trees = [];
 
 var bundle = compileModules('lib', {
@@ -30,4 +35,27 @@ if (process.env.ENV === 'production') {
   }));
 }
 
-module.exports = mergeTrees(trees);
+var distTree = mergeTrees(trees.concat('config'));
+var distTrees = [];
+
+distTrees.push(concat(distTree, {
+  inputFiles: ['versionTemplate.txt', 'rsvp.js'], outputFile: '/rsvp.js'
+}));
+
+if (process.env.ENV === 'production') {
+  distTrees.push(concat(distTree, {
+    inputFiles: ['versionTemplate.txt', 'rsvp.min.js'], outputFile: '/rsvp.min.js'
+  }));
+}
+
+
+distTree = mergeTrees(distTrees);
+var distTree = replace(distTree, {
+  files: ['rsvp.js', 'rsvp.min.js'],
+  pattern: {
+    match: /VERSION_PLACEHOLDER_STRING/g,
+    replacement: calculateVersion()
+  }
+});
+
+module.exports = distTree;
