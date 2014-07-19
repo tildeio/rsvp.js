@@ -11,11 +11,11 @@
   <script src="vendor/assert.js"></script>
   <script src="vendor/mocha.js"></script>
   <script src="/testem.js"></script>
-  <script>mocha.setup({ ui: 'bdd', timeout: 500 }); mocha.globals(['setTimeout']);</script>
+  <script>mocha.setup({ ui: 'bdd', timeout: 500, ignoreLeaks: true });;</script>
   <script src="../tmp/test-bundle.js"></script>
   <script>
     if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
-    else { mocha.globals(['setTimeout']); mocha.run(); }
+    else { mocha.run(); }
   </script>
 </body>
 </html>
