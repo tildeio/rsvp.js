@@ -23,7 +23,7 @@
     "mkdirp": "^0.5.0",
     "mocha": "^1.20.1",
     "promises-aplus-tests": "git://github.com/stefanpenner/promises-tests.git",
-    "testem": "^0.6.16"
+    "testem": "^0.6.17"
   },
   "scripts": {
     "test": "testem ci",
