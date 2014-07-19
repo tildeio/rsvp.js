@@ -11,7 +11,13 @@
   <script src="vendor/assert.js"></script>
   <script src="vendor/mocha.js"></script>
   <script src="/testem.js"></script>
-  <script>mocha.setup({ ui: 'bdd', timeout: 500, ignoreLeaks: true });;</script>
+  <script>
+    mocha.setup({
+      ui: 'bdd',
+      timeout: 200,
+      ignoreLeaks: true
+    });
+  </script>
   <script src="../tmp/test-bundle.js"></script>
   <script>
     if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
