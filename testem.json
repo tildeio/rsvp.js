@@ -4,7 +4,8 @@
   "before_tests": "npm run build-all",
   "launchers": {
     "Mocha": {
-      "command": "mocha test/main.js"
+      "command": "./node_modules/.bin/mocha test/main.js"
     }
-  }
+  },
+  "launch_in_ci":  ["PhantomJS", "Mocha"]
 }
