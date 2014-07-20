@@ -1,5 +1,6 @@
 # Master
 
+* faster denodeify
 * rework tooling (Broccoli, testem, no grunt)
 * utilize bundle format for super small UMD builds
 
