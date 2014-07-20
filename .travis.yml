@@ -3,8 +3,6 @@ language: node_js
 node_js:
 - '0.10'
 before_install:
-- npm install -g grunt-cli
-after_success: grunt build s3:dev
 env:
   global:
   - secure: |-

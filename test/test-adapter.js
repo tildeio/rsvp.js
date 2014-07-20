@@ -1,27 +1,18 @@
 /*global RSVP*/
 
-var defer, resolve, reject;
+var assert = require('./vendor/assert');
 
-if (typeof RSVP !== 'undefined') {
-  // Test the browser build
-  resolve = RSVP.resolve;
-  reject = RSVP.reject;
-  defer = RSVP.defer;
-} else {
-  // Test the Node build
-  RSVP = require('../dist/commonjs/main');
-  assert = require('./vendor/assert');
-  defer = require('../dist/commonjs/main').defer;
-  resolve = require('../dist/commonjs/main').resolve;
-  reject = require('../dist/commonjs/main').reject;
-}
+var RSVP = require('../dist/rsvp');
+var defer = RSVP.defer;
+var resolve = RSVP.resolve;
+var reject = RSVP.reject;
 
-if (typeof window === 'undefined' && typeof global !== 'undefined') {
-  window = global;
-}
+var g = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
 
-module.exports = global.adapter = {
+module.exports = g.adapter = {
   resolved: resolve,
   rejected: reject,
-  deferred: defer
+  deferred: defer,
+  RSVP: RSVP
 };
+
