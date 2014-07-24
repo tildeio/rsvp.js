@@ -12,14 +12,11 @@
   ],
   "license": "MIT",
   "ignore": [
-    "**/.*",
     "node_modules",
     "bower_components",
     "test",
     "tests",
     "vendor",
-    "tasks",
-    "macros",
-    "lib"
+    "tasks"
   ]
 }
