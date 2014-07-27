@@ -25,7 +25,7 @@ trees.push(compileModules('lib', {
   formatter: new AMDFormatter()
 }));
 
-if (process.env.ENV === 'production') {
+if (process.env.EMBER_ENV === 'production') {
   trees.push(closureCompiler(moveFile(bundle, {
     srcFile: 'rsvp.js',
     destFile: 'rsvp.min.js'
@@ -45,7 +45,7 @@ distTrees.push(concat(distTree, {
   outputFile: '/rsvp.js'
 }));
 
-if (process.env.ENV === 'production') {
+if (process.env.EMBER_ENV === 'production') {
   distTrees.push(concat(distTree, {
     inputFiles: [
       'versionTemplate.txt',
@@ -54,7 +54,6 @@ if (process.env.ENV === 'production') {
     outputFile: '/rsvp.min.js'
   }));
 }
-
 
 distTree = mergeTrees(distTrees);
 var distTree = replace(distTree, {

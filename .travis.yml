@@ -2,7 +2,8 @@
 language: node_js
 node_js:
 - '0.10'
-before_install:
+after_success:
+  - "./bin/publish_to_s3.js"
 env:
   global:
   - secure: |-

@@ -19,6 +19,7 @@
     "broccoli-string-replace": "0.0.1",
     "browserify": "^4.2.0",
     "ember-cli": "0.0.37",
+    "ember-publisher": "0.0.6",
     "es6-module-transpiler-amd-formatter": "0.0.1",
     "express": "^4.5.0",
     "jshint": "~0.9.1",
@@ -31,9 +32,9 @@
     "test": "testem ci",
     "test-server": "testem",
     "lint": "jshint lib",
-    "prepublish": "ember build",
+    "prepublish": "ember build --environment production",
     "aplus": "browserify test/main.js",
-    "build-all": "ember build && browserify ./test/main.js -o tmp/test-bundle.js"
+    "build-all": "ember build --environment production && browserify ./test/main.js -o tmp/test-bundle.js"
   },
   "repository": {
     "type": "git",
