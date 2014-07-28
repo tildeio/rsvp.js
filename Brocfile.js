@@ -2,7 +2,7 @@
 var AMDFormatter = require('es6-module-transpiler-amd-formatter');
 var closureCompiler = require('broccoli-closure-compiler');
 var compileModules = require('broccoli-compile-modules');
-var mergeTrees = require('broccoli-merge-trees');G
+var mergeTrees = require('broccoli-merge-trees');
 var moveFile = require('broccoli-file-mover');
 
 var concat           = require('broccoli-concat');
