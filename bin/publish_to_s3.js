@@ -18,6 +18,7 @@ var S3Publisher = require('ember-publisher');
 var configPath = require('path').join(__dirname, '../config/s3ProjectConfig.js');
 publisher = new S3Publisher({
   projectConfigPath: configPath,
+  S3_BUCKET_NAME: 'rsvpjs-builds',
   S3_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
   S3_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY
 });
