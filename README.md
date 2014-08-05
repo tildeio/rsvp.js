@@ -9,7 +9,7 @@ It works in node and the browser.
 ## downloads
 
 - [rsvp-latest](http://rsvpjs-builds.s3.amazonaws.com/rsvp-latest.js)
-- [rsvp-latest (amd)](http://rsvpjs-builds.s3.amazonaws.com/rsvp-latest.amd.js)
+- [rsvp-latest (minified)](http://rsvpjs-builds.s3.amazonaws.com/rsvp-latest.min.js)
 
 ## Promises
 
