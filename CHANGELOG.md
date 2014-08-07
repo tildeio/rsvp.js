@@ -1,5 +1,14 @@
 # Master
 
+# 3.0.11
+
+* [Bugfix] some onerror scenarios did not result in error notifications [4dcf](https://github.com/tildeio/rsvp.js/commit/4dcfa92bab6f5fc9e97ca3abfb71025a08984e7e)
+* [Bugfix] for more correctness internal optimization should only occure
+  if constructors equal, not just if instanceof check passes [96b5ec](https://github.com/tildeio/rsvp.js/commit/96b5ec201b2ddafc70cd5c836bc341a46081ae23)
+* fancy new s3 publishing thanks to @rondale-sc
+
+# 3.0.10
+
 * faster denodeify
 * rework tooling (Broccoli, testem, no grunt)
 * utilize bundle format for super small UMD builds
