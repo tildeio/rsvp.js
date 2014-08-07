@@ -512,6 +512,48 @@ describe("RSVP extensions", function() {
         done();
       });
     });
+
+
+    specify('integration test showing how awesome this can be (with promise subclass)', function(done) {
+      function readFile(fileName, cb) {
+        setTimeout(function() {
+          cb(null, 'contents of ' + fileName);
+        }, 0);
+      }
+
+      var writtenTo = null;
+      function writeFile(fileName, text, cb) {
+        setTimeout(function () {
+          writtenTo = [fileName, text];
+          cb();
+        }, 0);
+      }
+
+      function SuchSubclass(resolve) {
+        this._super$constructor(resolve);
+      }
+
+      SuchSubclass.prototype = o_create(RSVP.Promise.prototype);
+      SuchSubclass.prototype.constructor = SuchSubclass;
+      SuchSubclass.prototype._super$constructor = RSVP.Promise;
+
+      var denodeifiedWriteFile = RSVP.denodeify(writeFile);
+
+      var file = new SuchSubclass(function(resolve) {
+        readFile('src.txt', function(error, content) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(content);
+          }
+        });
+      });
+
+      denodeifiedWriteFile('dest.txt', file).then(function () {
+        assert(objectEquals(writtenTo, ['dest.txt', 'contents of src.txt']));
+        done();
+      });
+    });
   });
 
   describe("RSVP.hash", function() {
