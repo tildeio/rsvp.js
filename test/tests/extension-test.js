@@ -471,7 +471,9 @@ describe("RSVP extensions", function() {
 
     if (Object.prototype.hasOwnProperty('__proto__')) {
       specify('should inherit from node function', function() {
-        function nodeFunc(cb) { cb('hello'); }
+        function nodeFunc(cb) {
+          cb(undefined, 'hello');
+        }
         nodeFunc.something = 'test123';
 
         var denodeifiedFunc = RSVP.denodeify(nodeFunc);
