@@ -1228,7 +1228,7 @@ describe("RSVP extensions", function() {
       RSVP.off('error');
     });
 
-    it("When provided, any unhandled exceptions are sent to it", function(done) {
+    it("When provided, any unhandled exceptions are sent to it (false positive case)", function(done) {
       var thrownError = new Error();
 
       RSVP.configure('onerror', function(error) {
@@ -1333,9 +1333,13 @@ describe("RSVP extensions", function() {
     it("assimilation: When provided, unhandled exceptions are sent to it", function(done) {
       var thrownError = new Error();
 
+      var count = 0;
       RSVP.configure('onerror', function(error) {
-        assert(true, "Should get here");
-        done();
+        count++;
+        assert(count <= 2, "Should get here twice");
+        if (count === 2) {
+          done();
+        }
       });
 
       var promise = new RSVP.Promise(function(resolve, reject) {
