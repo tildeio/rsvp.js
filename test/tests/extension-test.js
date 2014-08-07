@@ -770,7 +770,7 @@ describe("RSVP extensions", function() {
       assert(all);
     });
 
-    it('throws when not passed an array', function() {
+    it('throws when not passed an array', function(done) {
       var nothing = assertRejection(all());
       var string  = assertRejection(all(''));
       var object  = assertRejection(all({}));
@@ -908,7 +908,7 @@ describe("RSVP extensions", function() {
       assert(RSVP.allSettled);
     });
 
-    it('throws when not passed an array', function() {
+    it('throws when not passed an array', function(done) {
       var nothing = assertRejection(RSVP.allSettled());
       var string  = assertRejection(RSVP.allSettled(''));
       var object  = assertRejection(RSVP.allSettled({}));
