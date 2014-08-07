@@ -1063,26 +1063,6 @@ describe("RSVP extensions", function() {
         done();
       });
     });
-
-    it("When provided, any unhandled exceptions are sent to it, even from inside error handlers", function(done) {
-      var firstError = new Error();
-      var secondError = new Error();
-
-      RSVP.on('error', function(reason) {
-        assert.equal(reason, secondError, "The thrown error is passed in");
-        done();
-      });
-
-      new RSVP.Promise(function(resolve, reject) {
-        reject(firstError);
-      }).catch(function(err){
-        assert.equal(err, firstError, "The first error is handled");
-        return new RSVP.Promise(function(resolve, reject){
-          reject(secondError);
-        });
-      });
-    });
-
   });
 
   function assertRejection(promise) {
@@ -1362,6 +1342,25 @@ describe("RSVP extensions", function() {
 
       RSVP.Promise.resolve().then(function(){
         return promise;
+      });
+    });
+
+    it("When provided, any unhandled exceptions are sent to it, even from inside error handlers", function(done) {
+      var firstError = new Error();
+      var secondError = new Error();
+
+      RSVP.on('error', function(reason) {
+        assert.equal(reason, secondError, "The thrown error is passed in");
+        done();
+      });
+
+      new RSVP.Promise(function(resolve, reject) {
+        reject(firstError);
+      }).catch(function(err) {
+        assert.equal(err, firstError, "The first error is handled");
+        return new RSVP.Promise(function(resolve, reject) {
+          reject(secondError);
+        });
       });
     });
   });
