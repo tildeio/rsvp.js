@@ -1,5 +1,7 @@
 # Master
 
+* [Bugfix] fix regression in denodeify that broke foreign thenables as arguments to denodeifed functions [#281](https://github.com/tildeio/rsvp.js/pull/281)
+
 # 3.0.11
 
 * [Bugfix] some onerror scenarios did not result in error notifications [4dcf](https://github.com/tildeio/rsvp.js/commit/4dcfa92bab6f5fc9e97ca3abfb71025a08984e7e)
