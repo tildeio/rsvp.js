@@ -337,3 +337,8 @@ Custom tasks:
 * `ember build` - Build distribution
 * `testem ci` - Run tests.
 * `testem` - Run test server.
+
+## Releasing
+
+Check what release-it will do by running `npm run-script dry-run-release`.
+To actually release, run `node_modules/.bin/release-it`.

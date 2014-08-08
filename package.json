@@ -26,6 +26,7 @@
     "mkdirp": "^0.5.0",
     "mocha": "^1.20.1",
     "promises-aplus-tests": "git://github.com/stefanpenner/promises-tests.git",
+    "release-it": "0.0.10",
     "testem": "^0.6.17"
   },
   "scripts": {
@@ -34,7 +35,8 @@
     "lint": "jshint lib",
     "prepublish": "ember build --environment production",
     "aplus": "browserify test/main.js",
-    "build-all": "ember build --environment production && browserify ./test/main.js -o tmp/test-bundle.js"
+    "build-all": "ember build --environment production && browserify ./test/main.js -o tmp/test-bundle.js",
+    "dry-run-release": "ember build --environment production && release-it --dry-run --non-interactive"
   },
   "repository": {
     "type": "git",
