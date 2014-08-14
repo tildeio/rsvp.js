@@ -18,5 +18,9 @@
     "tests",
     "vendor",
     "tasks"
-  ]
+  ],
+  "devDependencies": {
+    "mocha": "~1.21.4",
+    "json3": "~3.3.2"
+  }
 }
