@@ -12,6 +12,7 @@
     "broccoli-closure-compiler": "^0.2.0",
     "broccoli-compile-modules": "eventualbuddha/broccoli-compile-modules",
     "broccoli-concat": "0.0.7",
+    "broccoli-es3-safe-recast": "0.0.8",
     "broccoli-file-mover": "^0.4.0",
     "broccoli-jshint": "^0.5.1",
     "broccoli-merge-trees": "^0.1.4",

@@ -1,16 +1,16 @@
 /* jshint node:true, undef:true, unused:true */
-var AMDFormatter = require('es6-module-transpiler-amd-formatter');
-var closureCompiler = require('broccoli-closure-compiler');
-var compileModules = require('broccoli-compile-modules');
-var mergeTrees = require('broccoli-merge-trees');
-var moveFile = require('broccoli-file-mover');
-
+var AMDFormatter     = require('es6-module-transpiler-amd-formatter');
+var closureCompiler  = require('broccoli-closure-compiler');
+var compileModules   = require('broccoli-compile-modules');
+var mergeTrees       = require('broccoli-merge-trees');
+var moveFile         = require('broccoli-file-mover');
+var es3Recast        = require('broccoli-es3-safe-recast');
 var concat           = require('broccoli-concat');
 var replace          = require('broccoli-string-replace');
 var calculateVersion = require('./lib/calculateVersion');
 var path             = require('path');
-
-var trees = [];
+var trees            = [];
+var env              = process.env.EMBER_ENV || 'development';
 
 var bundle = compileModules('lib', {
   inputFiles: ['rsvp.umd.js'],
@@ -53,6 +53,10 @@ if (process.env.EMBER_ENV === 'production') {
     ],
     outputFile: '/rsvp.min.js'
   }));
+}
+
+if (env !== 'development') {
+  distTrees = distTrees.map(es3Recast);
 }
 
 distTree = mergeTrees(distTrees);
