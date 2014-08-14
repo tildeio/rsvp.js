@@ -30,7 +30,7 @@
     "testem": "^0.6.17"
   },
   "scripts": {
-    "test": "testem ci",
+    "test": "testem ci -R dot",
     "test-server": "testem",
     "lint": "jshint lib",
     "prepublish": "ember build --environment production",
