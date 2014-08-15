@@ -2268,6 +2268,114 @@ describe("RSVP extensions", function() {
   }
 });
 
+describe('RSVP.reduce', function(){
+  var reduce  = RSVP.reduce;
+  var resolve = Promise.resolve;
+  var reject  = Promise.reject;
+  var sum     = function(a, b){
+    return a + b;
+  };
+
+  var assertSummed = function(promise, total){
+    total = typeof total === 'number' ? total : 2;
+    return promise.then(function(value){
+      assert.equal(value, 2);
+    });
+  };
+
+  it('becomes rejected when array not passsed as first argument', function(){
+
+    return assertRejection(reduce());
+  });
+
+  it('rejects when the reduce argument is not a function', function(){
+    return assertRejection(reduce([]));
+  });
+
+  it('works with non-promise and promise values', function(){
+    var nonPromise = 1;
+    var promise    = resolve(1);
+
+    return assertSummed(reduce([nonPromise, promise], sum);
+  });
+
+  it('works with all non-promises', function(){
+    return assertSummed(reduce([1, 1], sum, 0));
+  });
+
+  it('works with all promises', function(){
+    var promises = [
+      resolve(1),
+      resolve(1)
+    ];
+
+    return assertSummed(reduce(promises, sum, 0));
+  });
+
+  it('becomes rejected if any of the given promises become rejected', function(){
+    var resolved = resolve(1);
+    var rejected = reject(1);
+    var promises = [resolved, rejected];
+
+    return assertRejection(reduce(promises, sum, 0));
+  });
+
+  it('executes results from the reduce function sequentially', function(){
+    var promises = [
+      resolve('a'),
+      resolve('b'),
+      resolve('c')
+     ];
+
+    var reduceFunction = function(aValue, bValue){
+      return resolve(aValue + bValue);
+    };
+
+    return reduce(promises, reduceFunction, 0).then(function(value){
+      assert.equal(value, 'abc');
+    });
+  });
+
+  it('waits for the initialValue to resolve before executing reduceFunction', function(){
+
+    var initialValue = resolve(1);
+
+    var promises = [
+      resolve(1),
+      resolve(1)
+    ];
+
+    var promise = reduce(promises, sum, initialValue);
+
+    return assertSummed(promise, 3);
+  });
+
+  it('becomes rejected if a promise returned from reduceFunction becomes rejected', function(){
+
+    var madReduceFunction = function(a, b){
+      return reject(new Error("Such rejection"));
+    };
+
+    return assertRejection([1, 1], madReduceFunction, 0);
+  });
+
+  it("becomes rejected with the first promise that becomes rejected", function(done){
+
+    var promises = [
+      RSVP.reject(new Error("prefix:1")),
+      RSVP.reject(new Error("prefix:2")),
+      1
+    ];
+
+    reduce(promises, sum, 0).then(function(){
+      done(new Error("Promise was resolved when it shouldn't have been!"));
+    }, function(reason){
+      assert(reason.message === "prefix:1");
+      done();
+    });
+  });
+});
+
 // thanks to @wizardwerdna for the test case -> https://github.com/tildeio/rsvp.js/issues/66
 // Only run these tests in node (phantomjs cannot handle them)
 if (typeof module !== 'undefined' && module.exports) {
