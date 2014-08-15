@@ -3,6 +3,7 @@
 # 3.0.13
 
 * [Bugfix] fix `RSVP.hash` `RSVP.hashSettled` in runtimes < es5 by fixing a broken `Object.create` polyfil [#286](https://github.com/tildeio/rsvp.js/pull/286)
+* [Enhancement] cleanup & improve test related build tooling [#288](https://github.com/tildeio/rsvp.js/pull/286)
 
 # 3.0.12
 
