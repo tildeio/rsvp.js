@@ -1,6 +1,3 @@
-before_script:
-  - npm install
-  - npm run-script bower-install
 language: node_js
 node_js:
 - '0.10'

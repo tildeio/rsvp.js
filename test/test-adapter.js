@@ -1,6 +1,6 @@
 /*global RSVP*/
 
-var assert = require('./vendor/assert');
+var assert = require('assert');
 
 var RSVP = require('../dist/rsvp');
 var defer = RSVP.defer;
