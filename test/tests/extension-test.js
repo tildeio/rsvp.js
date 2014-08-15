@@ -25,7 +25,7 @@ function keysOf(object) {
 
 var g = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
 var RSVP = g.adapter.RSVP;
-var assert = require('../vendor/assert');
+var assert = require('assert');
 
 var o_create = Object.create || function(o, props) {
   function F() {}
@@ -2234,7 +2234,7 @@ describe("RSVP extensions", function() {
 
     it("becomes rejected if a promise returned from mapFn becomes rejected", function(done){
 
-      var expectedErrorMessage = "must-be-prefixed-with-non-number-for-old-ie:1" 
+      var expectedErrorMessage = "must-be-prefixed-with-non-number-for-old-ie:1"
       var values = [ 1, 2, 3 ];
       var mapFn = function(value){
         // http://msdn.microsoft.com/en-us/library/ie/dww53sbt(v=vs.94).aspx
