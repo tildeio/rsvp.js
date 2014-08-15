@@ -1,5 +1,11 @@
 # Master
 
+# 3.0.13
+
+* [Bugfix] fix `RSVP.hash` `RSVP.hashSettled` in runtimes < es5 by fixing a broken `Object.create` polyfil [#286](https://github.com/tildeio/rsvp.js/pull/286)
+
+# 3.0.12
+
 * [Bugfix] fix regression in denodeify that broke foreign thenables as arguments to denodeifed functions [#281](https://github.com/tildeio/rsvp.js/pull/281)
 
 # 3.0.11
