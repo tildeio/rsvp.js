@@ -29,10 +29,10 @@
     "mocha": "^1.20.1",
     "promises-aplus-tests": "git://github.com/stefanpenner/promises-tests.git",
     "release-it": "0.0.10",
-    "testem": "^0.6.17"
+    "testem": "^0.6.17",
+    "json3": "^3.3.2"
   },
   "scripts": {
-    "bower-install": "bower install --no-interactive",
     "test": "testem ci -R dot",
     "test-server": "testem",
     "lint": "jshint lib",
