@@ -102,7 +102,7 @@
 * Significant internal cleanup and performance improvements
 * require Promise constructor to be new'd (aligned with es6 spec)
 * Prefer tasks + config inline within project
-* Add Promise#finally
+* Add Promise.finally
 * Add Promise.cast
 * Add Promise.resolve
 * Add Promise.reject
