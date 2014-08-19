@@ -182,6 +182,21 @@ this callback may result in false positives.
 **NOTE:** Usage of `RSVP.configure('onerror', yourCustomFunction);` is
 deprecated in favor of using `RSVP.on`.
 
+
+## Finally
+
+`finally` will be invoked regardless of the promise's fate, just as native
+try/catch/finally behaves.
+
+```js
+findAuthor().catch(function(reason){
+  return findOtherAuthor();
+}).finally(function(){
+  // author was either found, or not
+});
+```
+
+
 ## Arrays of promises
 
 Sometimes you might want to work with many promises at once. If you
