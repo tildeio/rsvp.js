@@ -1,5 +1,7 @@
 # Master
 
+* ensure minified RSVP.defer() maintains known external API [#293](https://github.com/tildeio/rsvp.js/pull/293)
+
 # 3.0.13
 
 * [Bugfix] fix `RSVP.hash` `RSVP.hashSettled` in runtimes < es5 by fixing a broken `Object.create` polyfil [#286](https://github.com/tildeio/rsvp.js/pull/286)
