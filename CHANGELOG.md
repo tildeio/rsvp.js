@@ -1,6 +1,9 @@
 # Master
 
 * ensure minified RSVP.defer() maintains known external API [#293](https://github.com/tildeio/rsvp.js/pull/293)
+* add `finally` to the readme
+* improve usage of browserify for promise/a+ tests
+* add wasteful files to gitignore
 
 # 3.0.13
 
