@@ -4,6 +4,7 @@
 * add `finally` to the readme
 * improve usage of browserify for promise/a+ tests
 * add wasteful files to gitignore
+* add [vert.x](http://vertx.io/) compatibility
 
 # 3.0.13
 
