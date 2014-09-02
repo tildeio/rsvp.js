@@ -1107,6 +1107,78 @@ describe("RSVP extensions", function() {
         done();
       });
     });
+
+    it("finally should not 'handle' errors", function(done) {
+      var thrownError = new Error();
+
+      RSVP.on('error', function(event) {
+        assert(true, 'Should get here');
+        done();
+      });
+
+      var promise = new RSVP.Promise(function(resolve, reject) {
+        reject(thrownError);
+      });
+
+      promise.finally(function(error) {
+
+      });
+    });
+
+    it("finally should not 'handle' errors (another variation)", function(done) {
+      var thrownError = new Error();
+
+      RSVP.on('error', function(event) {
+        assert(true, 'Should get here');
+        done();
+      });
+
+      var promise = new RSVP.Promise(function(resolve, reject) {
+        reject(thrownError);
+      });
+
+      promise.then().finally(function(error) {
+
+      });
+    });
+
+    it("finally should not 'handle' errors (yet another variation)", function(done) {
+      var thrownError = new Error();
+
+      RSVP.on('error', function(event) {
+        assert(false, 'Should not here');
+        done();
+      });
+
+      var promise = new RSVP.Promise(function(resolve, reject) {
+        reject(thrownError);
+      });
+
+      promise.then().finally(function(error) {
+
+      }).then(null, function() {
+        assert(true);
+        done();
+      });
+    });
+
+    it("When finally show not handle unsubscribe", function(done) {
+      var thrownError = new Error();
+
+      RSVP.on('error', function(event) {
+        assert(true, 'Should get here');
+        done();
+      });
+
+      var promise = new RSVP.Promise(function(resolve, reject) {
+        resolve(thrownError);
+      });
+
+      promise.then().finally(function(error) {
+        throw new Error("OMG");
+      });
+    });
+
   });
 
   function assertRejection(promise) {
