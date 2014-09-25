@@ -333,6 +333,7 @@ function listener (event) {
   event.detail    // fulfillment value or rejection reason, if applicable
   event.label     // label passed to promise's constructor
   event.timeStamp // milliseconds elapsed since 1 January 1970 00:00:00 UTC up until now
+  event.stack     // stack at the time of the event.
 }
 
 RSVP.configure('instrument', true | false);
@@ -341,7 +342,7 @@ RSVP.on('chained', listener);
 RSVP.on('fulfilled', listener);
 RSVP.on('rejected', listener);
 ```
-
+        
 Events are only triggered when `RSVP.configure('instrument')` is true, although
 listeners can be registered at any time.
 
