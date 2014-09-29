@@ -1,5 +1,6 @@
 # Master
 
+* improve performance of instrumentation (also add seperate flag to include "stack" with instrumentation as it is unfortunately slow)
 * ensure minified RSVP.defer() maintains known external API [#293](https://github.com/tildeio/rsvp.js/pull/293)
 * add `finally` to the readme
 * improve usage of browserify for promise/a+ tests
