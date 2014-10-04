@@ -31,6 +31,7 @@ if (process.env.EMBER_ENV === 'production') {
     destFile: 'rsvp.min.js'
   }), {
     compilation_level: 'ADVANCED_OPTIMIZATIONS',
+    externs: ['node'], 
   }));
 }
 
