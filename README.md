@@ -115,7 +115,7 @@ getJSON("/post/1.json").then(function(post) {
   // save off post
   return getJSON(post.commentURL);
 }).then(function(comments) {
-  // proceed with access to posts and comments
+  // proceed with access to post and comments
 });
 ```
 
