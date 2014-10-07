@@ -4,7 +4,7 @@ RSVP.js provides simple tools for organizing asynchronous code.
 
 Specifically, it is a tiny implementation of Promises/A+.
 
-It works in node and the browser.
+It works in node and the browser (IE6+, all the popular evergreen ones).
 
 ## downloads
 
