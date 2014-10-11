@@ -2081,6 +2081,42 @@ describe("RSVP extensions", function() {
         });
       });
     });
+
+    describe("inheritance", function() {
+      function Subclass (resolver) {
+        this._promise$constructor(resolver);
+      }
+
+      Subclass.prototype = o_create(RSVP.Promise.prototype);
+      Subclass.prototype.constructor = Subclass;
+      Subclass.prototype._promise$constructor = RSVP.Promise;
+
+      Subclass.resolve = RSVP.Promise.resolve;
+      Subclass.reject = RSVP.Promise.reject;
+      Subclass.all = RSVP.Promise.all;
+
+      it("preserves correct subclass when chained", function() {
+        var promise = Subclass.resolve().finally();
+        assert.ok(promise instanceof Subclass);
+        assert.equal(promise.constructor, Subclass);
+      });
+
+      it("preserves correct subclass when rejected", function() {
+        var promise = Subclass.resolve().finally(function() {
+          throw new Error("OMG");
+        });
+        assert.ok(promise instanceof Subclass);
+        assert.equal(promise.constructor, Subclass);
+      });
+
+      it("preserves correct subclass when someone returns a thenable", function() {
+        var promise = Subclass.resolve().finally(function() {
+          return RSVP.Promise.resolve(1);
+        });
+        assert.ok(promise instanceof Subclass);
+        assert.equal(promise.constructor, Subclass);
+      });
+    });
   });
 
   describe("RSVP.filter", function(){
