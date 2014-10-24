@@ -30,7 +30,8 @@
     "mocha": "^1.20.1",
     "promises-aplus-tests-phantom": "^2.1.0-revise",
     "release-it": "0.0.10",
-    "testem": "^0.6.17"
+    "testem": "^0.6.17",
+    "git-repo-version": "0.0.2"
   },
   "scripts": {
     "test": "testem ci -R dot",

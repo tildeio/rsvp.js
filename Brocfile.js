@@ -7,7 +7,7 @@ var moveFile         = require('broccoli-file-mover');
 var es3Recast        = require('broccoli-es3-safe-recast');
 var concat           = require('broccoli-concat');
 var replace          = require('broccoli-string-replace');
-var calculateVersion = require('./lib/calculateVersion');
+var calculateVersion = require('git-repo-version');
 var path             = require('path');
 var trees            = [];
 var env              = process.env.EMBER_ENV || 'development';
@@ -31,7 +31,7 @@ if (process.env.EMBER_ENV === 'production') {
     destFile: 'rsvp.min.js'
   }), {
     compilation_level: 'ADVANCED_OPTIMIZATIONS',
-    externs: ['node'], 
+    externs: ['node'],
   }));
 }
 
@@ -68,7 +68,7 @@ var distTree = replace(distTree, {
   ],
   pattern: {
     match: /VERSION_PLACEHOLDER_STRING/g,
-    replacement: calculateVersion()
+    replacement: calculateVersion(10)
   }
 });
 
