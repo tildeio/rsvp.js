@@ -337,6 +337,7 @@ function listener (event) {
 }
 
 RSVP.configure('instrument', true | false);
+RSVP.configure('instrument-with-stack', true | false); // capturing the stacks is slow, so you also have to opt in
 RSVP.on('created', listener);
 RSVP.on('chained', listener);
 RSVP.on('fulfilled', listener);
