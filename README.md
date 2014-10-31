@@ -333,11 +333,14 @@ function listener (event) {
   event.detail    // fulfillment value or rejection reason, if applicable
   event.label     // label passed to promise's constructor
   event.timeStamp // milliseconds elapsed since 1 January 1970 00:00:00 UTC up until now
-  event.stack     // stack at the time of the event.
+  event.stack     // stack at the time of the event. (if  'instrument-with-stack' is true)
 }
 
 RSVP.configure('instrument', true | false);
-RSVP.configure('instrument-with-stack', true | false); // capturing the stacks is slow, so you also have to opt in
+// capturing the stacks is slow, so you also have to opt in
+RSVP.configure('instrument-with-stack', true | false);
+
+// events
 RSVP.on('created', listener);
 RSVP.on('chained', listener);
 RSVP.on('fulfilled', listener);
