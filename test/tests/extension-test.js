@@ -1108,7 +1108,7 @@ describe("RSVP extensions", function() {
       });
     });
 
-    it("finally should not 'handle' errors", function(done) {
+    it("finally should not 'handle' errors (1)", function(done) {
       var thrownError = new Error();
 
       RSVP.on('error', function(event) {
@@ -1125,7 +1125,7 @@ describe("RSVP extensions", function() {
       });
     });
 
-    it("finally should not 'handle' errors (another variation)", function(done) {
+    it("finally should not 'handle' errors (2)", function(done) {
       var thrownError = new Error();
 
       RSVP.on('error', function(event) {
@@ -1142,11 +1142,11 @@ describe("RSVP extensions", function() {
       });
     });
 
-    it("finally should not 'handle' errors (yet another variation)", function(done) {
+    it("finally should not 'handle' errors (3)", function(done) {
       var thrownError = new Error();
 
       RSVP.on('error', function(event) {
-        assert(false, 'Should not here');
+        assert(false, 'Should not get here');
         done();
       });
 
@@ -1162,20 +1162,41 @@ describe("RSVP extensions", function() {
       });
     });
 
-    it("When finally show not handle unsubscribe", function(done) {
+    it("finally should trigger onError when its callback throws", function(done) {
       var thrownError = new Error();
+      var finallyError = new Error("OMG");
 
       RSVP.on('error', function(event) {
         assert(true, 'Should get here');
+        assert.equal(finallyError, event, "correct error is triggered");
         done();
       });
 
       var promise = new RSVP.Promise(function(resolve, reject) {
-        resolve(thrownError);
+        reject(thrownError);
       });
 
       promise.then().finally(function(error) {
-        throw new Error("OMG");
+        throw finallyError;
+      });
+    });
+
+    it("finally should trigger onError when its callback rejects", function(done) {
+      var thrownError = new Error();
+      var finallyError = new Error("OMG");
+
+      RSVP.on('error', function(event) {
+        assert(true, 'Should get here');
+        assert.equal(finallyError, event, "correct error is triggered");
+        done();
+      });
+
+      var promise = new RSVP.Promise(function(resolve, reject) {
+        reject(thrownError);
+      });
+
+      promise.then().finally(function(error) {
+        return RSVP.reject(finallyError);
       });
     });
 
