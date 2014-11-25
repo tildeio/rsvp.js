@@ -1354,20 +1354,16 @@ describe("RSVP extensions", function() {
     it("zalgo: When provided, unhandled exceptions are sent to it", function(done) {
       var thrownError = new Error();
 
-      var didOnError = false;
-
       RSVP.configure('onerror', function(error) {
-        didOnError = true;
+        assert(true, "should also have emitted onerror");
+        assert.equal(error, thrownError, "The handler should handle the error");
+        done();
       });
 
       var rejected = RSVP.Promise.reject(thrownError);
 
       RSVP.Promise.resolve().then(function(){
         return rejected;
-      }).then(undefined, function(reason) {
-        assert(didOnError, "should also have emitted onerror");
-        assert.equal(reason, thrownError, "The handler should handle the error");
-        done();
       });
     });
 
@@ -1375,13 +1371,9 @@ describe("RSVP extensions", function() {
     it("assimilation: When provided, unhandled exceptions are sent to it", function(done) {
       var thrownError = new Error();
 
-      var count = 0;
       RSVP.configure('onerror', function(error) {
-        count++;
-        assert(count <= 2, "Should get here twice");
-        if (count === 2) {
-          done();
-        }
+        assert(true, "Should get here once");
+        done();
       });
 
       var promise = new RSVP.Promise(function(resolve, reject) {
@@ -1411,6 +1403,24 @@ describe("RSVP extensions", function() {
         });
       });
     });
+
+    it('does not emit if handled by the end of the current turn', function(done){
+      var rejectionCount = 0;
+      var reason = new Error('Rejection Reason');
+
+      RSVP.on('error', function(event){
+        assert(false, 'should not have errored');
+        done();
+      });
+
+      var promise = RSVP.Promise.reject(reason);
+      RSVP.Promise.resolve().then(function() {
+        promise.catch(function() {
+          done();
+        });
+      });
+    });
+
   });
 
   describe("RSVP.resolve", function(){
