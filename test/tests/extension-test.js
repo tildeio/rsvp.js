@@ -181,6 +181,40 @@ describe("RSVP extensions", function() {
 
     });
 
+    it('should not resolve multiple times even if not settled', function() {
+      var promise = new RSVP.Promise(function(resolve) {
+        resolve(new RSVP.Promise(function(resolve) {
+          setTimeout(function(){
+            resolve(1);
+          }, 10);
+        }));
+
+        resolve(RSVP.Promise.resolve(2));
+      });
+
+      return promise.then(function(val) {
+        assert.equal(val, 1);
+      });
+    });
+
+    it('should not reject if already resolved (and not settled)', function() {
+      var promise = new RSVP.Promise(function(resolve, reject) {
+        resolve(new RSVP.Promise(function(resolve) {
+          setTimeout(function(){
+            resolve(1);
+          }, 10);
+        }));
+
+        reject(new Error());
+      });
+
+      return promise.then(function(val) {
+        assert.equal(val, 1);
+      }, function(){
+        assert(false, 'should not have rejected');
+      });
+    });
+
     describe('assimilation', function() {
       it('should assimilate if `resolve` is called with a fulfilled promise', function(done) {
         var originalPromise = new RSVP.Promise(function(resolve) { resolve('original value'); });
