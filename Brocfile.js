@@ -5,71 +5,47 @@ var compileModules   = require('broccoli-compile-modules');
 var mergeTrees       = require('broccoli-merge-trees');
 var moveFile         = require('broccoli-file-mover');
 var es3Recast        = require('broccoli-es3-safe-recast');
-var concat           = require('broccoli-concat');
-var replace          = require('broccoli-string-replace');
-var calculateVersion = require('git-repo-version');
-var path             = require('path');
-var trees            = [];
 var env              = process.env.EMBER_ENV || 'development';
+var calculateVersion = require('git-repo-version');
+var watchify = require('broccoli-watchify');
 
 var bundle = compileModules('lib', {
   inputFiles: ['rsvp.umd.js'],
   output: '/rsvp.js',
   formatter: 'bundle',
+  description: 'CompileModules (bundle)'
 });
 
-trees.push(bundle);
-trees.push(compileModules('lib', {
-  inputFiles: ['**/*.js'],
-  output: '/amd/',
-  formatter: new AMDFormatter()
-}));
+var output = [
+  bundle
+];
 
 if (process.env.EMBER_ENV === 'production') {
   trees.push(uglify(moveFile(bundle, {
     srcFile: 'rsvp.js',
-    destFile: 'rsvp.min.js'
+    destFile: 'rsvp.min.js',
   }), {
     mangle: true,
     compress: true
   }));
 }
 
-var distTree = mergeTrees(trees.concat('config'));
-var distTrees = [];
-
-distTrees.push(concat(distTree, {
-  inputFiles: [
-    'versionTemplate.txt',
-    'rsvp.js'
-  ],
-  outputFile: '/rsvp.js'
-}));
-
-if (process.env.EMBER_ENV === 'production') {
-  distTrees.push(concat(distTree, {
-    inputFiles: [
-      'versionTemplate.txt',
-      'rsvp.min.js'
-    ],
-    outputFile: '/rsvp.min.js'
-  }));
-}
-
 if (env !== 'development') {
-  distTrees = distTrees.map(es3Recast);
+  output = output.map(es3Recast);
 }
 
-distTree = mergeTrees(distTrees);
-var distTree = replace(distTree, {
-  files: [
-    'rsvp.js',
-    'rsvp.min.js'
-  ],
-  pattern: {
-    match: /VERSION_PLACEHOLDER_STRING/g,
-    replacement: calculateVersion(10)
+var tree = watchify('test',{
+  browserify: {
+    entries: ['./main.js'],
+    debug: true
+  },
+  outputFile: 'test-bundle.js',
+  cache: true,
+  init: function (b) {
+    b.external('vertx');
+    b.external('../dist/rsvp.js');
   }
 });
 
-module.exports = distTree;
+output.push(tree);
+module.exports = merge(output);
