@@ -1,3 +1,4 @@
+
 require('./test-adapter.js');
 require('./tests/extension-test.js');
 
