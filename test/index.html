@@ -2,13 +2,12 @@
 <head>
   <meta charset="utf-8">
   <title>rsvp.js Tests</title>
-  <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+  <link rel="stylesheet" href="mocha.css" />
 </head>
 <body>
   <div id="mocha"></div>
-  <script src="../dist/rsvp.js"></script>
-  <script src="../node_modules/json3/lib/json3.js"></script>
-  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="json3.js"></script>
+  <script src="mocha.js"></script>
   <script src="/testem.js"></script>
   <script>
     mocha.setup({
@@ -17,7 +16,7 @@
       ignoreLeaks: true
     });
   </script>
-  <script src="../dist/test-bundle.js"></script>
+  <script src="test-bundle.js"></script>
   <script>
     if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
     else { mocha.run(); }
