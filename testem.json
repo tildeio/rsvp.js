@@ -1,6 +1,7 @@
 {
   "test_page": "test/index.html",
   "parallel": 5,
+  "framework": "mocha",
   "before_tests": "npm run build",
   "launchers": {
     "Mocha": {
