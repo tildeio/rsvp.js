@@ -1,6 +1,6 @@
 /* jshint node:true, undef:true, unused:true */
 var AMDFormatter     = require('es6-module-transpiler-amd-formatter');
-var closureCompiler  = require('broccoli-closure-compiler');
+var uglify           = require('broccoli-uglify-js');
 var compileModules   = require('broccoli-compile-modules');
 var mergeTrees       = require('broccoli-merge-trees');
 var moveFile         = require('broccoli-file-mover');
@@ -26,12 +26,12 @@ trees.push(compileModules('lib', {
 }));
 
 if (process.env.EMBER_ENV === 'production') {
-  trees.push(closureCompiler(moveFile(bundle, {
+  trees.push(uglify(moveFile(bundle, {
     srcFile: 'rsvp.js',
     destFile: 'rsvp.min.js'
   }), {
-    compilation_level: 'ADVANCED_OPTIMIZATIONS',
-    externs: ['node'],
+    mangle: true,
+    compress: true
   }));
 }
 
