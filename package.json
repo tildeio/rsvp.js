@@ -1,14 +1,16 @@
 {
   "name": "rsvp",
   "namespace": "RSVP",
-  "version": "3.0.14",
+  "version": "3.0.15",
   "description": "A lightweight library that provides tools for organizing asynchronous code",
   "main": "dist/rsvp.js",
   "directories": {
     "lib": "lib"
   },
   "devDependencies": {
-    "broccoli-closure-compiler": "^0.2.0",
+    "bower": "^1.3.9",
+    "brfs": "0.0.8",
+    "broccoli-compile-modules": "^1.0.0",
     "broccoli-concat": "0.0.12",
     "broccoli-es3-safe-recast": "0.0.8",
     "broccoli-es6-module-transpiler": "^0.5.0",
@@ -19,10 +21,9 @@
     "broccoli-uglify-js": "^0.1.3",
     "broccoli-watchify": "^0.2.0",
     "browserify": "^4.2.0",
-    "ember-cli": "0.1.3",
+    "ember-cli": "0.1.4",
     "ember-publisher": "0.0.7",
     "git-repo-version": "0.0.2",
-    "jshint": "^2.5.10",
     "json3": "^3.3.2",
     "mocha": "^1.20.1",
     "promises-aplus-tests-phantom": "^2.1.0-revise",
@@ -33,7 +34,6 @@
     "server": "ember s",
     "test": "ember test",
     "test:node": "ember build --environment test && mocha ./test/main",
-    "lint": "jshint lib",
     "prepublish": "ember build --environment production",
     "aplus": "browserify test/main.js -x vertx",
     "build": "ember build --environment production",

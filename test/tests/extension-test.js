@@ -2520,3 +2520,37 @@ describe("Thenables should not be able to run code during assimilation", functio
         assert.strictEqual(thenCalled, false);
     });
 });
+
+describe("on node 0.10.x, using process.nextTick recursively shows deprecation warning. setImmediate should be used instead.", function() {
+  // (node) warning: Recursive process.nextTick detected. This will break in the next version of node. Please use setImmediate for recursive deferral.
+
+  it("should not cause 'RangeError: Maximum call stack size exceeded'", function (done) {
+    var total = 1000;
+
+    var resolved = 0;
+    var nextTick = function(depth) {
+      if (depth >= total) {
+        return RSVP.resolve();
+      }
+      var d = depth + 1;
+      //console.log('entered:', d);
+      return new RSVP.Promise(function(resolve){
+        process.nextTick(function(){
+          nextTick(d).then(function(){
+            resolved++;
+            //console.log('resolving:', d);
+            resolve();
+          });
+        });
+      });
+    };
+
+    nextTick(0)
+        .then(function(){
+          //console.log('nextTick: final');
+          assert.strictEqual(resolved, total);
+          done();
+        });
+  });
+
+});
