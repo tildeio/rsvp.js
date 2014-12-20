@@ -35,7 +35,6 @@
     "test": "ember test",
     "test:node": "ember build --environment test && mocha ./test/main",
     "prepublish": "ember build --environment production",
-    "aplus": "browserify test/main.js -x vertx",
     "build": "ember build --environment production",
     "dry-run-release": "ember build --environment production && release-it --dry-run --non-interactive"
   },
