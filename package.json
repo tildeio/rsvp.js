@@ -35,12 +35,11 @@
   },
   "scripts": {
     "start": "ember server",
+    "build": "ember build",
     "test": "testem ci -R dot",
-    "test-server": "testem",
+    "test:server": "testem",
     "lint": "jshint lib",
     "prepublish": "ember build --environment production",
-    "aplus": "browserify test/main.js -x vertx",
-    "build-all": "ember build --environment production && browserify ./test/main.js -x vertx -o tmp/test-bundle.js",
     "dry-run-release": "ember build --environment production && release-it --dry-run --non-interactive"
   },
   "repository": {

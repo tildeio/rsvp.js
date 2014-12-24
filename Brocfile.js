@@ -60,8 +60,7 @@ if (env !== 'development') {
   distTrees = distTrees.map(es3Recast);
 }
 
-distTree = mergeTrees(distTrees);
-var distTree = replace(distTree, {
+module.exports = replace(mergeTrees(distTrees), {
   files: [
     'rsvp.js',
     'rsvp.min.js'
@@ -71,5 +70,3 @@ var distTree = replace(distTree, {
     replacement: calculateVersion(10)
   }
 });
-
-module.exports = distTree;
