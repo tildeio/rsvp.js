@@ -3,65 +3,121 @@ var compileModules   = require('broccoli-es6-module-transpiler');
 var merge            = require('broccoli-merge-trees');
 var uglify           = require('broccoli-uglify-js');
 var es3Recast        = require('broccoli-es3-safe-recast');
-var env              = process.env.EMBER_ENV || 'development';
 var calculateVersion = require('git-repo-version');
 var watchify         = require('broccoli-watchify');
 var Funnel           = require('broccoli-funnel');
 var concat           = require('broccoli-concat');
 var replace          = require('broccoli-replace');
-var fs               = require('fs');
-var path             = require('path');
 
-var output;
-var paths = ['rsvp.min.js', 'rsvp.js'];
+// TODO: this should be dynamic
+var paths = [
+  'rsvp.min.js',
+  'rsvp.js'
+];
 
-var bundle = compileModules('lib', {
+var output = bundle = compileModules('lib', {
   inputFiles: ['rsvp.umd.js'],
   output: '/rsvp.js',
   formatter: 'bundle'
 });
 
-function concatHeader(tree, paths) {
-  return paths.map(function(path) {
-    return concat(tree, {
-      inputFiles: ['versionTemplate.txt', path],
-      outputFile: '/' + path
-    });
+env('production', function() {
+  output = createDist(bundle, paths);
+  output = replace(output, {
+    files: paths,
+    pattern: {
+      match: /VERSION_PLACEHOLDER_STRING/g,
+      replacement: calculateVersion(10)
+    }
+  });
+});
+
+env('test', 'development', function() {
+  output = createDist(bundle, paths);
+
+  var tests = createTest('test', [
+    'node_modules/mocha/mocha.js',
+    'node_modules/mocha/mocha.css',
+    'node_modules/json3/lib/json3.js',
+    'test/index.html',
+    'test/tests/worker.js'
+  ]);
+
+  output = merge([
+    output,
+    tests
+  ]);
+});
+
+env('!development', function() {
+  output = es3Recast(output);
+});
+
+module.exports = output;
+
+
+
+
+// TODO: extract
+// helpers
+function concatHeader(tree, path) {
+  return concat(tree, {
+    inputFiles: ['versionTemplate.txt', path],
+    outputFile: '/' + path
   });
 }
 
-function createDist(tree, paths) {
+function rename(tree, from, to) {
+  var replacer;
+
+  if (arguments.length === 2 && typeof from === 'function') {
+    replacer = from;
+  } else {
+    replacer = defaultReplace;
+  }
+
+  return new Funnel(tree, {
+    include: [new RegExp(from)],
+    getDestinationPath: replacer
+  });
+
+  function defaultReplace(relativePath) {
+    return relativePath.replace(from, to);
+  }
+}
+
+function createDist(input, paths) {
   var config = new Funnel('config');
-  var nonMinFile = new Funnel(tree);
-  var minFile = uglify(tree, {
+  var options = {
     mangle: true,
     compress: true
-  });
+  };
 
-  minFile = new Funnel(minFile, {
-    getDestinationPath: function (relativePath) {
-      if (relativePath.match('rsvp')) {
-        return relativePath.replace('.js', '.min.js');
-      }
-      return relativePath;
-    }
-  });
+  var minFile = rename(uglify(input, options), '.js', '.min.js');
 
-  tree = merge([minFile, nonMinFile, config]);
-  return merge(concatHeader(tree, paths));
+  var tree = merge([
+    minFile,
+    input,
+    config
+  ]);
+
+  return merge(paths.map(function(path) {
+    return concatHeader(tree, path);
+  }));
 }
 
 function createTest(tree, testSupportPaths) {
   var testSupport = merge(
       testSupportPaths.map(function (path) {
-      var pieces = path.split('/');
-      var path = pieces.splice(0, pieces.length - 1).join('/');
-      var file = pieces.splice(-1);
-      return new Funnel(path, {
-        include: [new RegExp( file )],
-        exclude: [new RegExp('lib')],
-        destDir: 'test'
-      });
+        var pieces = path.split('/');
+        var newPath = pieces.splice(0, pieces.length - 1).join('/');
+        var file = pieces.splice(-1);
+
+        return new Funnel(newPath, {
+          include: [new RegExp( file )],
+          exclude: [new RegExp('lib')],
+          destDir: 'test'
+        });
     })
   );
 
@@ -78,35 +134,28 @@ function createTest(tree, testSupportPaths) {
     }
   });
 
-  return merge([tests, testSupport]);
+  return merge([
+    tests,
+    testSupport
+  ]);
 }
 
-if (env === 'production') {
-  output = createDist(bundle, paths);
-  output = replace(output, {
-    files: paths,
-    pattern: {
-      match: /VERSION_PLACEHOLDER_STRING/g,
-      replacement: calculateVersion(10)
+function env(/* envName..., cb */) {
+  var length = arguments.length;
+  var envs = Array.prototype.slice.call(arguments).slice(0, length - 1);
+  var cb = arguments[length - 1];
+
+  var currentEnv = process.env.EMBER_ENV || 'development';
+
+  var match = envs.map(function(name) {
+    if (name.charAt(0) === '!') {
+      return name.substring(1) !== currentEnv;
+    } else {
+      return name == currentEnv;
     }
-  })
-}
+  }).filter(Boolean).length > 0;
 
-if (env === 'test') {
-  output = createDist(bundle, paths);
-  var testSupport = [
-    'node_modules/mocha/mocha.js',
-    'node_modules/mocha/mocha.css',
-    'node_modules/json3/lib/json3.js',
-    'test/index.html',
-    'test/tests/worker.js'
-  ];
-  var tests = createTest('test', testSupport);
-  output = merge([output, tests]);
+  if (match) {
+    return cb();
+  }
 }
-
-if (env !== 'development') {
-  output = es3Recast(output);
-}
-
-module.exports = output || bundle;
