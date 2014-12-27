@@ -4,6 +4,8 @@ node_js:
 - '0.11'
 after_success:
 - "./bin/publish_to_s3.js"
+before_install:
+  - npm install -g "npm@^2.0.0"
 env:
   global:
   - EMBER_ENV=production
