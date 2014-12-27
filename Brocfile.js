@@ -6,17 +6,21 @@ var calculateVersion = require('git-repo-version');
 var browserify       = require('broccoli-watchify');
 
 var stew   = require('broccoli-stew');
+
 var find   = stew.find;
 var mv     = stew.mv;
 var rename = stew.rename;
 var env    = stew.env;
 
 var lib       = find('lib');
-var test      = find('test');
-var json3     = find('node_modules/json3/lib/{json3.js}');
-var mocha     = find('node_modules/mocha/mocha.{js,css}');
-var testIndex = find('test/{index.html}');
-var worker    = find('test/tests/{worker.js}');
+var testDir   = find('test');
+var testFiles = find('test/{index.html,worker.js}');
+
+// should be mv
+var json3     = rename(find('node_modules/json3/lib/{json3.js}'), 'node_modules/json3/lib', 'test/');
+var mocha     = rename(find('node_modules/mocha/mocha.{js,css}'), 'node_modules/mocha/',    'test/');
+
+var testVendor = merge([ json3, mocha ]);
 
 var rsvp = compileModules(lib, {
   format: 'bundle',
@@ -25,11 +29,10 @@ var rsvp = compileModules(lib, {
 });
 
 var testBundle = browserify(merge([
-  rsvp,
-  mocha,
-  test
+  mv(rsvp, 'test'),
+  testDir
 ]), {
-  browserify: { entries: ['./index.js'] },
+  browserify: { entries: ['./test/index.js'] },
   init: function (b) { b.external('vertx'); }
 });
 
@@ -43,12 +46,9 @@ env('production', function() {
 });
 
 module.exports = merge([
-  mv(merge([
-    mocha,
-    testBundle,
-    testIndex,
-    worker,
-    rsvp,
-  ]), 'test'),
-  dist
+  dist,
+  testFiles,
+  testVendor,
+  mv(rsvp, 'test'),
+  mv(testBundle, 'test')
 ]);
