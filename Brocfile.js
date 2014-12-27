@@ -13,10 +13,10 @@ var env    = stew.env;
 
 var lib       = find('lib');
 var test      = find('test');
-var json3     = find('node_modules/json3/lib', { only: [/^json3\.js$/]      });
-var mocha     = find('node_modules/mocha/',    { only: [/^mocha\.(js|css)/] });
-var testIndex = find('test',                   { only: [/^index\.html/]     });
-var worker    = find('test/tests/',            { only: [/^worker\.js/]      });
+var json3     = find('node_modules/json3/lib/{json3.js}');
+var mocha     = find('node_modules/mocha/mocha.{js,css}');
+var testIndex = find('test/{index.html}');
+var worker    = find('test/tests/{worker.js}');
 
 var rsvp = compileModules(lib, {
   format: 'bundle',
