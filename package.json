@@ -35,6 +35,7 @@
     "test:node": "ember build && mocha ./dist/test/browserify",
     "prepublish": "ember build --environment production",
     "build": "ember build --environment production",
+    "lint": "jshint lib",
     "dry-run-release": "ember build --environment production && release-it --dry-run --non-interactive"
   },
   "repository": {
