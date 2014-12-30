@@ -29,6 +29,7 @@
     "release-it": "0.0.10"
   },
   "scripts": {
+    "build": "ember build",
     "start": "ember s",
     "test": "ember test",
     "test:server": "ember test --server",
