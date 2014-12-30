@@ -11,6 +11,7 @@ var stew   = require('broccoli-stew');
 
 var find   = stew.find;
 var mv     = stew.mv;
+var rename = stew.rename;
 var env    = stew.env;
 var map    = stew.map;
 
