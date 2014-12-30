@@ -59,6 +59,6 @@ module.exports = merge([
   map(dist, prependLicense),
   testFiles,
   testVendor,
-  mv(rsvp, 'test'),
+  mv(dist, 'test'),
   mv(testBundle, 'test')
 ]);
