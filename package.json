@@ -21,7 +21,7 @@
     "browserify": "^4.2.0",
     "ember-cli": "0.1.4",
     "ember-publisher": "0.0.7",
-    "git-repo-version": "0.0.2",
+    "git-repo-version": "0.0.3",
     "json3": "^3.3.2",
     "minimatch": "^2.0.1",
     "mocha": "^1.20.1",

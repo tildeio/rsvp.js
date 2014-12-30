@@ -2,10 +2,9 @@
 var compileModules   = require('broccoli-es6-module-transpiler');
 var merge            = require('broccoli-merge-trees');
 var uglify           = require('broccoli-uglify-js');
-var calculateVersion = require('git-repo-version');
+var version          = require('git-repo-version');
 var browserify       = require('broccoli-watchify');
 var fs               = require('fs');
-
 
 var stew   = require('broccoli-stew');
 
@@ -48,8 +47,7 @@ env('production', function() {
 });
 
 function prependLicense(content) {
-  var version = JSON.parse(fs.readFileSync('./package.json')).version;
-  var license = fs.readFileSync('./config/versionTemplate.txt').toString().replace(/VERSION_PLACEHOLDER_STRING/, version);
+  var license = fs.readFileSync('./config/versionTemplate.txt').toString().replace(/VERSION_PLACEHOLDER_STRING/, version());
 
   return license + '\n' + content;
 }
