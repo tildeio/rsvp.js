@@ -4,6 +4,8 @@ var merge            = require('broccoli-merge-trees');
 var uglify           = require('broccoli-uglify-js');
 var calculateVersion = require('git-repo-version');
 var browserify       = require('broccoli-watchify');
+var fs               = require('fs');
+
 
 var stew   = require('broccoli-stew');
 
@@ -11,6 +13,7 @@ var find   = stew.find;
 var mv     = stew.mv;
 var rename = stew.rename;
 var env    = stew.env;
+var map    = stew.map;
 
 var lib       = find('lib');
 var testDir   = find('test');
@@ -45,8 +48,18 @@ env('production', function() {
   ]);
 });
 
+function prependLicense(content) {
+  var version = JSON.parse(fs.readFileSync('./package.json')).version;
+  var license = fs.readFileSync('./config/versionTemplate.txt').toString().replace(/VERSION_PLACEHOLDER_STRING/, version);
+
+  return license + '\n' + content;
+}
+
+// exclude source maps for now, until map/cat supports source maps
+dist = find(dist, '!*.map');
+
 module.exports = merge([
-  dist,
+  map(dist, prependLicense),
   testFiles,
   testVendor,
   mv(rsvp, 'test'),
