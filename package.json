@@ -5,7 +5,8 @@
   "description": "A lightweight library that provides tools for organizing asynchronous code",
   "main": "dist/rsvp.js",
   "files": [
-    "dist"
+    "dist",
+    "lib"
   ],
   "directories": {
     "lib": "lib"
