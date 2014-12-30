@@ -19,6 +19,7 @@ var testDir   = find('test');
 var testFiles = find('test/{index.html,worker.js}');
 
 var json3     = mv(find('node_modules/json3/lib/{json3.js}'), 'node_modules/json3/lib/', 'test/');
+// mocha doesn't browserify correctly
 var mocha     = mv(find('node_modules/mocha/mocha.{js,css}'), 'node_modules/mocha/',    'test/');
 
 var testVendor = merge([ json3, mocha ]);
