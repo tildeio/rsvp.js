@@ -1,72 +1,67 @@
 /* jshint node:true, undef:true, unused:true */
-var AMDFormatter     = require('es6-module-transpiler-amd-formatter');
+var compileModules   = require('broccoli-es6-module-transpiler');
+var merge            = require('broccoli-merge-trees');
 var uglify           = require('broccoli-uglify-js');
-var compileModules   = require('broccoli-compile-modules');
-var mergeTrees       = require('broccoli-merge-trees');
-var moveFile         = require('broccoli-file-mover');
-var es3Recast        = require('broccoli-es3-safe-recast');
-var concat           = require('broccoli-concat');
-var replace          = require('broccoli-string-replace');
 var calculateVersion = require('git-repo-version');
-var path             = require('path');
-var trees            = [];
-var env              = process.env.EMBER_ENV || 'development';
+var browserify       = require('broccoli-watchify');
+var fs               = require('fs');
 
-var bundle = compileModules('lib', {
-  inputFiles: ['rsvp.umd.js'],
-  output: '/rsvp.js',
-  formatter: 'bundle',
+
+var stew   = require('broccoli-stew');
+
+var find   = stew.find;
+var mv     = stew.mv;
+var rename = stew.rename;
+var env    = stew.env;
+var map    = stew.map;
+
+var lib       = find('lib');
+var testDir   = find('test');
+var testFiles = find('test/{index.html,worker.js}');
+
+// should be mv
+var json3     = rename(find('node_modules/json3/lib/{json3.js}'), 'node_modules/json3/lib', 'test/');
+var mocha     = rename(find('node_modules/mocha/mocha.{js,css}'), 'node_modules/mocha/',    'test/');
+
+var testVendor = merge([ json3, mocha ]);
+
+var rsvp = compileModules(lib, {
+  format: 'bundle',
+  entry: 'rsvp.umd.js',
+  output: 'rsvp.js'
 });
 
-trees.push(bundle);
-trees.push(compileModules('lib', {
-  inputFiles: ['**/*.js'],
-  output: '/amd/',
-  formatter: new AMDFormatter()
-}));
-
-if (process.env.EMBER_ENV === 'production') {
-  trees.push(uglify(moveFile(bundle, {
-    srcFile: 'rsvp.js',
-    destFile: 'rsvp.min.js'
-  }), {
-    mangle: true,
-    compress: true
-  }));
-}
-
-var distTree = mergeTrees(trees.concat('config'));
-var distTrees = [];
-
-distTrees.push(concat(distTree, {
-  inputFiles: [
-    'versionTemplate.txt',
-    'rsvp.js'
-  ],
-  outputFile: '/rsvp.js'
-}));
-
-if (process.env.EMBER_ENV === 'production') {
-  distTrees.push(concat(distTree, {
-    inputFiles: [
-      'versionTemplate.txt',
-      'rsvp.min.js'
-    ],
-    outputFile: '/rsvp.min.js'
-  }));
-}
-
-if (env !== 'development') {
-  distTrees = distTrees.map(es3Recast);
-}
-
-module.exports = replace(mergeTrees(distTrees), {
-  files: [
-    'rsvp.js',
-    'rsvp.min.js'
-  ],
-  pattern: {
-    match: /VERSION_PLACEHOLDER_STRING/g,
-    replacement: calculateVersion(10)
-  }
+var testBundle = browserify(merge([
+  mv(rsvp, 'test'),
+  testDir
+]), {
+  browserify: { entries: ['./test/index.js'] },
+  init: function (b) { b.external('vertx'); }
 });
+
+var dist = rsvp;
+
+env('production', function() {
+  dist = merge([
+    rename(uglify(dist), '.js', '.min.js'),
+    dist
+  ]);
+});
+
+function prependLicense(content) {
+  var version = JSON.parse(fs.readFileSync('./package.json')).version;
+  var license = fs.readFileSync('./config/versionTemplate.txt').toString().replace(/VERSION_PLACEHOLDER_STRING/, version);
+
+  return license + '\n' + content;
+}
+
+// exclude source maps for now, until map/cat supports source maps
+dist = find(dist, '!*.map');
+
+module.exports = merge([
+  map(dist, prependLicense),
+  testFiles,
+  testVendor,
+  mv(rsvp, 'test'),
+  mv(testBundle, 'test')
+]);
