@@ -29,7 +29,7 @@
     "release-it": "0.0.10"
   },
   "scripts": {
-    "server": "ember s",
+    "start": "ember s",
     "test": "ember test",
     "test:server": "ember test --server",
     "test:node": "ember build && mocha ./dist/test/browserify",
