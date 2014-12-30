@@ -49,6 +49,8 @@ env('production', function() {
 function prependLicense(content) {
   var license = fs.readFileSync('./config/versionTemplate.txt').toString().replace(/VERSION_PLACEHOLDER_STRING/, version());
 
+  // strip source maps for now..
+  content.replace(/\/\/# sourceMappingURL=rsvp.*/,'');
   return license + '\n' + content;
 }
 
