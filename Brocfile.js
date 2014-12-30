@@ -33,8 +33,7 @@ var testBundle = browserify(merge([
   mv(rsvp, 'test'),
   testDir
 ]), {
-  browserify: { entries: ['./test/index.js'] },
-  init: function (b) { b.external('vertx'); }
+  browserify: { entries: ['./test/index.js'] }
 });
 
 var dist = rsvp;
