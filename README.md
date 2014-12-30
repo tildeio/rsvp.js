@@ -354,9 +354,12 @@ listeners can be registered at any time.
 
 Custom tasks:
 
-* `ember build` - Build distribution
-* `testem ci` - Run tests.
-* `testem` - Run test server.
+* `npm test` - build & test
+* `npm test:node` - build & test just node
+* `npm test:server` - build/watch & test
+* `npm run build` - Build
+* `npm run build:production` - Build production (with minified output)
+* `npm start` - build, watch and run interactive server at http://localhost:4200'
 
 ## Releasing
 
