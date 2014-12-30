@@ -11,7 +11,6 @@ var stew   = require('broccoli-stew');
 
 var find   = stew.find;
 var mv     = stew.mv;
-var rename = stew.rename;
 var env    = stew.env;
 var map    = stew.map;
 
@@ -19,9 +18,8 @@ var lib       = find('lib');
 var testDir   = find('test');
 var testFiles = find('test/{index.html,worker.js}');
 
-// should be mv
-var json3     = rename(find('node_modules/json3/lib/{json3.js}'), 'node_modules/json3/lib', 'test/');
-var mocha     = rename(find('node_modules/mocha/mocha.{js,css}'), 'node_modules/mocha/',    'test/');
+var json3     = mv(find('node_modules/json3/lib/{json3.js}'), 'node_modules/json3/lib/', 'test/');
+var mocha     = mv(find('node_modules/mocha/mocha.{js,css}'), 'node_modules/mocha/',    'test/');
 
 var testVendor = merge([ json3, mocha ]);
 
