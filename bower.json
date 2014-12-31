@@ -18,8 +18,5 @@
     "tests",
     "vendor",
     "tasks"
-  ],
-  "devDependencies": {
-    "loader.js": "^1.0.0"
-  }
+  ]
 }
