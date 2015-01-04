@@ -6,7 +6,7 @@
     "Stefan Penner <stefan.penner@gmail.com>"
   ],
   "description": "A lightweight library that provides tools for organizing asynchronous code",
-  "main": "dist/rsvp.js",
+  "main": "rsvp.js",
   "keywords": [
     "promise"
   ],
