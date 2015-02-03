@@ -87,9 +87,9 @@
 * align with the promise spec
   https://github.com/domenic/promises-unwrapping
 * idiomatic es6 usage
-* RSVP.all: now now casts rather then resolves, and doesn't touch the
+* RSVP.all: now casts rather then resolves, and doesn't touch the
   "then"
-* RSVP.hash: now now casts rather then resolves, and doesn't touch the
+* RSVP.hash: now casts rather then resolves, and doesn't touch the
   "then"
 * MutationObserver: prefer text mutation, this fixes interop with
   MutationObserver polyfils
