@@ -266,7 +266,7 @@ one of the following formats:
 > than `RSVP.defer()`. Promises are recommended unless the specific 
 > properties of deferred are needed.
 
-Sometimes one need to create a deferred object, without immediately specifying
+Sometimes one needs to create a deferred object, without immediately specifying
 how it will be resolved. These deferred objects are essentially a wrapper around
 a promise, whilst providing late access to the `resolve()` and `reject()` methods.
 
