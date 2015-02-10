@@ -52,6 +52,9 @@
   "bugs": {
     "url": "https://github.com/tildeio/rsvp.js/issues"
   },
+  "browser": {
+    "vertx": false
+  },
   "keywords": [
     "promises",
     "futures"
