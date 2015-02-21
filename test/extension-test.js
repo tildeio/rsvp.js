@@ -726,6 +726,15 @@ describe("RSVP extensions", function() {
       });
     });
 
+    specify('works with an object that does not inherit from Object.prototype', function(done) {
+      var hash = Object.create(null)
+      hash.someValue = Promise.resolve('hello')
+      RSVP.hash(hash).then(function(results) {
+        assert(objectEquals(results, { someValue: 'hello' }));
+        done();
+      });
+    });
+
   });
 
   describe("RSVP.hashSettled", function() {
