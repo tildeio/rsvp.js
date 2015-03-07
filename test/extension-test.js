@@ -1,45 +1,8 @@
 /*global describe, specify, it, assert */
 
-if (typeof Object.getPrototypeOf !== "function") {
-  Object.getPrototypeOf = "".__proto__ === String.prototype
-    ? function (object) {
-      return object.__proto__;
-    }
-    : function (object) {
-      // May break if the constructor has been tampered with
-      return object.constructor.prototype;
-    };
-}
-
-function keysOf(object) {
-  var results = [];
-
-  for (var key in object) {
-    if (object.hasOwnProperty(key)) {
-      results.push(key);
-    }
-  }
-
-  return results;
-}
-
 var g = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
 var RSVP = g.adapter.RSVP;
 var assert = require('assert');
-
-var o_create = Object.create || function(o, props) {
-  function F() {}
-  F.prototype = o;
-
-  if (typeof(props) === "object") {
-    for (var prop in props) {
-      if (props.hasOwnProperty((prop))) {
-        F[prop] = props[prop];
-      }
-    }
-  }
-  return new F();
-};
 
 function objectEquals(obj1, obj2) {
   for (var i in obj1) {
@@ -567,7 +530,7 @@ describe("RSVP extensions", function() {
         this._super$constructor(resolve);
       }
 
-      SuchSubclass.prototype = o_create(RSVP.Promise.prototype);
+      SuchSubclass.prototype = Object.create(RSVP.Promise.prototype);
       SuchSubclass.prototype.constructor = SuchSubclass;
       SuchSubclass.prototype._super$constructor = RSVP.Promise;
 
@@ -2233,7 +2196,7 @@ describe("RSVP extensions", function() {
         this._promise$constructor(resolver);
       }
 
-      Subclass.prototype = o_create(RSVP.Promise.prototype);
+      Subclass.prototype = Object.create(RSVP.Promise.prototype);
       Subclass.prototype.constructor = Subclass;
       Subclass.prototype._promise$constructor = RSVP.Promise;
 
@@ -2432,11 +2395,12 @@ describe("RSVP extensions", function() {
     });
   });
 
-  if (typeof Worker !== 'undefined') {
+  if (typeof Worker !== 'undefined' && navigator.userAgent.indexOf('PhantomJS') < 1) {
     describe('web worker', function () {
       it('should work', function (done) {
-        var worker = new Worker('worker.js');
+        var worker = new Worker('./worker.js');
         worker.addEventListener('error', function(reason) {
+          console.error(reason);
           done(new Error("Test failed:" + reason));
         });
         worker.addEventListener('message', function (e) {
@@ -2536,6 +2500,7 @@ describe("on node 0.10.x, using process.nextTick recursively shows deprecation w
   it("should not cause 'RangeError: Maximum call stack size exceeded'", function (done) {
     var total = 1000;
 
+    this.timeout(10000);
     var resolved = 0;
     var nextTick = function(depth) {
       if (depth >= total) {
