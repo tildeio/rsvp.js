@@ -1,5 +1,7 @@
 # Master
 
+* don't publish built tests to npm
+
 # 3.0.18
 
 * issue with phantomjs 2.0 on travis. I have lost patience..
