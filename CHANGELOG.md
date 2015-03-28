@@ -1,5 +1,82 @@
 # Master
 
+# 3.0.18
+
+* issue with phantomjs 2.0 on travis. I have lost patience..
+* test on iojs and node 0.12
+* bump ember-cli
+* Support objects not inheriting from Object.prototype in RSVP.hash()
+
+# 3.0.17
+
+* Added browser field to fix browserification
+* Fix stripping source map
+* Fix duplicate imports
+* Remove unused loader.js dependency
+* Add the ember-cli dependency checker
+* Remove the duplicate build script
+* Remove the static middleware
+* add npm run build:production
+* browserify extern not needed
+* also add lib for those es6 peeps
+* enusre only dist is included in publishes
+* strip source maps for now.
+* copy correct tree into test
+* prefer start to server
+* use git-repo-version
+* ah, prod builds used rename correctly.
+* remove rename, prefer mv for this scenario
+* prepend license
+* Revert "node 0.10.x doesn’t like this. Its not really needed just run `npm run test` or `npm run test:ci`"
+* node 0.10.x doesn’t like this. Its not really needed just run `npm run test` or `npm run test:ci`
+* move stuff around + bump to broccoli-stew 0.0.3
+* bump broccoli-stew which now supports globs
+* Problem with path for vertx.js.
+
+# 3.0.16
+
+* use more supported version of export default
+* more broccoli fun
+* remove accidentally imported map file
+* test non-minified (we can add a flag to test minified next)
+* [BUGFIX release] Replace closure compiler
+
+# 3.0.15
+
+* Added Node 0.11 to travis ci test runner
+* Replaced deprecated process.nextTick with setImmediate
+* Ember test and npm run test:node passing
+* (origin/upgrade-tooling) upgrade tooling
+* Fix onerror test
+* [fixes #322] don't inform instrumentation of errors until the current turn is complete.
+* Follow thenable state not own state
+* Correct minor spelling error in defer doc example
+* Set [[AlreadyResolved]] as soon as resolve is called
+* Finally should correctly trigger on('error')
+* [fixes #294] finally work correctly with on(‘error’)
+* Use git-repo-version to calculate build signature
+* yay the new transpiler supports this now!!!
+* Use the latest version of the transpiler
+* add subclassing tests to finally
+* extern event emitter stuff
+* [fixes #309] some more externs
+* ensure those select few using node with minified JS don't have an issue
+* [fixes #302] use @calvinmetcalf’s promises-aplus-tests-phantom
+
+# 3.0.14
+
+* Instrumentation with stack is now opt-in
+* improve cost of instrumentation by up to 15x in chrome
+* reduce AST size
+* last vertex related touch-ups.
+* Add vert.x compatibility.
+* [fixes #296] for define.amd and module.exports to no minify
+* [fixes #292] ensure the deferred's api doesn't break when minified
+* ignore some files for npm
+* Add 'finally' to readme
+* Use browserify assert instead of vendoring one
+* Use mocha and json3 from npm, not bower
+* Remove unused json2 file
 * upgrade build tooling
 * improve performance of instrumentation (also add seperate flag to include "stack" with instrumentation as it is unfortunately slow)
 * ensure minified RSVP.defer() maintains known external API [#293](https://github.com/tildeio/rsvp.js/pull/293)
