@@ -49,13 +49,10 @@ env('production', function() {
 function prependLicense(content) {
   var license = fs.readFileSync('./config/versionTemplate.txt').toString().replace(/VERSION_PLACEHOLDER_STRING/, version());
 
-  // strip source maps for now..
-  content = content.replace(/\/\/# sourceMappingURL=rsvp.*/,'');
-  return license + '\n' + content;
-}
+  content.prepend(license);
 
-// exclude source maps for now, until map/cat supports source maps
-dist = find(dist, '!*.map');
+  return content;
+}
 
 module.exports = merge([
   map(dist, prependLicense),
