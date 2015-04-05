@@ -25,6 +25,7 @@
     "browserify": "^4.2.0",
     "ember-cli": "^0.2.0-beta.1",
     "ember-cli-dependency-checker": "0.0.7",
+    "ember-cli-sauce": "1.0.0",
     "ember-publisher": "0.0.7",
     "git-repo-version": "0.0.3",
     "json3": "^3.3.2",
@@ -42,7 +43,9 @@
     "test:node": "ember build && mocha ./dist/test/browserify",
     "prepublish": "ember build --environment production",
     "lint": "jshint lib",
-    "dry-run-release": "ember build --environment production && release-it --dry-run --non-interactive"
+    "dry-run-release": "ember build --environment production && release-it --dry-run --non-interactive",
+    "sauce:start": "ember start-sauce-connect",
+    "sauce:stop": "ember stop-sauce-connect"
   },
   "repository": {
     "type": "git",

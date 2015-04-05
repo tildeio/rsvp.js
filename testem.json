@@ -6,10 +6,24 @@
   "launchers": {
     "Mocha": {
       "command": "./node_modules/.bin/mocha dist/test/browserify.js"
+    },
+    "SL_chrome": {
+      "exe": "./node_modules/.bin/ember-cli-sauce",
+      "args": [
+        "-b",
+        "chrome",
+        "--at",
+        "--no-ct",
+        "--u"
+      ],
+      "protocol": "browser"
     }
   },
-  "launch_in_ci":  [
-    "PhantomJS",
-    "Mocha"
+  "launch_in_ci": [
+    "SL_chrome"
+  ],
+  "launch_in_dev": [
+    "SL_chrome",
+    "Safari"
   ]
 }
