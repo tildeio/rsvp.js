@@ -6,7 +6,7 @@ node_js:
 before_script:
   - npm run sauce:start
 after_script:
-  - npm run sauce:start
+  - npm run sauce:stop
 after_success:
 - "./bin/publish_to_s3.js"
 before_install:

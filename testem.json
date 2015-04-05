@@ -20,7 +20,8 @@
     }
   },
   "launch_in_ci": [
-    "SL_chrome"
+    "SL_chrome",
+    "mocha"
   ],
   "launch_in_dev": [
     "SL_chrome",
