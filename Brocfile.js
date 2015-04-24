@@ -26,7 +26,7 @@ var testVendor = merge([ json3, mocha ]);
 
 var rsvp = compileModules(lib, {
   format: 'bundle',
-  entry: 'rsvp.umd.js',
+  entry: 'rsvp.umd',
   output: 'rsvp.js'
 });
 
