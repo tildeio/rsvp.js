@@ -3,6 +3,10 @@ node_js:
 - '0.10'
 - '0.12'
 - 'iojs'
+before_script:
+  - npm run sauce:start
+after_script:
+  - npm run sauce:stop
 after_success:
 - "./bin/publish_to_s3.js"
 before_install:
@@ -12,7 +16,9 @@ before_install:
   - npm config set spin false^
 env:
   global:
-  - EMBER_ENV=production
-  - secure: MiR5zbpHpblG1HcQyxzhYqxcb+3gGsjKWOjLYi1AOU4BG90+Ckim4mCJbneIHaBfeIZKZCm+X1wRRwUE0TlaMFEiXqReHt8k/1ChjfFdTicZtXYytbnGdRlHjvN/LVCaVhBiORSXWPzjIWhwYInMhCtekWTOqChtblRGdbrCLCY=
-  - secure: LF1yJIzr4z5e4RxFt+ZIwjazDyItPoPtSUgcoSQfTUhRtkxFsIRpOpf4VnzPH2FSpw4wbkNq+hm+K1xrKHNq+OE0PLYtD+H7i03ac993jReSJN8rwb0gpAlwAGWC++uF7j7aMKJAlZA1u4tnPD5cxuk6BKnNSONtD0BwKQ6oXkk=
-  - secure: MB2RZPsHVuikayckVYCVE9TWiooaFV+jyxEkpSoNJ5pRIVTwy9xRHK56S1sxkXmPIm7sYyaLWpngp13/CN80pT796HS8mEuxJ011XwjY6YutXHnR2gOrCssah6kQ6gaXO1sFVkerBa/GwdkKu/k8LVAiORiz1JlPZvOKDRsJaNw=
+    - SAUCE_USERNAME: rsvp
+    - SAUCE_ACCESS_KEY: cd53f34a-79e2-411c-8de0-52de398ac334
+    - EMBER_ENV=production
+    - secure: MiR5zbpHpblG1HcQyxzhYqxcb+3gGsjKWOjLYi1AOU4BG90+Ckim4mCJbneIHaBfeIZKZCm+X1wRRwUE0TlaMFEiXqReHt8k/1ChjfFdTicZtXYytbnGdRlHjvN/LVCaVhBiORSXWPzjIWhwYInMhCtekWTOqChtblRGdbrCLCY=
+    - secure: LF1yJIzr4z5e4RxFt+ZIwjazDyItPoPtSUgcoSQfTUhRtkxFsIRpOpf4VnzPH2FSpw4wbkNq+hm+K1xrKHNq+OE0PLYtD+H7i03ac993jReSJN8rwb0gpAlwAGWC++uF7j7aMKJAlZA1u4tnPD5cxuk6BKnNSONtD0BwKQ6oXkk=
+    - secure: MB2RZPsHVuikayckVYCVE9TWiooaFV+jyxEkpSoNJ5pRIVTwy9xRHK56S1sxkXmPIm7sYyaLWpngp13/CN80pT796HS8mEuxJ011XwjY6YutXHnR2gOrCssah6kQ6gaXO1sFVkerBa/GwdkKu/k8LVAiORiz1JlPZvOKDRsJaNw=
