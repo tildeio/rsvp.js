@@ -26,7 +26,7 @@ var testVendor = merge([ json3, mocha ]);
 
 var rsvp = compileModules(lib, {
   format: 'bundle',
-  entry: 'rsvp.umd.js',
+  entry: 'rsvp.umd',
   output: 'rsvp.js'
 });
 
@@ -37,7 +37,7 @@ var testBundle = browserify(merge([
   browserify: { entries: ['./test/index.js'] }
 });
 
-var dist = rsvp;
+var dist = find(rsvp, '!lib/rsvp.umd');
 
 env('production', function() {
   dist = merge([
