@@ -5,6 +5,7 @@ module.exports = {
     version: '<%= pkg.version %>',
     url: '<%= pkg.homepage %>',
     options: {
+      themedir: 'themes/rsvp',
       paths: 'lib',
       outdir: 'docs'
     }
