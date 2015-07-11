@@ -1084,6 +1084,26 @@ describe("RSVP extensions", function() {
       assert.equal(broCount, 1, 'bro was only trigged once');
     });
 
+    it("should throw if passed callback is not a function", function() {
+      var obj = {};
+      RSVP.EventTarget.mixin(obj);
+
+      function nullCallback() {
+        obj.on('myEvent', null);
+      }
+      function stringCallback() {
+        obj.on('myEvent', 'notAFunction');
+      }
+
+      assert.throws(
+        nullCallback
+      );
+
+      assert.throws(
+        stringCallback
+      );
+    });
+
     it("When provided, any unhandled exceptions are sent to it", function(done) {
       var thrownError = new Error();
 
