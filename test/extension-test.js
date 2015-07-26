@@ -21,6 +21,40 @@ function objectEquals(obj1, obj2) {
 }
 
 describe("RSVP extensions", function() {
+  describe("config", function() {
+    afterEach(function() {
+      RSVP.off('error');
+      RSVP.configure('after', function(cb) {
+        setTimeout(cb, 0);
+      });
+    });
+
+    it("allow post microTask flush to be configurable", function(done) {
+      var thrownError = new Error();
+      var async = [];
+      var after = [];
+
+      RSVP.configure('after', function(cb) {
+        after.push(cb);
+      });
+
+      RSVP.on('error', function(reason) {
+        assert.equal(reason, thrownError, "The thrown error is passed in");
+        done();
+      });
+
+      assert.equal(after.length, 0);;
+      new RSVP.Promise(function(resolve, reject) {
+        reject(thrownError);
+      });
+
+      Promise.resolve().then(function(){
+        assert.equal(after.length, 1);
+        after[0]();
+      });
+    });
+  });
+
   describe("self fulfillment", function(){
     it("treats self fulfillment as the recursive base case", function(done){
       var aDefer = new RSVP.defer(),
@@ -1116,6 +1150,7 @@ describe("RSVP extensions", function() {
         reject(thrownError);
       });
     });
+
 
     it("When provided, handled exceptions are not sent to it", function(done) {
       var thrownError = new Error();
