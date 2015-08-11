@@ -6,7 +6,8 @@
   "main": "dist/rsvp.js",
   "files": [
     "dist",
-    "lib"
+    "lib",
+    "!dist/test"
   ],
   "directories": {
     "lib": "lib"
