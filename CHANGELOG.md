@@ -1,5 +1,9 @@
 # Master
 
+# 3.0.20
+
+* correctly publish bower & npm
+
 # 3.0.19
 
 * don't publish built tests to npm
