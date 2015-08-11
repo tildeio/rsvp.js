@@ -1,5 +1,7 @@
 # Master
 
+# 3.0.19
+
 * don't publish built tests to npm
 
 # 3.0.18
