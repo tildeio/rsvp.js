@@ -175,7 +175,7 @@ RSVP.on('error', function(reason) {
 });
 ```
 
-`RSVP` allows Promises to be labeled: `Promise.resovle(value, 'I AM A LABEL')`
+`RSVP` allows Promises to be labeled: `Promise.resolve(value, 'I AM A LABEL')`
 If provided, this label is passed as the second argument to `RSVP.on('error')`
 
 ```javascript
