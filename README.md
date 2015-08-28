@@ -175,6 +175,20 @@ RSVP.on('error', function(reason) {
 });
 ```
 
+`RSVP` allows Promises to be labeled: `Promise.resovle(value, 'I AM A LABEL')`
+If provided, this label is passed as the second argument to `RSVP.on('error')`
+
+```javascript
+RSVP.on('error', function(reason, label) {
+  if (label) {
+    console.error(label);
+  }
+
+  console.assert(false, reason);
+});
+```
+
+
 **NOTE:** promises do allow for errors to be handled asynchronously, so
 this callback may result in false positives.
 
@@ -262,7 +276,7 @@ one of the following formats:
 ## Deferred
 
 > The `RSVP.Promise` constructor is generally a better, less error-prone choice
-> than `RSVP.defer()`. Promises are recommended unless the specific 
+> than `RSVP.defer()`. Promises are recommended unless the specific
 > properties of deferred are needed.
 
 Sometimes one needs to create a deferred object, without immediately specifying
@@ -345,7 +359,7 @@ RSVP.on('chained', listener);
 RSVP.on('fulfilled', listener);
 RSVP.on('rejected', listener);
 ```
-        
+
 Events are only triggered when `RSVP.configure('instrument')` is true, although
 listeners can be registered at any time.
 

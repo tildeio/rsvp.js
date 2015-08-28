@@ -1440,6 +1440,23 @@ describe("RSVP extensions", function() {
       });
     });
 
+    it("onerror gets label if provided", function(done) {
+      var thrownError = new Error();
+
+      RSVP.configure('onerror', function(error, label) {
+        assert.equal(error, thrownError, "The thrown error is passed in");
+        assert.equal(label, 'i am label', "the label for the given promise is also provided");
+        done();
+      });
+
+      new RSVP.Promise(function(resolve, reject) {
+        reject(thrownError);
+      }, 'i am label').then(function() {
+        // doesn't get here
+        assert(false);
+      });
+    });
+
     it("When provided, handled exceptions are not sent to it", function(done) {
       var thrownError = new Error();
 
