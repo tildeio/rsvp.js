@@ -1,5 +1,10 @@
 # Master
 
+# 3.1.0
+
+* `RSVP.on('error', function(reason, label) { ... }` now also provides the
+  rejected promises label.
+
 # 3.0.21
 
 * actually don't publish built tests to npm
