@@ -20,6 +20,65 @@ function objectEquals(obj1, obj2) {
   return true;
 }
 
+describe('tampering', function() {
+  var resolve = RSVP.Promise.resolve;
+
+  afterEach(function() {
+    RSVP.Promise.resolve = resolve;
+  });
+
+  describe('then assimilation', function() {
+    it('tampered resolved and then', function() {
+      var one = RSVP.Promise.resolve(1);
+      var two = RSVP.Promise.resolve(2);
+      var thenCalled = 0;
+      var resolveCalled = 0;
+
+      two.then = function() {
+        thenCalled++;
+        return RSVP.Promise.prototype.then.apply(this, arguments);
+      };
+
+      RSVP.Promise.resolve = function(x) {
+        resolveCalled++;
+        return new RSVP.Promise(function(resolve) { resolve(x); });
+      };
+
+      return one.then(function() {
+        return two;
+      }).then(function(value) {
+        assert.equal(thenCalled, 1, 'expected then to be called once');
+        assert.equal(resolveCalled, 0, 'expected resolve to be called once');
+        assert.equal(value, 2, 'expected fulfillment value to be 2');
+      });
+    });
+
+    describe('Promise.all', function() {
+      it('tampered resolved and then', function() {
+        var two = RSVP.Promise.resolve(2);
+        var thenCalled = 0;
+        var resolveCalled = 0;
+
+        two.then = function() {
+          thenCalled++;
+          return RSVP.Promise.prototype.then.apply(this, arguments);
+        };
+
+        RSVP.Promise.resolve = function(x) {
+          resolveCalled++;
+          return new RSVP.Promise(function(resolve) { resolve(x); });
+        };
+
+        return RSVP.Promise.all([two]).then(function(value) {
+          assert.equal(thenCalled, 1);
+          assert.equal(resolveCalled, 1);
+          assert.deepEqual(value, [2]);
+        });
+      });
+    });
+  });
+});
+
 describe("RSVP extensions", function() {
   describe("config", function() {
     afterEach(function() {
