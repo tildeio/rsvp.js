@@ -4,6 +4,7 @@
   "version": "3.1.0",
   "description": "A lightweight library that provides tools for organizing asynchronous code",
   "main": "dist/rsvp.js",
+  "jsnext:main":"lib/rsvp.js",
   "files": [
     "dist",
     "lib",
