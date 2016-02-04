@@ -923,6 +923,15 @@ describe("RSVP extensions", function() {
       ]).then(function(){ done(); });
     });
 
+    it('works with plan pojo input', function(done) {
+      RSVP.Promise.all([
+        {}
+      ]).then(function(result) {
+        assert.deepEqual(result, [{}]);
+        done();
+      });
+    });
+
     specify('fulfilled only after all of the other promises are fulfilled', function(done) {
       var firstResolved, secondResolved, firstResolver, secondResolver;
 
