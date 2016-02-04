@@ -127,11 +127,12 @@ describe("RSVP extensions", function() {
         }, 1);
 
         return promiseB;
+      }).catch(function(c) {
+        assert.equal(c.message, 'Chaining cycle detected for promise');
+        done();
       });
 
-      promiseB.then(function(c){
-        done();
-      })
+      promiseB.catch(done);
 
       aDefer.resolve(promiseA);
     });
@@ -342,7 +343,11 @@ describe("RSVP extensions", function() {
         });
 
         promise.then(function(value) {
-          assert.equal(value, originalPromise);
+          done("should not be fullfilled");
+        });
+
+        promise.catch(function(reason) {
+	        assert.equal(reason.message, 'Chaining cycle detected for promise');
           done();
         });
       });
