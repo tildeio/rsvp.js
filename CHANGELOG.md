@@ -1,5 +1,11 @@
 # Master
 
+# 3.2.0
+
+* add tamper protection - then / resolve tampering should avoid fast-paths the rely on those being predictable
+* improve performance of Enumerator operating on non-promise objects
+* Ensure the promise constructor continues to get inlined.
+
 # 3.1.0
 
 * `RSVP.on('error', function(reason, label) { ... }` now also provides the
