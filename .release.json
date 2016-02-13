@@ -6,12 +6,14 @@
   "pkgFiles": ["package.json", "bower.json"],
   "increment": "patch",
   "commitMessage": "Release %s",
-  "tagName": "%s",
+  "tagName": "v%s",
   "tagAnnotation": "Release %s",
   "buildCommand": "npm run-script build-all",
-  "distRepo": "git@github.com:components/rsvp.js.git",
-  "distStageDir": "tmp/stage",
-  "distBase": "dist",
-  "distFiles": ["**/*", "../package.json", "../bower.json"],
+  "dist": {
+    "repo": "git@github.com:components/rsvp.js.git",
+    "stageDir": "tmp/stage",
+    "base": "dist",
+    "files": ["**/*", "../package.json", "../bower.json"]
+  },
   "publish": false
 }
