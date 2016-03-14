@@ -2414,8 +2414,23 @@ describe("RSVP extensions", function() {
       });
     });
 
-    it("works with promise which returning an array", function(done){
+    it("works with promise that returns an array", function(done){
       var promise = RSVP.resolve([1,2,3]);
+
+      RSVP.filter(promise, filterFn).then(function(results){
+        assert.deepEqual([2, 3], results);
+        done();
+      },function(reason) {
+        done(reason);
+      });
+    });
+
+    it("works with promise that returns an array of promises", function(done){
+      var promise = RSVP.resolve([
+        RSVP.resolve(1),
+        RSVP.resolve(2),
+        RSVP.resolve(3)
+      ]);
 
       RSVP.filter(promise, filterFn).then(function(results){
         assert.deepEqual([2, 3], results);
