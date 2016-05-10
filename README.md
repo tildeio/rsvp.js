@@ -127,7 +127,7 @@ Errors also propagate:
 ```javascript
 getJSON("/posts.json").then(function(posts) {
 
-}).catch(function(error) {
+}).then(null, function(error) {
   // since no rejection handler was passed to the
   // first `.then`, the error propagates.
 });
@@ -142,7 +142,7 @@ getJSON("/post/1.json").then(function(post) {
   return getJSON(post.commentURL);
 }).then(function(comments) {
   // proceed with access to posts and comments
-}).catch(function(error) {
+}).then(null, function(error) {
   // handle errors in either of the two requests
 });
 ```
