@@ -51,7 +51,7 @@ var promise = new RSVP.Promise(function(resolve, reject) {
 
 promise.then(function(value) {
   // success
-}, function(value) {
+}).catch(function(error) {
   // failure
 });
 ```
@@ -84,7 +84,7 @@ var getJSON = function(url) {
 
 getJSON("/posts.json").then(function(json) {
   // continue
-}, function(error) {
+}).catch(function(error) {
   // handle errors
 });
 ```
@@ -144,17 +144,6 @@ getJSON("/post/1.json").then(function(post) {
   // proceed with access to posts and comments
 }).catch(function(error) {
   // handle errors in either of the two requests
-});
-```
-
-You can also use `catch` for error handling, which is a shortcut for
-`then(null, rejection)`, like so:
-
-```javascript
-getJSON("/post/1.json").then(function(post) {
-  return getJSON(post.commentURL);
-}).catch(function(error) {
-  // handle errors
 });
 ```
 
