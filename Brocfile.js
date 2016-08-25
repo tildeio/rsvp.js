@@ -36,7 +36,7 @@ var es5 = new Babel(lib, {
 // build RSVP itself
 var rsvp = new Rollup(es5, {
   rollup: {
-    entry: 'lib/index.js',
+    entry: 'lib/rsvp.js',
     targets: [
       {
         format: 'umd',
