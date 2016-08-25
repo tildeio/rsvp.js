@@ -1,12 +1,12 @@
 /* jshint node:true, undef:true, unused:true */
-var Rollup           = require('broccoli-rollup');
-var Babel            = require('broccoli-babel-transpiler');
-var merge            = require('broccoli-merge-trees');
-var uglify           = require('broccoli-uglify-js');
-var version          = require('git-repo-version');
-var browserify       = require('broccoli-watchify');
-var concat           = require('broccoli-concat');
-var fs               = require('fs');
+var Rollup   = require('broccoli-rollup');
+var Babel    = require('broccoli-babel-transpiler');
+var merge    = require('broccoli-merge-trees');
+var uglify   = require('broccoli-uglify-js');
+var version  = require('git-repo-version');
+var watchify = require('broccoli-watchify');
+var concat   = require('broccoli-concat');
+var fs       = require('fs');
 
 var stew   = require('broccoli-stew');
 
@@ -48,7 +48,7 @@ var rsvp = new Rollup(es5, {
   }
 });
 
-var testBundle = browserify(merge([
+var testBundle = watchify(merge([
   mv(rsvp, 'test'),
   testDir
 ]), {
