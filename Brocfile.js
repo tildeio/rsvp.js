@@ -1,5 +1,6 @@
 /* jshint node:true, undef:true, unused:true */
 var Rollup           = require('broccoli-rollup');
+var Babel            = require('broccoli-babel-transpiler');
 var merge            = require('broccoli-merge-trees');
 var uglify           = require('broccoli-uglify-js');
 var version          = require('git-repo-version');
@@ -28,15 +29,20 @@ var mocha     = mv(find('node_modules/mocha/mocha.{js,css}'), 'node_modules/moch
 var testVendor = merge([ json3, mocha ]);
 
 
+var es5 = new Babel(lib, {
+  blacklist: ['es6.modules']
+});
+
 // build RSVP itself
-var rsvp = new Rollup(lib, {
+var rsvp = new Rollup(es5, {
   rollup: {
     entry: 'lib/index.js',
     targets: [
       {
         format: 'umd',
         moduleName: 'thing',
-        dest: 'rsvp.js'
+        dest: 'rsvp.js',
+        sourceMap: 'inline'
       }
     ]
   }
