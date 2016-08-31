@@ -1,8 +1,8 @@
 /*global RSVP*/
 
 var assert = require('assert');
-var g = typeof window !== 'undefined' ?
-               window : typeof global !== 'undefined' ? global : this;
+var g = typeof self !== 'undefined' ?
+               self : typeof global !== 'undefined' ? global : this;
 
 var RSVP = g.RSVP || require('../');
 var defer = RSVP.defer;
