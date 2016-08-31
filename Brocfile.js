@@ -40,7 +40,7 @@ var rsvp = new Rollup(es5, {
     targets: [
       {
         format: 'umd',
-        moduleName: 'thing',
+        moduleName: 'RSVP',
         dest: 'rsvp.js',
         sourceMap: 'inline'
       }
