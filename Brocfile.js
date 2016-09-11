@@ -90,6 +90,5 @@ module.exports = merge([
   // test stuff
   testFiles,
   testVendor,
-  mv(rsvp, 'test'),
   mv(testBundle, 'test')
 ]);

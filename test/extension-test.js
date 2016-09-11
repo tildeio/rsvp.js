@@ -1,7 +1,6 @@
 /*global describe, specify, it, assert */
 
-var g = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
-var RSVP = g.adapter.RSVP;
+var RSVP = new Function('return this;')().adapter.RSVP;
 var assert = require('assert');
 
 function objectEquals(obj1, obj2) {
