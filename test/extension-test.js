@@ -52,6 +52,24 @@ describe('tampering', function() {
       });
     });
 
+  it('tampered resolved', function() {
+      var one = RSVP.Promise.resolve(1);
+      var two = RSVP.Promise.resolve(2);
+      var thenCalled = 0;
+      var resolveCalled = 0;
+
+      RSVP.Promise.resolve = function(x) {
+        resolveCalled++;
+        return new RSVP.Promise(function(resolve) { resolve(x); });
+      };
+
+      return one.then(function() {
+        return two;
+      }).then(function(value) {
+        assert.equal(resolveCalled, 0, 'expected resolve to be called once');
+        assert.equal(value, 2, 'expected fulfillment value to be 2');
+      });
+    });
     describe('Promise.all', function() {
       it('tampered resolved and then', function() {
         var two = RSVP.Promise.resolve(2);
