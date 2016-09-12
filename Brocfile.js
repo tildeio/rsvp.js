@@ -52,7 +52,7 @@ var testBundle = watchify(merge([
   mv(rsvp, 'test'),
   testDir
 ]), {
-  browserify: { entries: ['./test/index.js'] }
+  browserify: { debug: true, entries: ['./test/index.js'] }
 });
 
 var header = stew.map(find('config/versionTemplate.txt'), function(content) {
