@@ -1,5 +1,16 @@
 # Master
 
+# 3.3.0
+
+* improve build, switch to broccoli-rollup (among other things)
+* RSVP.filter() now itself accepts a Promise.all as input
+* compress and mangle prod build output
+* [REVERT] reject instead of throwing, spec violation.
+
+# 3.2.1
+
+* reject instead of throwing
+
 # 3.2.0
 
 * add tamper protection - then / resolve tampering should avoid fast-paths the rely on those being predictable
