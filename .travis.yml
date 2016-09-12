@@ -1,15 +1,17 @@
 language: node_js
 node_js:
-- '0.10'
-- '0.12'
-- 'iojs'
+  - "6"
+  - "5"
+  - "4"
+  - "0.12"
 after_success:
-- "./bin/publish_to_s3.js"
+  - "./bin/publish_to_s3.js"
 before_install:
+  - nvm install 6
+  - nvm use 6
   - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
-  - npm config set spin false^
-  - npm install -g "npm@^2.0.0"
-  - npm config set spin false^
+before_script:
+  - nvm use $TRAVIS_NODE_VERSION
 env:
   global:
   - EMBER_ENV=production

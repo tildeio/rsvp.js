@@ -1,4 +1,4 @@
-importScripts('./lib/rsvp.js');
+importScripts('rsvp.js');
 new RSVP.Promise(function(resolve, reject) {
   self.onmessage = function (e) {
     if (e.data === 'ping') {

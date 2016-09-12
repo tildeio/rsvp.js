@@ -1,17 +1,10 @@
 /*global RSVP*/
 
-var assert = require('assert');
-var g = typeof window !== 'undefined' ?
-               window : typeof global !== 'undefined' ? global : this;
+var RSVP = require('./rsvp.js');
 
-var RSVP = g.RSVP || require('./rsvp.js');
-var defer = RSVP.defer;
-var resolve = RSVP.resolve;
-var reject = RSVP.reject;
-
-module.exports = g.adapter = {
-  resolved: resolve,
-  rejected: reject,
-  deferred: defer,
+new Function('return this')().adapter = {
+  resolved: RSVP.resolve,
+  rejected: RSVP.reject,
+  deferred: RSVP.defer,
   RSVP: RSVP
 };

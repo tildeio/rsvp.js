@@ -1,10 +1,12 @@
 /* jshint node:true, undef:true, unused:true */
-var compileModules   = require('broccoli-es6-module-transpiler');
-var merge            = require('broccoli-merge-trees');
-var uglify           = require('broccoli-uglify-js');
-var version          = require('git-repo-version');
-var browserify       = require('broccoli-watchify');
-var fs               = require('fs');
+var Rollup   = require('broccoli-rollup');
+var Babel    = require('broccoli-babel-transpiler');
+var merge    = require('broccoli-merge-trees');
+var uglify   = require('broccoli-uglify-js');
+var version  = require('git-repo-version');
+var watchify = require('broccoli-watchify');
+var concat   = require('broccoli-concat');
+var fs       = require('fs');
 
 var stew   = require('broccoli-stew');
 
@@ -15,6 +17,8 @@ var env    = stew.env;
 var map    = stew.map;
 
 var lib       = find('lib');
+
+// test stuff
 var testDir   = find('test');
 var testFiles = find('test/{index.html,worker.js}');
 
@@ -24,43 +28,67 @@ var mocha     = mv(find('node_modules/mocha/mocha.{js,css}'), 'node_modules/moch
 
 var testVendor = merge([ json3, mocha ]);
 
-var rsvp = compileModules(lib, {
-  format: 'bundle',
-  entry: 'rsvp.umd.js',
-  output: 'rsvp.js'
+
+var es5 = new Babel(lib, {
+  blacklist: ['es6.modules']
 });
 
-var testBundle = browserify(merge([
+// build RSVP itself
+var rsvp = new Rollup(es5, {
+  rollup: {
+    entry: 'lib/rsvp.js',
+    targets: [
+      {
+        format: 'umd',
+        moduleName: 'RSVP',
+        dest: 'rsvp.js',
+        sourceMap: 'inline'
+      }
+    ]
+  }
+});
+
+var testBundle = watchify(merge([
   mv(rsvp, 'test'),
   testDir
 ]), {
-  browserify: { entries: ['./test/index.js'] }
+  browserify: { debug: true, entries: ['./test/index.js'] }
 });
 
-var dist = rsvp;
-
-env('production', function() {
-  dist = merge([
-    rename(uglify(dist,{ mangle: true, compress: true }), '.js', '.min.js'),
-    dist
-  ]);
+var header = stew.map(find('config/versionTemplate.txt'), function(content) {
+  return content.replace(/VERSION_PLACEHOLDER_STRING/, version());
 });
 
-function prependLicense(content) {
-  var license = fs.readFileSync('./config/versionTemplate.txt').toString().replace(/VERSION_PLACEHOLDER_STRING/, version());
-
-  // strip source maps for now..
-  content = content.replace(/\/\/# sourceMappingURL=rsvp.*/,'');
-  return license + '\n' + content;
+function concatAs(tree, outputFile) {
+  return concat(merge([tree, header]), {
+    headerFiles: ['config/versionTemplate.txt'],
+    inputFiles:  ['rsvp.js'],
+    outputFile: outputFile
+  });
 }
 
-// exclude source maps for now, until map/cat supports source maps
-dist = find(dist, '!*.map');
+function production(dist, header) {
+  var result;
+  env('production', function(){
+    result = uglify(concatAs(dist, 'rsvp.min.js'), {
+      compress: true,
+      mangle: true,
+    });
+  })
+  return result;
+}
+
+function development(dist, header) {
+  return concatAs(dist, 'rsvp.js');
+}
 
 module.exports = merge([
-  map(dist, prependLicense),
+  merge([
+    production(rsvp, header),
+    development(rsvp, header),
+  ].filter(Boolean)),
+  // test stuff
   testFiles,
   testVendor,
-  mv(dist, 'test'),
   mv(testBundle, 'test')
 ]);
