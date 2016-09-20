@@ -1,5 +1,9 @@
 # Master
 
+# 3.3.2
+
+* [BUGFIX] fix invalid ES6
+
 # 3.3.1
 
 * [BUGFIX] for compat, ensure both default export and property export exist. This will likely go away in 4.0.0, and was the result of rollup producing proper output with `__esModule: true` brand
