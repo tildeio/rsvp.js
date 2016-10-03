@@ -1,5 +1,9 @@
 # Master
 
+# 3.3.3
+
+* [BUGFIX] Fix asap for Titanium \w webpack usage.
+
 # 3.3.2
 
 * [BUGFIX] fix invalid ES6
