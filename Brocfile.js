@@ -43,6 +43,11 @@ var rsvp = new Rollup(es5, {
         moduleName: 'RSVP',
         dest: 'rsvp.js',
         sourceMap: 'inline'
+      },
+      {
+        format: 'es',
+        dest: 'rsvp.es.js',
+        sourceMap: 'inline'
       }
     ]
   }
@@ -71,8 +76,11 @@ function production(dist, header) {
   var result;
   env('production', function(){
     result = uglify(concatAs(dist, 'rsvp.min.js'), {
-      compress: true,
-      mangle: true,
+      compress: {
+        negate_iife: false,
+        sequences: false
+      },
+      mangle: true
     });
   })
   return result;
@@ -86,6 +94,11 @@ module.exports = merge([
   merge([
     production(rsvp, header),
     development(rsvp, header),
+    concat(merge([rsvp, header]), {
+      headerFiles: ['config/versionTemplate.txt'],
+      inputFiles:  ['rsvp.es.js'],
+      outputFile: 'rsvp.es.js'
+    })
   ].filter(Boolean)),
   // test stuff
   testFiles,
