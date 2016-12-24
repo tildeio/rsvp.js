@@ -58,5 +58,8 @@
     "futures"
   ],
   "author": "Tilde, Inc. & Stefan Penner",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": "0.12.* || 4.* || 6.* || 7.*"
+  }
 }
