@@ -1,5 +1,12 @@
 # Master
 
+# 3.4.0
+
+* [BUGFIX] Fix memory leak [#446]
+* Mirror Node's LTS policy
+* add dist/rsvp.es.js (bundle as a single ES module file)
+* fix typo in readme
+
 # 3.3.3
 
 * [BUGFIX] Fix asap for Titanium \w webpack usage.
