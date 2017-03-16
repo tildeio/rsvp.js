@@ -913,6 +913,12 @@ describe("RSVP extensions", function() {
   });
 
 
+  describe("RSVP.asap", function() {
+    it("is exposed publically", function() {
+      assert(typeof RSVP.asap === 'function')
+    });
+  });
+
   describe("RSVP.all", function() {
     testAll(RSVP.all);
   });
