@@ -1,5 +1,9 @@
 # Master
 
+# 3.5.0
+
+* expose RSVP.asap for access to the micro-task polyfil
+
 # 3.4.0
 
 * [BUGFIX] Fix memory leak [#446]
