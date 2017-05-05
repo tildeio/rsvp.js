@@ -13,7 +13,7 @@ It works in node and the browser (IE6+, all the popular evergreen ones).
 
 ## Promises
 
-Although RSVP is es6 compliant, it does bring along some extra toys. If you would prefer a strict es6 subset, I would suggest checking out our sibling project https://github.com/stefanpenner/es6-promise, It is RSVP but stripped down to the es6 spec features.
+Although RSVP is ES6 compliant, it does bring along some extra toys. If you would prefer a strict ES6 subset, I would suggest checking out our sibling project https://github.com/stefanpenner/es6-promise, It is RSVP but stripped down to the ES6 spec features.
 
 ## Bower
 
