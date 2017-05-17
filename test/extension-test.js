@@ -2423,14 +2423,51 @@ describe("RSVP extensions", function() {
     });
 
     it("catches error thrown from filterFn", function(done){
-      var throwerFilter = function() {
-        throw new Error('function error');
+      var throwerFilter = function(val) {
+        if (val === 2) {
+          throw new Error('function error');
+        }
       }
 
-      RSVP.filter([RSVP.resolve(1)], throwerFilter).then(function() {
+      RSVP.filter([RSVP.resolve(1), RSVP.resolve(2)], throwerFilter).then(function() {
         done(new Error("Promise was resolved when it shouldn't have been!"));
       }, function(e) {
         assert.equal(e.message, 'function error');
+        done()
+      });
+    });
+
+    it("eager filter works", function(){
+      var makePromise = function(delay, label) {
+        return new RSVP.Promise(function(resolve){
+          setTimeout(function() {
+            resolve(label);
+          }, delay);
+        });
+      }
+
+      var p1 = makePromise(15, 'p1');
+      var p2 = makePromise(5, 'p2');
+      var p3 = makePromise(10, 'p3');
+      var p4 = makePromise(20, 'p4');
+
+      var i = 0;
+      var order = ['p2', 'p3', 'p1', 'p4'];
+      return RSVP.filter([p1, p2, p3, p4], function(value) {
+        assert.equal(value, order[i++]);
+      })
+    });
+
+    it("reject filterFn returns rejected promise", function(done){
+      var rejectFilter = function(val) {
+        if (val === 2) {
+          return RSVP.reject();
+        }
+      }
+
+      RSVP.filter([RSVP.resolve(1), RSVP.resolve(2)], rejectFilter).then(function() {
+        done(new Error("Promise was resolved when it shouldn't have been!"));
+      }, function() {
         done()
       });
     });
@@ -2508,7 +2545,6 @@ describe("RSVP extensions", function() {
         assert.deepEqual(results2, [ 2, 3 ]);
         done();
       }, done);
-
     });
   });
 
@@ -2536,17 +2572,19 @@ describe("RSVP extensions", function() {
       var promises = [ promise1, promise2, promise3 ];
 
       RSVP.map(promises, mapFn).then(function(results){
-        assert.deepEqual([ 2, 3, 4], results);
+        assert.deepEqual([2, 3, 4], results);
         done();
       });
     });
 
     it("catches error thrown from mapFn", function(done){
-      var throwerMap = function() {
-        throw new Error('function error');
+      var throwerMap = function(val) {
+        if (val === 2) {
+          throw new Error('function error');
+        }
       }
 
-      RSVP.map([RSVP.resolve(1)], throwerMap).then(function() {
+      RSVP.map([RSVP.resolve(1), RSVP.resolve(2)], throwerMap).then(function() {
         done(new Error("Promise was resolved when it shouldn't have been!"));
       }, function(e) {
         assert.equal(e.message, 'function error');
@@ -2590,6 +2628,27 @@ describe("RSVP extensions", function() {
         assert.deepEqual(values, [ 2, 3, 4 ]);
         done();
       }, done);
+    });
+
+    it("eager map works", function(){
+      var makePromise = function(delay, label) {
+        return new RSVP.Promise(function(resolve){
+          setTimeout(function() {
+            resolve(label);
+          }, delay);
+        });
+      }
+
+      var p1 = makePromise(15, 'p1');
+      var p2 = makePromise(5, 'p2');
+      var p3 = makePromise(10, 'p3');
+      var p4 = makePromise(20, 'p4');
+
+      var i = 0;
+      var order = ['p2', 'p3', 'p1', 'p4'];
+      return RSVP.map([p1, p2, p3, p4], function(value) {
+        assert.equal(value, order[i++]);
+      })
     });
 
     it("becomes rejected if a promise returned from mapFn becomes rejected", function(done){
