@@ -669,9 +669,9 @@ describe("RSVP extensions", function() {
     });
   });
 
-  describe("RSVP.hash", function() {
+  describe("RSVP.Promise.hash", function() {
     it('should exist', function() {
-      assert(RSVP.hash);
+      assert(RSVP.Promise.hash);
     });
 
     it('fulfilled only after all of the promise values are fulfilled', function(done) {
@@ -699,7 +699,7 @@ describe("RSVP extensions", function() {
         secondResolver(true);
       }, 0);
 
-      RSVP.hash({
+      RSVP.Promise.hash({
         first: first,
         second: second
       }).then(function(values) {
@@ -734,7 +734,7 @@ describe("RSVP extensions", function() {
         secondCompleted = true;
       });
 
-      RSVP.hash({
+      RSVP.Promise.hash({
         first: first,
         second: second
       }).then(function() {
@@ -747,8 +747,8 @@ describe("RSVP extensions", function() {
       });
     });
 
-    it('resolves an empty hash passed to RSVP.hash()', function(done) {
-      RSVP.hash({}).then(function(results) {
+    it('resolves an empty hash passed to RSVP.Promise.hash()', function(done) {
+      RSVP.Promise.hash({}).then(function(results) {
         assert.deepEqual(results, {}, 'expected fulfillment');
         done();
       })
@@ -758,7 +758,7 @@ describe("RSVP extensions", function() {
     });
 
     it('works with null', function(done) {
-      RSVP.hash({foo: null}).then(function(results) {
+      RSVP.Promise.hash({foo: null}).then(function(results) {
         assert.deepEqual(results.foo, null);
         done();
       })
@@ -768,7 +768,7 @@ describe("RSVP extensions", function() {
     });
 
     it('works with a truthy value', function(done) {
-      RSVP.hash({foo: 1}).then(function(results) {
+      RSVP.Promise.hash({foo: 1}).then(function(results) {
         assert.deepEqual(results.foo, true);
         done();
       })
@@ -798,7 +798,7 @@ describe("RSVP extensions", function() {
 
       var nonPromise = 4;
 
-      RSVP.hash({
+      RSVP.Promise.hash({
         promise: promise,
         syncThenable: syncThenable,
         asyncThenable: asyncThenable,
@@ -818,7 +818,7 @@ describe("RSVP extensions", function() {
     it('works with an object that does not inherit from Object.prototype', function(done) {
       var hash = Object.create(null)
       hash.someValue = Promise.resolve('hello')
-      RSVP.hash(hash).then(function(results) {
+      RSVP.Promise.hash(hash).then(function(results) {
         assert.deepEqual(results, { someValue: 'hello' });
         done();
       });
@@ -826,9 +826,9 @@ describe("RSVP extensions", function() {
 
   });
 
-  describe("RSVP.hashSettled", function() {
+  describe("RSVP.Promise.hashSettled", function() {
     it('should exist', function() {
-      assert(RSVP.hashSettled);
+      assert(RSVP.Promise.hashSettled);
     });
 
     it('fulfilled only after all of the promise values are fulfilled', function(done) {
@@ -856,7 +856,7 @@ describe("RSVP extensions", function() {
         secondResolver(true);
       }, 0);
 
-      RSVP.hashSettled({
+      RSVP.Promise.hashSettled({
         first: first,
         second: second
       }).then(function(values) {
@@ -874,7 +874,7 @@ describe("RSVP extensions", function() {
         reject(new Error('WHOOPS'));
       });
       var entries = { rejectedPromise: rejectedPromise };
-      RSVP.hashSettled(entries).then(function(results) {
+      RSVP.Promise.hashSettled(entries).then(function(results) {
         assert(results.rejectedPromise.state, 'rejected' );
         assert(results.rejectedPromise.reason.message, 'WHOOPS' );
         done();
@@ -884,8 +884,8 @@ describe("RSVP extensions", function() {
       });
     });
 
-    it('resolves an empty hash passed to RSVP.hashSettled()', function(done) {
-      RSVP.hashSettled({}).then(function(results) {
+    it('resolves an empty hash passed to RSVP.Promise.hashSettled()', function(done) {
+      RSVP.Promise.hashSettled({}).then(function(results) {
         assert.deepEqual(results, {}, 'expected fulfillment');
         done();
       })
@@ -895,7 +895,7 @@ describe("RSVP extensions", function() {
     });
 
     it('works with null', function(done) {
-      RSVP.hashSettled({foo: null}).then(function(results) {
+      RSVP.Promise.hashSettled({foo: null}).then(function(results) {
         assert.deepEqual(results.foo, {state: 'fulfilled', value: null} );
         done();
       })
@@ -905,7 +905,7 @@ describe("RSVP extensions", function() {
     });
 
     it('works with a truthy value', function(done) {
-      RSVP.hashSettled({foo: 1}).then(function(results) {
+      RSVP.Promise.hashSettled({foo: 1}).then(function(results) {
         assert.deepEqual(results.foo, {state: 'fulfilled', value: true} );
         done();
       })
@@ -931,7 +931,7 @@ describe("RSVP extensions", function() {
         rejectedPromise: rejectedPromise
       };
 
-      RSVP.hashSettled(entries).then(function(results) {
+      RSVP.Promise.hashSettled(entries).then(function(results) {
         assert.deepEqual(results.promise,       {state: 'fulfilled', value: 1} );
         assert.deepEqual(results.syncThenable,  {state: 'fulfilled', value: 2} );
         assert.deepEqual(results.asyncThenable, {state: 'fulfilled', value: 3} );
