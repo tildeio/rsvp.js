@@ -1477,15 +1477,15 @@ describe("RSVP extensions", function() {
     });
   }
 
-  function testRace(race) {
+  describe("RSVP.Promise.race", function(){
     it("should exist", function() {
-      assert(race);
+      assert(RSVP.Promise.race);
     });
 
     it("throws when not passed an array", function(done) {
-      var nothing = assertRejection(race());
-      var string  = assertRejection(race(''));
-      var object  = assertRejection(race({}));
+      var nothing = assertRejection(RSVP.Promise.race());
+      var string  = assertRejection(RSVP.Promise.race(''));
+      var object  = assertRejection(RSVP.Promise.race({}));
 
       RSVP.Promise.all([
         nothing,
@@ -1519,14 +1519,18 @@ describe("RSVP extensions", function() {
         secondResolver(true);
       }, 0);
 
-      race([first, second]).then(function() {
+      RSVP.Promise.race([first, second]).then(function() {
         assert(secondResolved);
         assert.equal(firstResolved, undefined);
         done();
       });
     });
 
+<<<<<<< HEAD
     it('the race begins on nextTurn and prioritized by array entry', function(done) {
+=======
+    specify('the RSVP.Promise.race begins on nextTurn and prioritized by array entry', function(done) {
+>>>>>>> moved `race` (rsvp => promise)
       var firstResolver, secondResolver, nonPromise = 5;
 
       var first = new RSVP.Promise(function(resolve, reject) {
@@ -1537,7 +1541,7 @@ describe("RSVP extensions", function() {
         resolve(false);
       });
 
-      race([first, second, nonPromise]).then(function(value) {
+      RSVP.Promise.race([first, second, nonPromise]).then(function(value) {
         assert.equal(value, true);
         done();
       });
@@ -1568,7 +1572,7 @@ describe("RSVP extensions", function() {
         secondCompleted = true;
       });
 
-      race([first, second]).then(function() {
+      RSVP.Promise.race([first, second]).then(function() {
         assert(false);
       }, function() {
         assert(firstWasRejected);
@@ -1577,8 +1581,13 @@ describe("RSVP extensions", function() {
       });
     });
 
+<<<<<<< HEAD
     it('resolves an empty array to forever pending Promise', function(done) {
       var foreverPendingPromise = RSVP.race([]),
+=======
+    specify('resolves an empty array to forever pending Promise', function(done) {
+      var foreverPendingPromise = RSVP.Promise.race([]),
+>>>>>>> moved `race` (rsvp => promise)
           wasSettled            = false;
 
       foreverPendingPromise.then(function() {
@@ -1597,7 +1606,7 @@ describe("RSVP extensions", function() {
       var promise = new RSVP.Promise(function(resolve) { setTimeout(function() { resolve(1); }, 10); }),
           syncThenable = { then: function (onFulfilled) { onFulfilled(2); } };
 
-      race([promise, syncThenable]).then(function(result) {
+      RSVP.Promise.race([promise, syncThenable]).then(function(result) {
         assert(result, 2);
         done();
       });
@@ -1606,20 +1615,10 @@ describe("RSVP extensions", function() {
     it('works with a mix of thenables and non-promises', function (done) {
       var asyncThenable = { then: function (onFulfilled) { setTimeout(function() { onFulfilled(3); }, 0); } },
           nonPromise = 4;
-      race([asyncThenable, nonPromise]).then(function(result) {
+      RSVP.Promise.race([asyncThenable, nonPromise]).then(function(result) {
         assert(result, 4);
         done();
       });
-    });
-  }
-
-  describe("RSVP.race", function() {
-    testRace(RSVP.race);
-  });
-
-  describe("RSVP.Promise.race", function() {
-    testRace(function(){
-      return RSVP.Promise.race.apply(RSVP.Promise, arguments);
     });
   });
 
