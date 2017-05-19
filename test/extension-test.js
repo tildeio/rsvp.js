@@ -2578,14 +2578,14 @@ describe("RSVP extensions", function() {
     // });
   });
 
-  describe("RSVP.filter", function(){
+  describe("RSVP.Promise.filter", function(){
 
     var filterFn = function(item){
       return item > 1;
     };
 
     it("exists", function(){
-      assert(RSVP.filter);
+      assert(RSVP.Promise.filter);
     });
 
     it("throws an error if an array is not passed", function(){
@@ -2616,6 +2616,7 @@ describe("RSVP extensions", function() {
         RSVP.Promise.resolve(3)
       ];
 
+<<<<<<< HEAD
       RSVP.filter(promises, filterFn)
         .then(function(results){
           assert.deepEqual([2, 3], results);
@@ -2637,6 +2638,10 @@ describe("RSVP extensions", function() {
 
       RSVP.filter(promises, function(){ return true; }).then(function(results){
         assert.deepEqual([false, undefined, null, 0, ''], results);
+=======
+      RSVP.Promise.filter(promises, filterFn).then(function(results){
+        assert.deepEqual([2, 3], results);
+>>>>>>> `filter` (rsvp => promise)
         done();
       })
       .catch(function(e) {
@@ -2644,6 +2649,7 @@ describe("RSVP extensions", function() {
       });
     });
 
+<<<<<<< HEAD
     it("filters falsy values correctly 2", function(done){
       var promises = [
         RSVP.resolve(false),
@@ -2736,6 +2742,14 @@ describe("RSVP extensions", function() {
       }, function() {
         done()
       });
+=======
+    it("throws an error if an array is not passed", function(){
+      assertRejection(RSVP.Promise.filter());
+    });
+
+    it("throws an error if a filterFn is not passed", function(){
+      assertRejection(RSVP.Promise.filter([]));
+>>>>>>> `filter` (rsvp => promise)
     });
 
     it("works with non-promise values and promises", function(done){
@@ -2745,7 +2759,7 @@ describe("RSVP extensions", function() {
         3
       ];
 
-      RSVP.filter(promises, filterFn).then(function(results){
+      RSVP.Promise.filter(promises, filterFn).then(function(results){
         assert.deepEqual([2, 3], results);
         done();
       })
@@ -2757,7 +2771,7 @@ describe("RSVP extensions", function() {
     it("works with promise that returns an array", function(done){
       var promise = RSVP.Promise.resolve([1,2,3]);
 
-      RSVP.filter(promise, filterFn).then(function(results){
+      RSVP.Promise.filter(promise, filterFn).then(function(results){
         assert.deepEqual([2, 3], results);
         done();
       })
@@ -2773,7 +2787,7 @@ describe("RSVP extensions", function() {
         RSVP.Promise.resolve(3)
       ]);
 
-      RSVP.filter(promise, filterFn).then(function(results){
+      RSVP.Promise.filter(promise, filterFn).then(function(results){
         assert.deepEqual([2, 3], results);
         done();
       })
@@ -2801,7 +2815,7 @@ describe("RSVP extensions", function() {
         3
       ];
 
-      var results1 = RSVP.filter(promises, filterFn);
+      var results1 = RSVP.Promise.filter(promises, filterFn);
 
       filterFn = function(item){
         if (item === 1) {
@@ -2810,7 +2824,7 @@ describe("RSVP extensions", function() {
         return true;
       }
 
-      var results2 = RSVP.filter(promises, filterFn);
+      var results2 = RSVP.Promise.filter(promises, filterFn);
 
       RSVP.all([results1, results2]).then(function(results){
         var results1 = results[0];
