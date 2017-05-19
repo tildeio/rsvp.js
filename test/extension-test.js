@@ -1151,15 +1151,15 @@ describe("RSVP extensions", function() {
     });
   }
 
-  describe("RSVP.allSettled", function() {
+  describe("RSVP.Promise.allSettled", function() {
     it('should exist', function() {
-      assert(RSVP.allSettled);
+      assert(RSVP.Promise.allSettled);
     });
 
     it('throws when not passed an array', function(done) {
-      var nothing = assertRejection(RSVP.allSettled());
-      var string  = assertRejection(RSVP.allSettled(''));
-      var object  = assertRejection(RSVP.allSettled({}));
+      var nothing = assertRejection(RSVP.Promise.allSettled());
+      var string  = assertRejection(RSVP.Promise.allSettled(''));
+      var object  = assertRejection(RSVP.Promise.allSettled({}));
 
       RSVP.Promise.all([
         nothing,
@@ -1168,8 +1168,13 @@ describe("RSVP extensions", function() {
       ]).then(function(){ done(); });
     });
 
+<<<<<<< HEAD
     it('resolves an empty array passed to allSettled()', function(done) {
       RSVP.allSettled([]).then(function(results) {
+=======
+    specify('resolves an empty array passed to allSettled()', function(done) {
+      RSVP.Promise.allSettled([]).then(function(results) {
+>>>>>>> `all-settled` (rsvp => promise)
         assert(results.length === 0);
         done();
       });
@@ -1193,11 +1198,19 @@ describe("RSVP extensions", function() {
           promise, syncThenable, asyncThenable, nonPromise, rejectedPromise
         );
 
+<<<<<<< HEAD
         RSVP.allSettled(entries).then(function(results) {
           assert.deepEqual(results[0], { state: "fulfilled", value: 1 } );
           assert.deepEqual(results[1], { state: "fulfilled", value: 2 } );
           assert.deepEqual(results[2], { state: "fulfilled", value: 3 } );
           assert.deepEqual(results[3], { state: "fulfilled", value: 4 } );
+=======
+        RSVP.Promise.allSettled(entries).then(function(results) {
+          assert(objectEquals(results[0], {state: "fulfilled", value: 1} ));
+          assert(objectEquals(results[1], {state: "fulfilled", value: 2} ));
+          assert(objectEquals(results[2], {state: "fulfilled", value: 3} ));
+          assert(objectEquals(results[3], {state: "fulfilled", value: 4} ));
+>>>>>>> `all-settled` (rsvp => promise)
           assert(results[4].state, "rejected");
           assert(results[4].reason.message, "WHOOPS");
           done();
@@ -1233,7 +1246,7 @@ describe("RSVP extensions", function() {
         secondResolver(true);
       }, 0);
 
-      RSVP.allSettled([first, second]).then(function() {
+      RSVP.Promise.allSettled([first, second]).then(function() {
         assert(firstResolved);
         assert(secondResolved);
         done();
