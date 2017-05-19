@@ -849,9 +849,9 @@ describe("RSVP extensions", function() {
 
   });
 
-  describe("RSVP.hashSettled", function() {
+  describe("RSVP.Promise.hashSettled", function() {
     it('should exist', function() {
-      assert(RSVP.hashSettled);
+      assert(RSVP.Promise.hashSettled);
     });
 
     it('fulfilled only after all of the promise values are fulfilled', function(done) {
@@ -879,10 +879,14 @@ describe("RSVP extensions", function() {
         secondResolver(true);
       }, 0);
 
+<<<<<<< HEAD
       RSVP.hashSettled({
         first: first,
         second: second
       }).then(function(values) {
+=======
+      RSVP.Promise.hashSettled({ first: first, second: second }).then(function(values) {
+>>>>>>> `hashSettled` (rsvp => promise)
         assert(values.first);
         assert(values.second);
         done();
@@ -897,7 +901,7 @@ describe("RSVP extensions", function() {
         reject(new Error('WHOOPS'));
       });
       var entries = { rejectedPromise: rejectedPromise };
-      RSVP.hashSettled(entries).then(function(results) {
+      RSVP.Promise.hashSettled(entries).then(function(results) {
         assert(results.rejectedPromise.state, 'rejected' );
         assert(results.rejectedPromise.reason.message, 'WHOOPS' );
         done();
@@ -907,9 +911,15 @@ describe("RSVP extensions", function() {
       });
     });
 
+<<<<<<< HEAD
     it('resolves an empty hash passed to RSVP.hashSettled()', function(done) {
       RSVP.hashSettled({}).then(function(results) {
         assert.deepEqual(results, {}, 'expected fulfillment');
+=======
+    specify('resolves an empty hash passed to RSVP.Promise.hashSettled()', function(done) {
+      RSVP.Promise.hashSettled({}).then(function(results) {
+        assert(objectEquals(results, {}), 'expected fulfillment');
+>>>>>>> `hashSettled` (rsvp => promise)
         done();
       })
       .catch(function(e) {
@@ -917,9 +927,15 @@ describe("RSVP extensions", function() {
       });
     });
 
+<<<<<<< HEAD
     it('works with null', function(done) {
       RSVP.hashSettled({foo: null}).then(function(results) {
         assert.deepEqual(results.foo, {state: 'fulfilled', value: null} );
+=======
+    specify('works with null', function(done) {
+      RSVP.Promise.hashSettled({foo: null}).then(function(results) {
+        assert(objectEquals(results.foo, {state: 'fulfilled', value: null} ));
+>>>>>>> `hashSettled` (rsvp => promise)
         done();
       })
       .catch(function(e) {
@@ -927,9 +943,15 @@ describe("RSVP extensions", function() {
       });
     });
 
+<<<<<<< HEAD
     it('works with a truthy value', function(done) {
       RSVP.hashSettled({foo: 1}).then(function(results) {
         assert.deepEqual(results.foo, {state: 'fulfilled', value: true} );
+=======
+    specify('works with a truthy value', function(done) {
+      RSVP.Promise.hashSettled({foo: 1}).then(function(results) {
+        assert(objectEquals(results.foo, {state: 'fulfilled', value: true} ));
+>>>>>>> `hashSettled` (rsvp => promise)
         done();
       })
       .catch(function(e) {
@@ -954,11 +976,19 @@ describe("RSVP extensions", function() {
         rejectedPromise: rejectedPromise
       };
 
+<<<<<<< HEAD
       RSVP.hashSettled(entries).then(function(results) {
         assert.deepEqual(results.promise,       {state: 'fulfilled', value: 1} );
         assert.deepEqual(results.syncThenable,  {state: 'fulfilled', value: 2} );
         assert.deepEqual(results.asyncThenable, {state: 'fulfilled', value: 3} );
         assert.deepEqual(results.nonPromise,    {state: 'fulfilled', value: 4} );
+=======
+      RSVP.Promise.hashSettled(entries).then(function(results) {
+        assert(objectEquals(results.promise,       {state: 'fulfilled', value: 1} ));
+        assert(objectEquals(results.syncThenable,  {state: 'fulfilled', value: 2} ));
+        assert(objectEquals(results.asyncThenable, {state: 'fulfilled', value: 3} ));
+        assert(objectEquals(results.nonPromise,    {state: 'fulfilled', value: 4} ));
+>>>>>>> `hashSettled` (rsvp => promise)
         assert(results.rejectedPromise.state, 'rejected' );
         assert(results.rejectedPromise.reason.message, 'WHOOPS' );
         done();
