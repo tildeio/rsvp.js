@@ -1245,14 +1245,20 @@ describe("RSVP extensions", function() {
 
   });
 
+<<<<<<< HEAD
   describe("RSVP.reject", function(){
     it("it should exist", function(){
       assert(RSVP.reject);
+=======
+  describe("RSVP.Promise.reject", function(){
+    specify("it should exist", function(){
+      assert(RSVP.Promise.reject);
+>>>>>>> `reject` (rsvp => promise)
     });
 
     it('it rejects', function(done) {
       var reason = 'the reason',
-      promise = RSVP.reject(reason);
+      promise = RSVP.Promise.reject(reason);
 
       promise.then(function(){
         assert(false, 'should not fulfill');
@@ -1459,7 +1465,7 @@ describe("RSVP extensions", function() {
       });
 
       promise.then().finally(function(error) {
-        return RSVP.reject(finallyError);
+        return RSVP.Promise.reject(finallyError);
       });
     });
 
@@ -2181,7 +2187,7 @@ describe("RSVP extensions", function() {
           assert(false, 'rejected erroneously fired');
         });
 
-        RSVP.reject()['catch'](done);
+        RSVP.Promise.reject()['catch'](done);
       });
     });
 
@@ -2278,7 +2284,7 @@ describe("RSVP extensions", function() {
           done();
         });
 
-        var promise = RSVP.reject(reason);
+        var promise = RSVP.Promise.reject(reason);
       });
     });
 
@@ -2414,7 +2420,7 @@ describe("RSVP extensions", function() {
 
         it("does not provide a reason to the finally code", function(done) {
           var rejectionReason = new Error();
-          var promise = RSVP.reject(rejectionReason);
+          var promise = RSVP.Promise.reject(rejectionReason);
 
           promise['finally'](function(arg) {
             assert.equal(arguments.length, 0);
@@ -2441,7 +2447,7 @@ describe("RSVP extensions", function() {
 
         it("preserves the original rejection reason even if the finally callback returns a value", function(done) {
           var rejectionReason = new Error();
-          var promise = RSVP.reject(rejectionReason);
+          var promise = RSVP.Promise.reject(rejectionReason);
 
           promise['finally'](function() {
             return 2;
@@ -2477,7 +2483,7 @@ describe("RSVP extensions", function() {
             var expectedReason  = new Error();
 
             promise['finally'](function() {
-              return RSVP.reject(expectedReason);
+              return RSVP.Promise.reject(expectedReason);
             }).then(undefined, function(reason) {
               assert.deepEqual(expectedReason, reason);
               done();
@@ -2490,7 +2496,7 @@ describe("RSVP extensions", function() {
 
         describe("rejected promise", function(){
           it("propagates changes via throw", function(done) {
-            var promise = RSVP.reject(1);
+            var promise = RSVP.Promise.reject(1);
             var expectedReason  = new Error();
 
             promise['finally'](function() {
@@ -2505,11 +2511,11 @@ describe("RSVP extensions", function() {
           });
 
           it("propagates changes via returned rejected promise", function(done){
-            var promise = RSVP.reject(1);
+            var promise = RSVP.Promise.reject(1);
             var expectedReason  = new Error();
 
             promise['finally'](function() {
-              return RSVP.reject(expectedReason);
+              return RSVP.Promise.reject(expectedReason);
             }).then(undefined, function(reason) {
               assert.deepEqual(expectedReason, reason);
               done();
@@ -2872,8 +2878,8 @@ describe("RSVP extensions", function() {
     it("becomes rejected with the first promise that becomes rejected", function(done){
 
       var promises = [
-        RSVP.reject(new Error("prefix:1")),
-        RSVP.reject(new Error("prefix:2")),
+        RSVP.Promise.reject(new Error("prefix:1")),
+        RSVP.Promise.reject(new Error("prefix:2")),
         1
       ];
 
@@ -2952,7 +2958,7 @@ describe("RSVP extensions", function() {
       var values = [ 1, 2, 3 ];
       var mapFn = function(value){
         // http://msdn.microsoft.com/en-us/library/ie/dww53sbt(v=vs.94).aspx
-        return RSVP.reject(new Error(expectedErrorMessage));
+        return RSVP.Promise.reject(new Error(expectedErrorMessage));
       };
 
       RSVP.map(values, mapFn).then(function(){
