@@ -2839,13 +2839,13 @@ describe("RSVP extensions", function() {
     });
   });
 
-  describe("RSVP.map", function(){
+  describe("RSVP.Promise.map", function(){
     var mapFn = function(item){
       return item + 1;
     };
 
     it("exists", function(){
-      assert(RSVP.map);
+      assert(RSVP.Promise.map);
     });
 
     it("throws an error if an array is not passed", function(){
@@ -2862,8 +2862,13 @@ describe("RSVP extensions", function() {
       var promise3 = RSVP.Promise.resolve(3);
       var promises = [ promise1, promise2, promise3 ];
 
+<<<<<<< HEAD
       RSVP.map(promises, mapFn).then(function(results){
         assert.deepEqual([2, 3, 4], results);
+=======
+      RSVP.Promise.map(promises, mapFn).then(function(results){
+        assert.deepEqual([ 2, 3, 4], results);
+>>>>>>> `map` (rsvp => promise)
         done();
       })
       .catch(function(e) {
@@ -2871,6 +2876,7 @@ describe("RSVP extensions", function() {
       });
     });
 
+<<<<<<< HEAD
     it("catches error thrown from mapFn", function(done){
       var throwerMap = function(val) {
         if (val === 2) {
@@ -2887,13 +2893,21 @@ describe("RSVP extensions", function() {
       .catch(function(e) {
         done(e || 'promise rejected');
       });
+=======
+    it("throws an error if an array is not passed", function(){
+      assertRejection(RSVP.Promise.map());
+    });
+
+    it("throws an error if a mapFn is not passed", function(){
+      assertRejection(RSVP.Promise.map([]));
+>>>>>>> `map` (rsvp => promise)
     });
 
     it("works with non-promise values and promises", function(done){
 
       var values = [ 1, RSVP.Promise.resolve(2) ];
 
-      RSVP.map(values, mapFn).then(function(results){
+      RSVP.Promise.map(values, mapFn).then(function(results){
         assert.deepEqual([2, 3], results);
         done();
       })
@@ -2910,7 +2924,7 @@ describe("RSVP extensions", function() {
         1
       ];
 
-      RSVP.map(promises, mapFn).then(function(){
+      RSVP.Promise.map(promises, mapFn).then(function(){
         done(new Error("Promise was resolved when it shouldn't have been!"));
       }, function(reason){
         assert(reason.message === "prefix:1");
@@ -2927,7 +2941,7 @@ describe("RSVP extensions", function() {
         return RSVP.Promise.resolve(value + 1);
       };
 
-      RSVP.map(values, mapFn).then(function(values){
+      RSVP.Promise.map(values, mapFn).then(function(values){
         assert.deepEqual(values, [ 2, 3, 4 ]);
         done();
       })
@@ -2988,7 +3002,7 @@ describe("RSVP extensions", function() {
         return RSVP.Promise.reject(new Error(expectedErrorMessage));
       };
 
-      RSVP.map(values, mapFn).then(function(){
+      RSVP.Promise.map(values, mapFn).then(function(){
         done(new Error("Promise should not be resolved!"));
       }, function (reason) {
         assert(reason.message === expectedErrorMessage);
