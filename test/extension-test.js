@@ -466,9 +466,15 @@ describe("RSVP extensions", function() {
     });
   });
 
+<<<<<<< HEAD
   describe("RSVP.denodeify", function() {
     it('it should exist', function() {
       assert(RSVP.denodeify);
+=======
+  describe("RSVP.Promise.denodeify", function() {
+    specify('it should exist', function() {
+      assert(RSVP.Promise.denodeify);
+>>>>>>> `denodeify` (rsvp => promise)
     });
 
     it('calls node function with any arguments passed', function(done) {
@@ -479,7 +485,7 @@ describe("RSVP extensions", function() {
         cb();
       }
 
-      var denodeifiedFunc = RSVP.denodeify(nodeFunc);
+      var denodeifiedFunc = RSVP.Promise.denodeify(nodeFunc);
 
       denodeifiedFunc(1, 2, 3).then(function() {
         assert.deepEqual(args, [1, 2, 3]);
@@ -495,7 +501,7 @@ describe("RSVP extensions", function() {
         cb();
       }
 
-      var denodeifiedFunc = RSVP.denodeify(nodeFunc);
+      var denodeifiedFunc = RSVP.Promise.denodeify(nodeFunc);
 
       var promise = new RSVP.Promise(function(resolve) { resolve(1); });
       var thenable = { then: function (onFulfilled) { onFulfilled(2); } };
@@ -512,7 +518,7 @@ describe("RSVP extensions", function() {
         cb(null, 'nodeFuncResult');
       }
 
-      var denodeifiedFunc = RSVP.denodeify(nodeFunc);
+      var denodeifiedFunc = RSVP.Promise.denodeify(nodeFunc);
 
       denodeifiedFunc().then(function(value) {
         assert.equal(value, 'nodeFuncResult');
@@ -520,12 +526,16 @@ describe("RSVP extensions", function() {
       });
     });
 
+<<<<<<< HEAD
     it('fulfilled with array if if user called RSVP.denodeify(nodeFunc, true)', function(done) {
+=======
+    specify('fulfilled with array if if user called RSVP.Promise.denodeify(nodeFunc, true)', function(done) {
+>>>>>>> `denodeify` (rsvp => promise)
       function nodeFunc(cb) {
         cb(null, 1, 2, 3);
       }
 
-      var denodeifiedFunc = RSVP.denodeify(nodeFunc, true);
+      var denodeifiedFunc = RSVP.Promise.denodeify(nodeFunc, true);
 
       denodeifiedFunc().then(function(value) {
         assert.deepEqual(value, [1, 2, 3]);
@@ -533,12 +543,16 @@ describe("RSVP extensions", function() {
       });
     });
 
+<<<<<<< HEAD
     it('fulfilled with hash if if user called RSVP.denodeify with an array as second argument', function(done) {
+=======
+    specify('fulfilled with hash if if user called RSVP.Promise.denodeify with an array as second argument', function(done) {
+>>>>>>> `denodeify` (rsvp => promise)
       function nodeFunc(cb) {
         cb(null, 1, 2, 3);
       }
 
-      var denodeifiedFunc = RSVP.denodeify(nodeFunc, ['a', 'b', 'c']);
+      var denodeifiedFunc = RSVP.Promise.denodeify(nodeFunc, ['a', 'b', 'c']);
 
       denodeifiedFunc().then(function(value) {
         assert.equal(value.a, '1');
@@ -553,7 +567,7 @@ describe("RSVP extensions", function() {
         cb(null, 42, 2, 3);
       }
 
-      var denodeifiedFunc = RSVP.denodeify(nodeFunc);
+      var denodeifiedFunc = RSVP.Promise.denodeify(nodeFunc);
 
       denodeifiedFunc().then(function(value) {
         assert.equal(value, 42);
@@ -566,7 +580,7 @@ describe("RSVP extensions", function() {
         cb('bad!');
       }
 
-      var denodeifiedFunc = RSVP.denodeify(nodeFunc);
+      var denodeifiedFunc = RSVP.Promise.denodeify(nodeFunc);
 
       denodeifiedFunc().then(function() {
         assert(false);
@@ -582,7 +596,7 @@ describe("RSVP extensions", function() {
         throw 'bad!';
       }
 
-      var denodeifiedFunc = RSVP.denodeify(nodeFunc);
+      var denodeifiedFunc = RSVP.Promise.denodeify(nodeFunc);
 
       denodeifiedFunc().then(function() {
         assert(false);
@@ -600,7 +614,7 @@ describe("RSVP extensions", function() {
         }
         nodeFunc.something = 'test123';
 
-        var denodeifiedFunc = RSVP.denodeify(nodeFunc);
+        var denodeifiedFunc = RSVP.Promise.denodeify(nodeFunc);
 
         assert.equal(denodeifiedFunc.something, 'test123');
 
@@ -628,8 +642,8 @@ describe("RSVP extensions", function() {
         }, 0);
       }
 
-      var denodeifiedReadFile = RSVP.denodeify(readFile);
-      var denodeifiedWriteFile = RSVP.denodeify(writeFile);
+      var denodeifiedReadFile = RSVP.Promise.denodeify(readFile);
+      var denodeifiedWriteFile = RSVP.Promise.denodeify(writeFile);
 
       denodeifiedWriteFile('dest.txt', denodeifiedReadFile('src.txt')).then(function () {
         assert.deepEqual(writtenTo, ['dest.txt', 'contents of src.txt']);
@@ -661,7 +675,7 @@ describe("RSVP extensions", function() {
       SuchSubclass.prototype.constructor = SuchSubclass;
       SuchSubclass.prototype._super$constructor = RSVP.Promise;
 
-      var denodeifiedWriteFile = RSVP.denodeify(writeFile);
+      var denodeifiedWriteFile = RSVP.Promise.denodeify(writeFile);
 
       var file = new SuchSubclass(function(resolve) {
         readFile('src.txt', function(error, content) {
