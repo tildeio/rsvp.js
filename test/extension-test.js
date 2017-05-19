@@ -126,8 +126,8 @@ describe("RSVP extensions", function() {
 
   describe("self fulfillment", function(){
     it("treats self fulfillment as the recursive base case", function(done){
-      var aDefer = new RSVP.defer(),
-      bDefer = new RSVP.defer(),
+      var aDefer = new RSVP.Promise.defer(),
+      bDefer = new RSVP.Promise.defer(),
       promiseA = aDefer.promise,
       promiseB = bDefer.promise;
 
@@ -429,9 +429,15 @@ describe("RSVP extensions", function() {
     });
   });
 
+<<<<<<< HEAD
   describe("RSVP.defer", function() {
     it("It should return a resolver and promise together", function(done) {
       var deferred = RSVP.defer(), value = {};
+=======
+  describe("RSVP.Promise.defer", function() {
+    specify("It should return a resolver and promise together", function(done) {
+      var deferred = RSVP.Promise.defer(), value = {};
+>>>>>>> `defer` (rsvp => promise)
 
       // resolve first to confirm that the semantics are async
       deferred.resolve(value);
@@ -442,8 +448,13 @@ describe("RSVP extensions", function() {
       });
     });
 
+<<<<<<< HEAD
     it("The provided resolver should support rejection", function(done) {
       var deferred = RSVP.defer(), reason = {};
+=======
+    specify("The provided resolver should support rejection", function(done) {
+      var deferred = RSVP.Promise.defer(), reason = {};
+>>>>>>> `defer` (rsvp => promise)
 
       // resolve first to confirm that the semantics are async
       deferred.reject(reason);
@@ -2280,7 +2291,7 @@ describe("RSVP extensions", function() {
           done();
         });
 
-        deferred = RSVP.defer();
+        deferred = RSVP.Promise.defer();
         promise = deferred.promise;
       });
 
@@ -2301,8 +2312,8 @@ describe("RSVP extensions", function() {
           lastIndex= parsedGuid.index;
         });
 
-        RSVP.defer();
-        RSVP.defer();
+        RSVP.Promise.defer();
+        RSVP.Promise.defer();
       });
     });
 
