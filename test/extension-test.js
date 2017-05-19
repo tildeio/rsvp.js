@@ -429,15 +429,9 @@ describe("RSVP extensions", function() {
     });
   });
 
-<<<<<<< HEAD
-  describe("RSVP.defer", function() {
-    it("It should return a resolver and promise together", function(done) {
-      var deferred = RSVP.defer(), value = {};
-=======
   describe("RSVP.Promise.defer", function() {
-    specify("It should return a resolver and promise together", function(done) {
+    it("It should return a resolver and promise together", function(done) {
       var deferred = RSVP.Promise.defer(), value = {};
->>>>>>> `defer` (rsvp => promise)
 
       // resolve first to confirm that the semantics are async
       deferred.resolve(value);
@@ -448,13 +442,8 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
     it("The provided resolver should support rejection", function(done) {
-      var deferred = RSVP.defer(), reason = {};
-=======
-    specify("The provided resolver should support rejection", function(done) {
       var deferred = RSVP.Promise.defer(), reason = {};
->>>>>>> `defer` (rsvp => promise)
 
       // resolve first to confirm that the semantics are async
       deferred.reject(reason);
@@ -466,15 +455,9 @@ describe("RSVP extensions", function() {
     });
   });
 
-<<<<<<< HEAD
-  describe("RSVP.denodeify", function() {
-    it('it should exist', function() {
-      assert(RSVP.denodeify);
-=======
   describe("RSVP.Promise.denodeify", function() {
-    specify('it should exist', function() {
+    it('it should exist', function() {
       assert(RSVP.Promise.denodeify);
->>>>>>> `denodeify` (rsvp => promise)
     });
 
     it('calls node function with any arguments passed', function(done) {
@@ -526,11 +509,7 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
-    it('fulfilled with array if if user called RSVP.denodeify(nodeFunc, true)', function(done) {
-=======
-    specify('fulfilled with array if if user called RSVP.Promise.denodeify(nodeFunc, true)', function(done) {
->>>>>>> `denodeify` (rsvp => promise)
+    it('fulfilled with array if if user called RSVP.Promise.denodeify(nodeFunc, true)', function(done) {
       function nodeFunc(cb) {
         cb(null, 1, 2, 3);
       }
@@ -543,11 +522,7 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
-    it('fulfilled with hash if if user called RSVP.denodeify with an array as second argument', function(done) {
-=======
-    specify('fulfilled with hash if if user called RSVP.Promise.denodeify with an array as second argument', function(done) {
->>>>>>> `denodeify` (rsvp => promise)
+    it('fulfilled with hash if if user called RSVP.Promise.denodeify with an array as second argument', function(done) {
       function nodeFunc(cb) {
         cb(null, 1, 2, 3);
       }
@@ -772,15 +747,9 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
-    it('resolves an empty hash passed to RSVP.hash()', function(done) {
-      RSVP.hash({}).then(function(results) {
-        assert.deepEqual(results, {}, 'expected fulfillment');
-=======
-    specify('resolves an empty hash passed to RSVP.Promise.hash()', function(done) {
+    it('resolves an empty hash passed to RSVP.Promise.hash()', function(done) {
       RSVP.Promise.hash({}).then(function(results) {
-        assert(objectEquals(results, {}), 'expected fulfillment');
->>>>>>> moved `hash` (rsvp => promise)
+        assert.deepEqual(results, {}, 'expected fulfillment');
         done();
       })
       .catch(function(e) {
@@ -788,15 +757,9 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
     it('works with null', function(done) {
-      RSVP.hash({foo: null}).then(function(results) {
-        assert.deepEqual(results.foo, null);
-=======
-    specify('works with null', function(done) {
       RSVP.Promise.hash({foo: null}).then(function(results) {
-        assert(objectEquals(results.foo, null));
->>>>>>> moved `hash` (rsvp => promise)
+        assert.deepEqual(results.foo, null);
         done();
       })
       .catch(function(e) {
@@ -804,15 +767,9 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
     it('works with a truthy value', function(done) {
-      RSVP.hash({foo: 1}).then(function(results) {
-        assert.deepEqual(results.foo, true);
-=======
-    specify('works with a truthy value', function(done) {
       RSVP.Promise.hash({foo: 1}).then(function(results) {
-        assert(objectEquals(results.foo, true));
->>>>>>> moved `hash` (rsvp => promise)
+        assert.deepEqual(results.foo, true);
         done();
       })
       .catch(function(e) {
@@ -861,13 +818,8 @@ describe("RSVP extensions", function() {
     it('works with an object that does not inherit from Object.prototype', function(done) {
       var hash = Object.create(null)
       hash.someValue = Promise.resolve('hello')
-<<<<<<< HEAD
-      RSVP.hash(hash).then(function(results) {
-        assert.deepEqual(results, { someValue: 'hello' });
-=======
       RSVP.Promise.hash(hash).then(function(results) {
-        assert(objectEquals(results, { someValue: 'hello' }));
->>>>>>> moved `hash` (rsvp => promise)
+        assert.deepEqual(results, { someValue: 'hello' });
         done();
       });
     });
@@ -904,14 +856,10 @@ describe("RSVP extensions", function() {
         secondResolver(true);
       }, 0);
 
-<<<<<<< HEAD
-      RSVP.hashSettled({
+      RSVP.Promise.hashSettled({
         first: first,
         second: second
       }).then(function(values) {
-=======
-      RSVP.Promise.hashSettled({ first: first, second: second }).then(function(values) {
->>>>>>> `hashSettled` (rsvp => promise)
         assert(values.first);
         assert(values.second);
         done();
@@ -936,15 +884,9 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
-    it('resolves an empty hash passed to RSVP.hashSettled()', function(done) {
-      RSVP.hashSettled({}).then(function(results) {
-        assert.deepEqual(results, {}, 'expected fulfillment');
-=======
-    specify('resolves an empty hash passed to RSVP.Promise.hashSettled()', function(done) {
+    it('resolves an empty hash passed to RSVP.Promise.hashSettled()', function(done) {
       RSVP.Promise.hashSettled({}).then(function(results) {
-        assert(objectEquals(results, {}), 'expected fulfillment');
->>>>>>> `hashSettled` (rsvp => promise)
+        assert.deepEqual(results, {}, 'expected fulfillment');
         done();
       })
       .catch(function(e) {
@@ -952,15 +894,9 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
     it('works with null', function(done) {
-      RSVP.hashSettled({foo: null}).then(function(results) {
-        assert.deepEqual(results.foo, {state: 'fulfilled', value: null} );
-=======
-    specify('works with null', function(done) {
       RSVP.Promise.hashSettled({foo: null}).then(function(results) {
-        assert(objectEquals(results.foo, {state: 'fulfilled', value: null} ));
->>>>>>> `hashSettled` (rsvp => promise)
+        assert.deepEqual(results.foo, {state: 'fulfilled', value: null} );
         done();
       })
       .catch(function(e) {
@@ -968,15 +904,9 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
     it('works with a truthy value', function(done) {
-      RSVP.hashSettled({foo: 1}).then(function(results) {
-        assert.deepEqual(results.foo, {state: 'fulfilled', value: true} );
-=======
-    specify('works with a truthy value', function(done) {
       RSVP.Promise.hashSettled({foo: 1}).then(function(results) {
-        assert(objectEquals(results.foo, {state: 'fulfilled', value: true} ));
->>>>>>> `hashSettled` (rsvp => promise)
+        assert.deepEqual(results.foo, {state: 'fulfilled', value: true} );
         done();
       })
       .catch(function(e) {
@@ -1001,19 +931,11 @@ describe("RSVP extensions", function() {
         rejectedPromise: rejectedPromise
       };
 
-<<<<<<< HEAD
-      RSVP.hashSettled(entries).then(function(results) {
+      RSVP.Promise.hashSettled(entries).then(function(results) {
         assert.deepEqual(results.promise,       {state: 'fulfilled', value: 1} );
         assert.deepEqual(results.syncThenable,  {state: 'fulfilled', value: 2} );
         assert.deepEqual(results.asyncThenable, {state: 'fulfilled', value: 3} );
         assert.deepEqual(results.nonPromise,    {state: 'fulfilled', value: 4} );
-=======
-      RSVP.Promise.hashSettled(entries).then(function(results) {
-        assert(objectEquals(results.promise,       {state: 'fulfilled', value: 1} ));
-        assert(objectEquals(results.syncThenable,  {state: 'fulfilled', value: 2} ));
-        assert(objectEquals(results.asyncThenable, {state: 'fulfilled', value: 3} ));
-        assert(objectEquals(results.nonPromise,    {state: 'fulfilled', value: 4} ));
->>>>>>> `hashSettled` (rsvp => promise)
         assert(results.rejectedPromise.state, 'rejected' );
         assert(results.rejectedPromise.reason.message, 'WHOOPS' );
         done();
@@ -1031,8 +953,8 @@ describe("RSVP extensions", function() {
     });
   });
 
-  describe("RSVP.all", function() {
-    testAll(RSVP.all);
+  describe("RSVP.Promise.all", function() {
+    testAll(RSVP.Promise.all);
   });
 
   describe("RSVP.Promise.all", function() {
@@ -1047,9 +969,9 @@ describe("RSVP extensions", function() {
     });
 
     it('throws when not passed an array', function(done) {
-      var nothing = assertRejection(all());
-      var string  = assertRejection(all(''));
-      var object  = assertRejection(all({}));
+      var nothing = assertRejection(RSVP.Promise.all());
+      var string  = assertRejection(RSVP.Promise.all(''));
+      var object  = assertRejection(RSVP.Promise.all({}));
 
       RSVP.Promise.all([
         nothing,
@@ -1095,7 +1017,7 @@ describe("RSVP extensions", function() {
         secondResolver(true);
       }, 0);
 
-      all([first, second]).then(function() {
+      RSVP.Promise.all([first, second]).then(function() {
         assert(firstResolved);
         assert(secondResolved);
         done();
@@ -1130,7 +1052,7 @@ describe("RSVP extensions", function() {
         secondCompleted = true;
       });
 
-      all([first, second]).then(function() {
+      RSVP.Promise.all([first, second]).then(function() {
         assert(false);
       }, function() {
         assert(firstWasRejected);
@@ -1161,7 +1083,7 @@ describe("RSVP extensions", function() {
       firstResolver.resolve(1);
       secondResolver.resolve(2);
 
-      all([first, second, third]).then(function(results) {
+      RSVP.Promise.all([first, second, third]).then(function(results) {
         assert(results.length === 3);
         assert(results[0] === 1);
         assert(results[1] === 2);
@@ -1170,8 +1092,8 @@ describe("RSVP extensions", function() {
       });
     });
 
-    it('resolves an empty array passed to all()', function(done) {
-      all([]).then(function(results) {
+    it('resolves an empty array passed to RSVP.Promise.all()', function(done) {
+      RSVP.Promise.all([]).then(function(results) {
         assert(results.length === 0);
         done();
       })
@@ -1181,7 +1103,7 @@ describe("RSVP extensions", function() {
     });
 
     it('works with null', function(done) {
-      all([null]).then(function(results) {
+      RSVP.Promise.all([null]).then(function(results) {
         assert.equal(results[0], null);
         done();
       })
@@ -1196,7 +1118,7 @@ describe("RSVP extensions", function() {
       var asyncThenable = { then: function (onFulfilled) { setTimeout(function() { onFulfilled(3); }, 0); } };
       var nonPromise = 4;
 
-      all([promise, syncThenable, asyncThenable, nonPromise]).then(function(results) {
+      RSVP.Promise.all([promise, syncThenable, asyncThenable, nonPromise]).then(function(results) {
         assert.deepEqual(results, [1, 2, 3, 4]);
         done();
       })
@@ -1223,13 +1145,8 @@ describe("RSVP extensions", function() {
       ]).then(function(){ done(); });
     });
 
-<<<<<<< HEAD
     it('resolves an empty array passed to allSettled()', function(done) {
-      RSVP.allSettled([]).then(function(results) {
-=======
-    specify('resolves an empty array passed to allSettled()', function(done) {
       RSVP.Promise.allSettled([]).then(function(results) {
->>>>>>> `all-settled` (rsvp => promise)
         assert(results.length === 0);
         done();
       });
@@ -1253,19 +1170,11 @@ describe("RSVP extensions", function() {
           promise, syncThenable, asyncThenable, nonPromise, rejectedPromise
         );
 
-<<<<<<< HEAD
-        RSVP.allSettled(entries).then(function(results) {
+        RSVP.Promise.allSettled(entries).then(function(results) {
           assert.deepEqual(results[0], { state: "fulfilled", value: 1 } );
           assert.deepEqual(results[1], { state: "fulfilled", value: 2 } );
           assert.deepEqual(results[2], { state: "fulfilled", value: 3 } );
           assert.deepEqual(results[3], { state: "fulfilled", value: 4 } );
-=======
-        RSVP.Promise.allSettled(entries).then(function(results) {
-          assert(objectEquals(results[0], {state: "fulfilled", value: 1} ));
-          assert(objectEquals(results[1], {state: "fulfilled", value: 2} ));
-          assert(objectEquals(results[2], {state: "fulfilled", value: 3} ));
-          assert(objectEquals(results[3], {state: "fulfilled", value: 4} ));
->>>>>>> `all-settled` (rsvp => promise)
           assert(results[4].state, "rejected");
           assert(results[4].reason.message, "WHOOPS");
           done();
@@ -1313,15 +1222,9 @@ describe("RSVP extensions", function() {
 
   });
 
-<<<<<<< HEAD
-  describe("RSVP.reject", function(){
-    it("it should exist", function(){
-      assert(RSVP.reject);
-=======
   describe("RSVP.Promise.reject", function(){
-    specify("it should exist", function(){
+    it("it should exist", function(){
       assert(RSVP.Promise.reject);
->>>>>>> `reject` (rsvp => promise)
     });
 
     it('it rejects', function(done) {
@@ -1551,9 +1454,9 @@ describe("RSVP extensions", function() {
     });
   }
 
-  describe("RSVP.Promise.race", function(){
+  function testRace(race) {
     it("should exist", function() {
-      assert(RSVP.Promise.race);
+      assert(race);
     });
 
     it("throws when not passed an array", function(done) {
@@ -1600,11 +1503,7 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
     it('the race begins on nextTurn and prioritized by array entry', function(done) {
-=======
-    specify('the RSVP.Promise.race begins on nextTurn and prioritized by array entry', function(done) {
->>>>>>> moved `race` (rsvp => promise)
       var firstResolver, secondResolver, nonPromise = 5;
 
       var first = new RSVP.Promise(function(resolve, reject) {
@@ -1655,13 +1554,8 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
     it('resolves an empty array to forever pending Promise', function(done) {
-      var foreverPendingPromise = RSVP.race([]),
-=======
-    specify('resolves an empty array to forever pending Promise', function(done) {
       var foreverPendingPromise = RSVP.Promise.race([]),
->>>>>>> moved `race` (rsvp => promise)
           wasSettled            = false;
 
       foreverPendingPromise.then(function() {
@@ -1693,6 +1587,16 @@ describe("RSVP extensions", function() {
         assert(result, 4);
         done();
       });
+    });
+  }
+
+  describe("RSVP.Promise.race", function() {
+    testRace(RSVP.Promise.race);
+  });
+
+  describe("RSVP.Promise.race", function() {
+    testRace(function(){
+      return RSVP.Promise.race.apply(RSVP.Promise, arguments);
     });
   });
 
@@ -1873,15 +1777,9 @@ describe("RSVP extensions", function() {
 
   });
 
-<<<<<<< HEAD
-  describe("RSVP.resolve", function(){
-    it("it should exist", function(){
-      assert(RSVP.resolve);
-=======
   describe("RSVP.Promise.resolve", function(){
-    specify("it should exist", function(){
+    it("it should exist", function(){
       assert(RSVP.Promise.resolve);
->>>>>>> moved `resolve` (rsvp => promise)
     });
 
     describe("1. If x is a promise, adopt its state ", function(){
@@ -2596,41 +2494,41 @@ describe("RSVP extensions", function() {
       });
     });
 
-    // describe("inheritance", function() {
-    //   function Subclass (resolver) {
-    //     this._promise$constructor(resolver);
-    //   }
+    describe("inheritance", function() {
+      function Subclass (resolver) {
+        this._promise$constructor(resolver);
+      }
 
-    //   Subclass.prototype = Object.create(RSVP.Promise.prototype);
-    //   Subclass.prototype.constructor = Subclass;
-    //   Subclass.prototype._promise$constructor = RSVP.Promise;
+      Subclass.prototype = Object.create(RSVP.Promise.prototype);
+      Subclass.prototype.constructor = Subclass;
+      Subclass.prototype._promise$constructor = RSVP.Promise;
 
-    //   Subclass.resolve = RSVP.Promise.resolve;
-    //   Subclass.reject = RSVP.Promise.reject;
-    //   Subclass.all = RSVP.Promise.all;
+      Subclass.resolve = RSVP.Promise.resolve;
+      Subclass.reject = RSVP.Promise.reject;
+      Subclass.all = RSVP.Promise.all;
 
-    //   it("preserves correct subclass when chained", function() {
-    //     var promise = Subclass.resolve().finally();
-    //     assert.ok(promise instanceof Subclass);
-    //     assert.equal(promise.constructor, Subclass);
-    //   });
+      it("preserves correct subclass when chained", function() {
+        var promise = Subclass.resolve().finally();
+        assert.ok(promise instanceof Subclass);
+        assert.equal(promise.constructor, Subclass);
+      });
 
-    //   it("preserves correct subclass when rejected", function() {
-    //     var promise = Subclass.resolve().finally(function() {
-    //       throw new Error("OMG");
-    //     });
-    //     assert.ok(promise instanceof Subclass);
-    //     assert.equal(promise.constructor, Subclass);
-    //   });
+      it("preserves correct subclass when rejected", function() {
+        var promise = Subclass.resolve().finally(function() {
+          throw new Error("OMG");
+        });
+        assert.ok(promise instanceof Subclass);
+        assert.equal(promise.constructor, Subclass);
+      });
 
-    //   it("preserves correct subclass when someone returns a thenable", function() {
-    //     var promise = Subclass.resolve().finally(function() {
-    //       return RSVP.Promise.resolve(1);
-    //     });
-    //     assert.ok(promise instanceof Subclass);
-    //     assert.equal(promise.constructor, Subclass);
-    //   });
-    // });
+      it("preserves correct subclass when someone returns a thenable", function() {
+        var promise = Subclass.resolve().finally(function() {
+          return RSVP.Promise.resolve(1);
+        });
+        assert.ok(promise instanceof Subclass);
+        assert.equal(promise.constructor, Subclass);
+      });
+    });
   });
 
   describe("RSVP.Promise.filter", function(){
@@ -2645,22 +2543,22 @@ describe("RSVP extensions", function() {
 
     it("throws an error if an array is not passed", function(){
       return assertRejection(
-        RSVP.filter(),
-        'RSVP.filter expects function as a second argument'
+        RSVP.Promise.filter(),
+        'RSVP.Promise.filter expects function as a second argument'
       );
     });
 
     it("throws an error if is non array promise passed", function(){
       return assertRejection(
-        RSVP.filter(Promise.resolve({}), function(){}),
-        'RSVP.filter must be called with an array'
+        RSVP.Promise.filter(Promise.resolve({}), function(){}),
+        'RSVP.Promise.filter must be called with an array'
       );
     });
 
     it("throws an error if a filterFn is not passed", function(){
       return assertRejection(
-        RSVP.filter([]),
-        'RSVP.filter expects function as a second argument'
+        RSVP.Promise.filter([]),
+        'RSVP.Promise.filter expects function as a second argument'
       );
     });
 
@@ -2671,8 +2569,7 @@ describe("RSVP extensions", function() {
         RSVP.Promise.resolve(3)
       ];
 
-<<<<<<< HEAD
-      RSVP.filter(promises, filterFn)
+      RSVP.Promise.filter(promises, filterFn)
         .then(function(results){
           assert.deepEqual([2, 3], results);
           done();
@@ -2684,19 +2581,15 @@ describe("RSVP extensions", function() {
 
     it("filters falsy values correctly 1", function(done){
       var promises = [
-        RSVP.resolve(false),
-        RSVP.resolve(undefined),
-        RSVP.resolve(null),
-        RSVP.resolve(0),
-        RSVP.resolve('')
+        RSVP.Promise.resolve(false),
+        RSVP.Promise.resolve(undefined),
+        RSVP.Promise.resolve(null),
+        RSVP.Promise.resolve(0),
+        RSVP.Promise.resolve('')
       ];
 
-      RSVP.filter(promises, function(){ return true; }).then(function(results){
+      RSVP.Promise.filter(promises, function(){ return true; }).then(function(results){
         assert.deepEqual([false, undefined, null, 0, ''], results);
-=======
-      RSVP.Promise.filter(promises, filterFn).then(function(results){
-        assert.deepEqual([2, 3], results);
->>>>>>> `filter` (rsvp => promise)
         done();
       })
       .catch(function(e) {
@@ -2704,17 +2597,16 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
     it("filters falsy values correctly 2", function(done){
       var promises = [
-        RSVP.resolve(false),
-        RSVP.resolve(undefined),
-        RSVP.resolve(null),
-        RSVP.resolve(0),
-        RSVP.resolve('')
+        RSVP.Promise.resolve(false),
+        RSVP.Promise.resolve(undefined),
+        RSVP.Promise.resolve(null),
+        RSVP.Promise.resolve(0),
+        RSVP.Promise.resolve('')
       ];
 
-      RSVP.filter(promises, function(val){ return val; }).then(function(results){
+      RSVP.Promise.filter(promises, function(val){ return val; }).then(function(results){
         assert.equal(results.length, 0);
         done();
       })
@@ -2725,15 +2617,15 @@ describe("RSVP extensions", function() {
 
     it("filters truthy values correctly", function(done){
       var promises = [
-        RSVP.resolve(true),
-        RSVP.resolve(1),
-        RSVP.resolve(-10),
-        RSVP.resolve('a'),
-        RSVP.resolve({}),
-        RSVP.resolve([])
+        RSVP.Promise.resolve(true),
+        RSVP.Promise.resolve(1),
+        RSVP.Promise.resolve(-10),
+        RSVP.Promise.resolve('a'),
+        RSVP.Promise.resolve({}),
+        RSVP.Promise.resolve([])
       ];
 
-      RSVP.filter(promises, function(val){ return val; }).then(function(results){
+      RSVP.Promise.filter(promises, function(val){ return val; }).then(function(results){
         assert.deepEqual(results, [true, 1, -10, 'a', {}, []]);
         done();
       })
@@ -2749,7 +2641,7 @@ describe("RSVP extensions", function() {
         }
       }
 
-      RSVP.filter([RSVP.resolve(1), RSVP.resolve(2)], throwerFilter).then(function() {
+      RSVP.Promise.filter([RSVP.Promise.resolve(1), RSVP.Promise.resolve(2)], throwerFilter).then(function() {
         done(new Error("Promise was resolved when it shouldn't have been!"));
       }, function(e) {
         assert.equal(e.message, 'function error');
@@ -2776,7 +2668,7 @@ describe("RSVP extensions", function() {
 
       var i = 0;
       var order = ['p2', 'p3', 'p1', 'p4'];
-      return RSVP.filter([p1, p2, p3, p4], function(value) {
+      return RSVP.Promise.filter([p1, p2, p3, p4], function(value) {
         assert.equal(value, order[i++]);
         return true;
       })
@@ -2788,23 +2680,15 @@ describe("RSVP extensions", function() {
     it("reject filterFn returns rejected promise", function(done){
       var rejectFilter = function(val) {
         if (val === 2) {
-          return RSVP.reject();
+          return RSVP.Promise.reject();
         }
       }
 
-      RSVP.filter([RSVP.resolve(1), RSVP.resolve(2)], rejectFilter).then(function() {
+      RSVP.Promise.filter([RSVP.Promise.resolve(1), RSVP.Promise.resolve(2)], rejectFilter).then(function() {
         done(new Error("Promise was resolved when it shouldn't have been!"));
       }, function() {
         done()
       });
-=======
-    it("throws an error if an array is not passed", function(){
-      assertRejection(RSVP.Promise.filter());
-    });
-
-    it("throws an error if a filterFn is not passed", function(){
-      assertRejection(RSVP.Promise.filter([]));
->>>>>>> `filter` (rsvp => promise)
     });
 
     it("works with non-promise values and promises", function(done){
@@ -2854,13 +2738,8 @@ describe("RSVP extensions", function() {
     it("waits if filterFn returns a promise", function(done){
 
       var filterFn = function(item){
-<<<<<<< HEAD
         if (item === 1) {
-          return RSVP.resolve(true);
-=======
-        if (item === 1 ) {
           return RSVP.Promise.resolve(true);
->>>>>>> moved `resolve` (rsvp => promise)
         }
         return true;
       };
@@ -2881,7 +2760,7 @@ describe("RSVP extensions", function() {
 
       var results2 = RSVP.Promise.filter(promises, filterFn);
 
-      RSVP.all([results1, results2]).then(function(results){
+      RSVP.Promise.all([results1, results2]).then(function(results){
         var results1 = results[0];
         var results2 = results[1];
         assert.deepEqual(results1, [1, 2, 3]);
@@ -2904,11 +2783,11 @@ describe("RSVP extensions", function() {
     });
 
     it("throws an error if an array is not passed", function(){
-      assertRejection(RSVP.map());
+      assertRejection(RSVP.Promise.map());
     });
 
     it("throws an error if a mapFn is not passed", function(){
-      assertRejection(RSVP.map([]));
+      assertRejection(RSVP.Promise.map([]));
     });
 
     it("calls mapFn on all the promises that are resolved", function(done){
@@ -2917,13 +2796,8 @@ describe("RSVP extensions", function() {
       var promise3 = RSVP.Promise.resolve(3);
       var promises = [ promise1, promise2, promise3 ];
 
-<<<<<<< HEAD
-      RSVP.map(promises, mapFn).then(function(results){
-        assert.deepEqual([2, 3, 4], results);
-=======
       RSVP.Promise.map(promises, mapFn).then(function(results){
-        assert.deepEqual([ 2, 3, 4], results);
->>>>>>> `map` (rsvp => promise)
+        assert.deepEqual([2, 3, 4], results);
         done();
       })
       .catch(function(e) {
@@ -2931,7 +2805,6 @@ describe("RSVP extensions", function() {
       });
     });
 
-<<<<<<< HEAD
     it("catches error thrown from mapFn", function(done){
       var throwerMap = function(val) {
         if (val === 2) {
@@ -2939,7 +2812,7 @@ describe("RSVP extensions", function() {
         }
       }
 
-      RSVP.map([RSVP.resolve(1), RSVP.resolve(2)], throwerMap).then(function() {
+      RSVP.Promise.map([RSVP.Promise.resolve(1), RSVP.Promise.resolve(2)], throwerMap).then(function() {
         done(new Error("Promise was resolved when it shouldn't have been!"));
       }, function(e) {
         assert.equal(e.message, 'function error');
@@ -2948,14 +2821,6 @@ describe("RSVP extensions", function() {
       .catch(function(e) {
         done(e || 'promise rejected');
       });
-=======
-    it("throws an error if an array is not passed", function(){
-      assertRejection(RSVP.Promise.map());
-    });
-
-    it("throws an error if a mapFn is not passed", function(){
-      assertRejection(RSVP.Promise.map([]));
->>>>>>> `map` (rsvp => promise)
     });
 
     it("works with non-promise values and promises", function(done){
@@ -2972,7 +2837,6 @@ describe("RSVP extensions", function() {
     });
 
     it("becomes rejected with the first promise that becomes rejected", function(done){
-
       var promises = [
         RSVP.Promise.reject(new Error("prefix:1")),
         RSVP.Promise.reject(new Error("prefix:2")),
@@ -3021,7 +2885,7 @@ describe("RSVP extensions", function() {
 
       var i = 0;
       var order = ['p2', 'p3', 'p1', 'p4'];
-      return RSVP.map([p1, p2, p3, p4], function(value) {
+      return RSVP.Promise.map([p1, p2, p3, p4], function(value) {
         assert.equal(value, order[i++]);
         return value;
       })
@@ -3032,14 +2896,14 @@ describe("RSVP extensions", function() {
 
     it("maps falsy values correctly", function(done){
       var promises = [
-        RSVP.resolve(false),
-        RSVP.resolve(undefined),
-        RSVP.resolve(null),
-        RSVP.resolve(0),
-        RSVP.resolve('')
+        RSVP.Promise.resolve(false),
+        RSVP.Promise.resolve(undefined),
+        RSVP.Promise.resolve(null),
+        RSVP.Promise.resolve(0),
+        RSVP.Promise.resolve('')
       ];
 
-      RSVP.map(promises, function(val){ return val; }).then(function(results){
+      RSVP.Promise.map(promises, function(val){ return val; }).then(function(results){
         assert.deepEqual([false, undefined, null, 0, ''], results);
         done();
       })
@@ -3093,8 +2957,6 @@ describe("RSVP extensions", function() {
 if (typeof module !== 'undefined' && module.exports) {
 
   describe("using reduce to sum integers using promises", function(){
-    var resolve = RSVP.Promise.resolve;
-
     it("should build the promise pipeline without error", function(){
       var array, iters, pZero, i;
 
@@ -3105,11 +2967,11 @@ if (typeof module !== 'undefined' && module.exports) {
         array.push(i);
       }
 
-      pZero = resolve(0);
+      pZero = RSVP.Promise.resolve(0);
 
       array.reduce(function(promise, nextVal) {
         return promise.then(function(currentVal) {
-          return resolve(currentVal + nextVal);
+          return RSVP.Promise.resolve(currentVal + nextVal);
         });
       }, pZero);
     });
@@ -3117,7 +2979,7 @@ if (typeof module !== 'undefined' && module.exports) {
     it("should get correct answer without blowing the nextTick stack", function(done){
       var pZero, array, iters, result, i;
 
-      pZero = resolve(0);
+      pZero = RSVP.Promise.resolve(0);
 
       array = [];
       iters = 1000;
@@ -3128,7 +2990,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
       result = array.reduce(function(promise, nextVal) {
         return promise.then(function(currentVal) {
-          return resolve(currentVal + nextVal);
+          return RSVP.Promise.resolve(currentVal + nextVal);
         });
       }, pZero);
 
