@@ -2401,6 +2401,14 @@ describe("RSVP extensions", function() {
       assert(RSVP.filter);
     });
 
+    it("throws an error if an array is not passed", function(){
+      assertRejection(RSVP.filter());
+    });
+
+    it("throws an error if a filterFn is not passed", function(){
+      assertRejection(RSVP.filter([]));
+    });
+
     it("returns results that filterFn returns truthy values", function(done){
       var promises = [
         RSVP.resolve(1),
@@ -2414,12 +2422,17 @@ describe("RSVP extensions", function() {
       }, done);
     });
 
-    it("throws an error if an array is not passed", function(){
-      assertRejection(RSVP.filter());
-    });
+    it("catches error thrown from filterFn", function(done){
+      var throwerFilter = function() {
+        throw new Error('function error');
+      }
 
-    it("throws an error if a filterFn is not passed", function(){
-      assertRejection(RSVP.filter([]));
+      RSVP.filter([RSVP.resolve(1)], throwerFilter).then(function() {
+        done(new Error("Promise was resolved when it shouldn't have been!"));
+      }, function(e) {
+        assert.equal(e.message, 'function error');
+        done()
+      });
     });
 
     it("works with non-promise values and promises", function(done){
@@ -2508,6 +2521,14 @@ describe("RSVP extensions", function() {
       assert(RSVP.map);
     });
 
+    it("throws an error if an array is not passed", function(){
+      assertRejection(RSVP.map());
+    });
+
+    it("throws an error if a mapFn is not passed", function(){
+      assertRejection(RSVP.map([]));
+    });
+
     it("calls mapFn on all the promises that are resolved", function(done){
       var promise1 = RSVP.resolve(1);
       var promise2 = RSVP.resolve(2);
@@ -2520,12 +2541,17 @@ describe("RSVP extensions", function() {
       });
     });
 
-    it("throws an error if an array is not passed", function(){
-      assertRejection(RSVP.map());
-    });
+    it("catches error thrown from mapFn", function(done){
+      var throwerMap = function() {
+        throw new Error('function error');
+      }
 
-    it("throws an error if a mapFn is not passed", function(){
-      assertRejection(RSVP.map([]));
+      RSVP.map([RSVP.resolve(1)], throwerMap).then(function() {
+        done(new Error("Promise was resolved when it shouldn't have been!"));
+      }, function(e) {
+        assert.equal(e.message, 'function error');
+        done()
+      });
     });
 
     it("works with non-promise values and promises", function(done){
