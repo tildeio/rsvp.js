@@ -52,7 +52,7 @@ describe('tampering', function() {
       });
     });
 
-  it('tampered resolved', function() {
+    it('tampered resolved', function() {
       var one = RSVP.Promise.resolve(1);
       var two = RSVP.Promise.resolve(2);
       var thenCalled = 0;
@@ -82,8 +82,8 @@ describe('tampering', function() {
         };
 
         return RSVP.Promise.all([two]).then(function(value) {
-          assert.equal(resolveCalled, 1);
-          assert.deepEqual(value, [2]);
+          assert.equal(resolveCalled, 1, 'expected then to be called once');
+          assert.equal(value, 2, 'expected fulfillment value to be 2');
         });
       });
 
