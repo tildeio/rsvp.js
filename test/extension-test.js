@@ -2432,6 +2432,21 @@ describe("RSVP extensions", function() {
       }).catch(done);
     });
 
+    it("filters falsy values correctly", function(done){
+      var promises = [
+        RSVP.resolve(false),
+        RSVP.resolve(undefined),
+        RSVP.resolve(null),
+        RSVP.resolve(0),
+        RSVP.resolve('')
+      ];
+
+      RSVP.filter(promises, function(){ return true; }).then(function(results){
+        assert.deepEqual([false, undefined, null, 0, ''], results);
+        done();
+      }).catch(done);
+    });
+
     it("catches error thrown from filterFn", function(done){
       var throwerFilter = function(val) {
         if (val === 2) {
@@ -2465,7 +2480,11 @@ describe("RSVP extensions", function() {
       var order = ['p2', 'p3', 'p1', 'p4'];
       return RSVP.filter([p1, p2, p3, p4], function(value) {
         assert.equal(value, order[i++]);
+        return true;
       })
+      .then(function(val) {
+        assert.deepEqual(val, ['p1', 'p2', 'p3', 'p4']);
+      });
     });
 
     it("reject filterFn returns rejected promise", function(done){
@@ -2520,7 +2539,7 @@ describe("RSVP extensions", function() {
     it("waits if filterFn returns a promise", function(done){
 
       var filterFn = function(item){
-        if (item === 1 ) {
+        if (item === 1) {
           return RSVP.resolve(true);
         }
         return true;
@@ -2652,7 +2671,26 @@ describe("RSVP extensions", function() {
       var order = ['p2', 'p3', 'p1', 'p4'];
       return RSVP.map([p1, p2, p3, p4], function(value) {
         assert.equal(value, order[i++]);
+        return value;
       })
+      .then(function(val) {
+        assert.deepEqual(val, ['p1', 'p2', 'p3', 'p4']);
+      });
+    });
+
+    it("maps falsy values correctly", function(done){
+      var promises = [
+        RSVP.resolve(false),
+        RSVP.resolve(undefined),
+        RSVP.resolve(null),
+        RSVP.resolve(0),
+        RSVP.resolve('')
+      ];
+
+      RSVP.map(promises, function(val){ return val; }).then(function(results){
+        assert.deepEqual([false, undefined, null, 0, ''], results);
+        done();
+      }).catch(done);
     });
 
     it("becomes rejected if a promise returned from mapFn becomes rejected", function(done){
