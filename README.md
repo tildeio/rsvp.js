@@ -181,10 +181,6 @@ RSVP.on('error', function(reason, label) {
 **NOTE:** promises do allow for errors to be handled asynchronously, so
 this callback may result in false positives.
 
-**NOTE:** Usage of `RSVP.configure('onerror', yourCustomFunction);` is
-deprecated in favor of using `RSVP.on`.
-
-
 ## Finally
 
 `finally` will be invoked regardless of the promise's fate, just as native

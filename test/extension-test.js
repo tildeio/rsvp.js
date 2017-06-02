@@ -1528,7 +1528,7 @@ describe("RSVP extensions", function() {
     it("When provided, any unhandled exceptions are sent to it (false positive case)", function(done) {
       var thrownError = new Error();
 
-      RSVP.configure('onerror', function(error) {
+      RSVP.on('error', function(error) {
         assert.equal(error, thrownError, "The thrown error is passed in");
         done();
       });
@@ -1544,7 +1544,7 @@ describe("RSVP extensions", function() {
     it("onerror gets label if provided", function(done) {
       var thrownError = new Error();
 
-      RSVP.configure('onerror', function(error, label) {
+      RSVP.on('error', function(error, label) {
         assert.equal(error, thrownError, "The thrown error is passed in");
         assert.equal(label, 'i am label', "the label for the given promise is also provided");
         done();
@@ -1561,7 +1561,7 @@ describe("RSVP extensions", function() {
     it("When provided, handled exceptions are not sent to it", function(done) {
       var thrownError = new Error();
 
-      RSVP.configure('onerror', function(error) {
+      RSVP.on('error', function(error) {
         assert(false, "Should not get here");
       });
 
@@ -1576,7 +1576,7 @@ describe("RSVP extensions", function() {
     it("Enumerator: When provided, any unhandled exceptions are sent to it", function(done) {
       var thrownError = new Error();
 
-      RSVP.configure('onerror', function(error) {
+      RSVP.on('error', function(error) {
         assert.equal(error, thrownError, "The thrown error is passed in");
         done();
       });
@@ -1594,7 +1594,7 @@ describe("RSVP extensions", function() {
     it("all When provided, handled exceptions are not sent to it", function(done) {
       var thrownError = new Error();
 
-      RSVP.configure('onerror', function(error) {
+      RSVP.on('error', function(error) {
         assert(false, "Should not get here");
       });
 
@@ -1611,7 +1611,7 @@ describe("RSVP extensions", function() {
     it("assimilation: When provided, handled exceptions are not sent to it", function(done) {
       var thrownError = new Error();
 
-      RSVP.configure('onerror', function(error) {
+      RSVP.on('error', function(error) {
         assert(false, "Should not get here");
       });
 
@@ -1626,7 +1626,7 @@ describe("RSVP extensions", function() {
     it("zalgo: When provided, unhandled exceptions are sent to it", function(done) {
       var thrownError = new Error();
 
-      RSVP.configure('onerror', function(error) {
+      RSVP.on('error', function(error) {
         assert(true, "should also have emitted onerror");
         assert.equal(error, thrownError, "The handler should handle the error");
         done();
@@ -1643,7 +1643,7 @@ describe("RSVP extensions", function() {
     it("assimilation: When provided, unhandled exceptions are sent to it", function(done) {
       var thrownError = new Error();
 
-      RSVP.configure('onerror', function(error) {
+      RSVP.on('error', function(error) {
         assert(true, "Should get here once");
         done();
       });
