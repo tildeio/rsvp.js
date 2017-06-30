@@ -70,6 +70,6 @@
   "author": "Tilde, Inc. & Stefan Penner",
   "license": "MIT",
   "engines": {
-    "node": "0.12.* || 4.* || 6.* || 7.*"
+    "node": "0.12.* || 4.* || 6.* || >= 7.*"
   }
 }
