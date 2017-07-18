@@ -2680,7 +2680,6 @@ describe("RSVP extensions", function() {
     });
 
     it("becomes rejected if a promise returned from mapFn becomes rejected", function(done){
-
       var expectedErrorMessage = "must-be-prefixed-with-non-number-for-old-ie:1"
       var values = [ 1, 2, 3 ];
       var mapFn = function(value){
