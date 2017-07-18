@@ -2418,17 +2418,73 @@ describe("RSVP extensions", function() {
       }).catch(done);
     });
 
+    it("filters falsy values correctly", function(done){
+      var promises = [
+        RSVP.resolve(false),
+        RSVP.resolve(undefined),
+        RSVP.resolve(null),
+        RSVP.resolve(0),
+        RSVP.resolve('')
+      ];
+
+      RSVP.filter(promises, function(){ return true; }).then(function(results){
+        assert.deepEqual([false, undefined, null, 0, ''], results);
+        done();
+      }).catch(done);
+    });
+
     it("catches error thrown from filterFn", function(done){
-      var throwerFilter = function() {
-        throw new Error('function error');
+      var throwerFilter = function(val) {
+        if (val === 2) {
+          throw new Error('function error');
+        }
       }
 
-      RSVP.filter([RSVP.resolve(1)], throwerFilter).then(function() {
+      RSVP.filter([RSVP.resolve(1), RSVP.resolve(2)], throwerFilter).then(function() {
         done(new Error("Promise was resolved when it shouldn't have been!"));
       }, function(e) {
         assert.equal(e.message, 'function error');
         done()
       }).catch(done);
+    });
+
+    it("eager filter works", function(){
+      var makePromise = function(delay, label) {
+        return new RSVP.Promise(function(resolve){
+          setTimeout(function() {
+            resolve(label);
+          }, delay);
+        });
+      }
+
+      var p1 = makePromise(15, 'p1');
+      var p2 = makePromise(5, 'p2');
+      var p3 = makePromise(10, 'p3');
+      var p4 = makePromise(20, 'p4');
+
+      var i = 0;
+      var order = ['p2', 'p3', 'p1', 'p4'];
+      return RSVP.filter([p1, p2, p3, p4], function(value) {
+        assert.equal(value, order[i++]);
+        return true;
+      })
+      .then(function(val) {
+        assert.deepEqual(val, ['p1', 'p2', 'p3', 'p4']);
+      });
+    });
+
+    it("reject filterFn returns rejected promise", function(done){
+      var rejectFilter = function(val) {
+        if (val === 2) {
+          return RSVP.reject();
+        }
+      }
+
+      RSVP.filter([RSVP.resolve(1), RSVP.resolve(2)], rejectFilter).then(function() {
+        done(new Error("Promise was resolved when it shouldn't have been!"));
+      }, function() {
+        done()
+      });
     });
 
     it("works with non-promise values and promises", function(done){
@@ -2469,7 +2525,7 @@ describe("RSVP extensions", function() {
     it("waits if filterFn returns a promise", function(done){
 
       var filterFn = function(item){
-        if (item === 1 ) {
+        if (item === 1) {
           return RSVP.resolve(true);
         }
         return true;
@@ -2525,17 +2581,19 @@ describe("RSVP extensions", function() {
       var promises = [ promise1, promise2, promise3 ];
 
       RSVP.map(promises, mapFn).then(function(results){
-        assert.deepEqual([ 2, 3, 4], results);
+        assert.deepEqual([2, 3, 4], results);
         done();
       }).catch(done);
     });
 
     it("catches error thrown from mapFn", function(done){
-      var throwerMap = function() {
-        throw new Error('function error');
+      var throwerMap = function(val) {
+        if (val === 2) {
+          throw new Error('function error');
+        }
       }
 
-      RSVP.map([RSVP.resolve(1)], throwerMap).then(function() {
+      RSVP.map([RSVP.resolve(1), RSVP.resolve(2)], throwerMap).then(function() {
         done(new Error("Promise was resolved when it shouldn't have been!"));
       }, function(e) {
         assert.equal(e.message, 'function error');
@@ -2577,6 +2635,46 @@ describe("RSVP extensions", function() {
 
       RSVP.map(values, mapFn).then(function(values){
         assert.deepEqual(values, [ 2, 3, 4 ]);
+        done();
+      }).catch(done);
+    });
+
+    it("eager map works", function(){
+      var makePromise = function(delay, label) {
+        return new RSVP.Promise(function(resolve){
+          setTimeout(function() {
+            resolve(label);
+          }, delay);
+        });
+      }
+
+      var p1 = makePromise(15, 'p1');
+      var p2 = makePromise(5, 'p2');
+      var p3 = makePromise(10, 'p3');
+      var p4 = makePromise(20, 'p4');
+
+      var i = 0;
+      var order = ['p2', 'p3', 'p1', 'p4'];
+      return RSVP.map([p1, p2, p3, p4], function(value) {
+        assert.equal(value, order[i++]);
+        return value;
+      })
+      .then(function(val) {
+        assert.deepEqual(val, ['p1', 'p2', 'p3', 'p4']);
+      });
+    });
+
+    it("maps falsy values correctly", function(done){
+      var promises = [
+        RSVP.resolve(false),
+        RSVP.resolve(undefined),
+        RSVP.resolve(null),
+        RSVP.resolve(0),
+        RSVP.resolve('')
+      ];
+
+      RSVP.map(promises, function(val){ return val; }).then(function(results){
+        assert.deepEqual([false, undefined, null, 0, ''], results);
         done();
       }).catch(done);
     });
