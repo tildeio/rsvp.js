@@ -1,5 +1,10 @@
 # Master
 
+# 4.0.0
+
+* remove es3 fallbacks
+* make map/filter eager
+
 # 3.5.0
 
 * expose RSVP.asap for access to the micro-task polyfil
