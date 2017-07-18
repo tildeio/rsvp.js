@@ -66,8 +66,8 @@ describe('tampering', function() {
         };
 
         return RSVP.Promise.all([two]).then(function(value) {
-          assert.equal(resolveCalled, 1);
-          assert.deepEqual(value, [2]);
+          assert.equal(resolveCalled, 1, 'expected resolve to be called once');
+          assert.equal(value, 2, 'expected fulfillment value to be 2');
         });
       });
 
@@ -81,8 +81,8 @@ describe('tampering', function() {
         };
 
         return RSVP.Promise.all([two]).then(function(value) {
-          assert.equal(thenCalled, 1);
-          assert.deepEqual(value, [2]);
+          assert.equal(thenCalled, 1, 'expected resolve to be called once');
+          assert.equal(value, 2, 'expected fulfillment value to be 2');
         });
       });
     });
@@ -2724,11 +2724,11 @@ describe("on node 0.10.x, using process.nextTick recursively shows deprecation w
     };
 
     nextTick(0)
-        .then(function(){
-          //console.log('nextTick: final');
-          assert.strictEqual(resolved, total);
-          done();
-        }).catch(done);
+      .then(function(){
+        //console.log('nextTick: final');
+        assert.strictEqual(resolved, total);
+        done();
+      }).catch(done);
   });
 
 });
