@@ -1,4 +1,4 @@
-# RSVP.js  [![Build Status](https://secure.travis-ci.org/tildeio/rsvp.js.png?branch=master)](http://travis-ci.org/tildeio/rsvp.js) [![Inline docs](http://inch-ci.org/github/tildeio/rsvp.js.svg?branch=master)](http://inch-ci.org/github/tildeio/rsvp.js)
+# RSVP.js  [![Build Status](https://secure.travis-ci.org/tildeio/rsvp.js.svg?branch=master)](http://travis-ci.org/tildeio/rsvp.js) [![Inline docs](http://inch-ci.org/github/tildeio/rsvp.js.svg?branch=master)](http://inch-ci.org/github/tildeio/rsvp.js)
 
 RSVP.js provides simple tools for organizing asynchronous code.
 
@@ -180,10 +180,6 @@ RSVP.on('error', function(reason, label) {
 
 **NOTE:** promises do allow for errors to be handled asynchronously, so
 this callback may result in false positives.
-
-**NOTE:** Usage of `RSVP.configure('onerror', yourCustomFunction);` is
-deprecated in favor of using `RSVP.on`.
-
 
 ## Finally
 
