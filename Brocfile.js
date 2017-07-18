@@ -66,6 +66,19 @@ const rsvp = new Rollup(es5, {
   }
 });
 
+const rsvpES6 = new Rollup(lib, {
+  rollup: {
+    entry: 'lib/rsvp.js',
+    targets: [
+      {
+        format: 'es',
+        dest: 'es6/rsvp.es.js',
+        sourceMap: 'inline'
+      }
+    ]
+  }
+});
+
 const testBundle = watchify(merge([
   mv(rsvp, 'test'),
   testDir
@@ -109,6 +122,11 @@ module.exports = merge([
       headerFiles: ['config/versionTemplate.txt'],
       inputFiles:  ['rsvp.es.js'],
       outputFile: 'rsvp.es.js'
+    }),
+    concat(merge([rsvpES6, header]), {
+      headerFiles: ['config/versionTemplate.txt'],
+      inputFiles:  ['es6/rsvp.es.js'],
+      outputFile: 'es6/rsvp.es.js'
     })
   ].filter(Boolean)),
   // test stuff
