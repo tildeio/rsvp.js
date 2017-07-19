@@ -2794,6 +2794,32 @@ describe("RSVP extensions", function() {
         done();
       });
     });
+
+    it("eager reduce works", function(){
+      var makePromise = function(delay, label) {
+        return new RSVP.Promise(function(resolve){
+          setTimeout(function() {
+            resolve(label);
+          }, delay);
+        });
+      }
+
+      var p1 = makePromise(15, 'p1');
+      var p2 = makePromise(5, 'p2');
+      var p3 = makePromise(10, 'p3');
+      var p4 = makePromise(20, 'p4');
+
+      var i = 0;
+      var order = ['p2', 'p3', 'p1', 'p4'];
+      return RSVP.reduce([p1, p2, p3, p4], function(sum, value) {
+        assert.equal(value, order[i++]);
+        sum.push(value);
+        return sum;
+      }, [])
+      .then(function(val) {
+        assert.deepEqual(val, ['p2', 'p3', 'p1', 'p4']);
+      });
+    });
   });
 
   if (typeof Worker !== 'undefined' && navigator.userAgent.indexOf('PhantomJS') < 1) {
