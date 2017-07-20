@@ -2418,7 +2418,7 @@ describe("RSVP extensions", function() {
       }).catch(done);
     });
 
-    it("filters falsy values correctly", function(done){
+    it("filters falsy values correctly 1", function(done){
       var promises = [
         RSVP.resolve(false),
         RSVP.resolve(undefined),
@@ -2429,6 +2429,37 @@ describe("RSVP extensions", function() {
 
       RSVP.filter(promises, function(){ return true; }).then(function(results){
         assert.deepEqual([false, undefined, null, 0, ''], results);
+        done();
+      }).catch(done);
+    });
+
+    it("filters falsy values correctly 2", function(done){
+      var promises = [
+        RSVP.resolve(false),
+        RSVP.resolve(undefined),
+        RSVP.resolve(null),
+        RSVP.resolve(0),
+        RSVP.resolve('')
+      ];
+
+      RSVP.filter(promises, function(val){ return val; }).then(function(results){
+        assert.equal(results.length, 0);
+        done();
+      }).catch(done);
+    });
+
+    it("filters truthy values correctly", function(done){
+      var promises = [
+        RSVP.resolve(true),
+        RSVP.resolve(1),
+        RSVP.resolve(-10),
+        RSVP.resolve('a'),
+        RSVP.resolve({}),
+        RSVP.resolve([])
+      ];
+
+      RSVP.filter(promises, function(val){ return val; }).then(function(results){
+        assert.deepEqual(results, [true, 1, -10, 'a', {}, []]);
         done();
       }).catch(done);
     });
