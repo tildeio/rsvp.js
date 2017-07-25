@@ -757,6 +757,14 @@ describe("RSVP extensions", function() {
       });
     });
 
+    it('works with promise hash', function(done) {
+      RSVP.hash(Promise.resolve({}))
+        .then(function(results) {
+          assert.deepEqual(results, {}, 'expected fulfillment');
+          done();
+        }).catch(done);
+    });
+
     it('works with null', function(done) {
       RSVP.hash({foo: null}).then(function(results) {
         assert.deepEqual(results.foo, null);
@@ -829,6 +837,14 @@ describe("RSVP extensions", function() {
   describe("RSVP.hashSettled", function() {
     it('should exist', function() {
       assert(RSVP.hashSettled);
+    });
+
+    it('works with promise hash', function(done) {
+      RSVP.hashSettled(Promise.resolve({}))
+        .then(function(results) {
+          assert.deepEqual(results, {}, 'expected fulfillment');
+          done();
+        }).catch(done);
     });
 
     it('fulfilled only after all of the promise values are fulfilled', function(done) {
@@ -2834,6 +2850,15 @@ describe("RSVP extensions", function() {
       .catch(function(e) {
         done(e || 'promise rejected');
       });
+    });
+
+    it("works promise array", function(done){
+      var values = RSVP.resolve([ 1, RSVP.resolve(2) ]);
+
+      RSVP.map(values, mapFn).then(function(results){
+        assert.deepEqual([2, 3], results);
+        done();
+      }).catch(done);
     });
 
     it("becomes rejected with the first promise that becomes rejected", function(done){
