@@ -174,6 +174,18 @@ describe("RSVP extensions", function() {
       });
     });
 
+    it('should reject if `reject` without a reason with `finally` on top', function(done) {
+      new RSVP.Promise(function (resolve, reject) {
+        reject()
+      })
+      .finally(function() {
+      })
+      .catch(function(e) {
+        assert(true)
+        done();
+      })
+    });
+
     it('should be a constructor', function() {
       var promise = new RSVP.Promise(function() {});
 
