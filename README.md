@@ -134,7 +134,7 @@ getJSON("/posts.json").then(function(posts) {
 ```
 
 You can use this to emulate `try/catch` logic in synchronous code.
-Simply chain as many resolve callbacks as a you want, and add a failure
+Simply chain as many resolve callbacks as you want, and add a failure
 handler at the end to catch errors.
 
 ```javascript
