@@ -31,7 +31,7 @@ It delivers all promises asynchronously, even if the value is already
 available, to help you write consistent code that doesn't change if the
 underlying data provider changes from synchronous to asynchronous.
 
-It is compatible with [TaskJS](http://taskjs.org/), a library by Dave
+It is compatible with [TaskJS](https://github.com/mozilla/task.js), a library by Dave
 Herman of Mozilla that uses ES6 generators to allow you to write
 synchronous code with promises. It currently works in Firefox, and will
 work in any browser that adds support for ES6 generators. See the
@@ -281,7 +281,7 @@ deferred.resolve();
 
 ## TaskJS
 
-The [TaskJS](http://taskjs.org/) library makes it possible to take
+The [TaskJS](https://github.com/mozilla/task.js) library makes it possible to take
 promises-oriented code and make it synchronous using ES6 generators.
 
 Let's review an earlier example:
