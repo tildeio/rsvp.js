@@ -1,4 +1,4 @@
-# RSVP.js  [![Build Status](https://secure.travis-ci.org/tildeio/rsvp.js.svg?branch=master)](http://travis-ci.org/tildeio/rsvp.js) [![Inline docs](http://inch-ci.org/github/tildeio/rsvp.js.svg?branch=master)](http://inch-ci.org/github/tildeio/rsvp.js)
+# RSVP.js  [![Build Status](https://secure.travis-ci.org/tildeio/rsvp.js.svg?branch=master)](http://travis-ci.org/tildeio/rsvp.js) [![jsDelivr Hits](https://data.jsdelivr.com/v1/package/npm/rsvp/badge?style=rounded)](https://www.jsdelivr.com/package/npm/rsvp) [![Inline docs](http://inch-ci.org/github/tildeio/rsvp.js.svg?branch=master)](http://inch-ci.org/github/tildeio/rsvp.js)
 
 RSVP.js provides simple tools for organizing asynchronous code.
 
