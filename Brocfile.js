@@ -49,18 +49,18 @@ const es5 = new Babel(lib, {
 // build RSVP itself
 const rsvp = new Rollup(es5, {
   rollup: {
-    entry: 'lib/rsvp.js',
-    targets: [
+    input: 'lib/rsvp.js',
+    output: [
       {
         format: 'umd',
         moduleName: 'RSVP',
-        dest: 'rsvp.js',
-        sourceMap: 'inline'
+        file: 'rsvp.js',
+        sourcemap: 'inline'
       },
       {
         format: 'es',
-        dest: 'rsvp.es.js',
-        sourceMap: 'inline'
+        file: 'rsvp.es.js',
+        sourcemap: 'inline'
       }
     ]
   }
@@ -68,12 +68,12 @@ const rsvp = new Rollup(es5, {
 
 const rsvpES6 = new Rollup(lib, {
   rollup: {
-    entry: 'lib/rsvp.js',
-    targets: [
+    input: 'lib/rsvp.js',
+    output: [
       {
         format: 'es',
-        dest: 'es6/rsvp.es.js',
-        sourceMap: 'inline'
+        file: 'es6/rsvp.es.js',
+        sourcemap: 'inline'
       }
     ]
   }
