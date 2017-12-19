@@ -1362,11 +1362,15 @@ describe("RSVP extensions", function() {
 
   });
 
-  function assertRejection(promise) {
+  function assertRejection(promise, message) {
     return promise.then(function(){
       assert(false, 'expected rejection, but got fulfillment');
-    }, function(reason){
-      assert(reason instanceof Error);
+    }, function(e){
+      assert(e instanceof Error);
+      if (message) {
+        assert.equal(e.message, message);
+        console.log("e.message, message", message);
+      }
     });
   }
 
@@ -2410,11 +2414,24 @@ describe("RSVP extensions", function() {
     });
 
     it("throws an error if an array is not passed", function(){
-      assertRejection(RSVP.filter());
+      return assertRejection(
+        RSVP.filter(),
+        'RSVP.filter expects function as a second argument'
+      );
+    });
+
+    it("throws an error if is non array promise passed", function(){
+      return assertRejection(
+        RSVP.filter(Promise.resolve({}), function(){}),
+        'RSVP.filter must be called with an array'
+      );
     });
 
     it("throws an error if a filterFn is not passed", function(){
-      assertRejection(RSVP.filter([]));
+      return assertRejection(
+        RSVP.filter([]),
+        'RSVP.filter expects function as a second argument'
+      );
     });
 
     it("returns results that filterFn returns truthy values", function(done){
