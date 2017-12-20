@@ -1237,6 +1237,29 @@ describe("RSVP extensions", function() {
       );
     });
 
+    it("events callbacks should properly register", function() {
+      var obj = {};
+      RSVP.EventTarget.mixin(obj);
+      var callCount1 = 0;
+      var callCount2 = 0;
+      var cb1 = function() {
+        callCount1++;
+      };
+
+      var cb2 = function() {
+        callCount2++;
+      };
+
+      obj.on('boom', cb1);
+      obj.on('boom', cb2);
+      obj.on('boom', cb2);
+
+      obj.trigger('boom');
+
+      assert.equal(callCount1, 1);
+      assert.equal(callCount2, 1);
+    });
+
     it("When provided, any unhandled exceptions are sent to it", function(done) {
       var thrownError = new Error();
 
