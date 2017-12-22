@@ -53,7 +53,7 @@ const rsvp = new Rollup(es5, {
     output: [
       {
         format: 'umd',
-        moduleName: 'RSVP',
+        name: 'RSVP',
         file: 'rsvp.js',
         sourcemap: 'inline'
       },
