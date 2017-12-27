@@ -44,13 +44,12 @@
   },
   "scripts": {
     "build": "ember build --environment production",
-    "build:production": "ember build --env production",
     "start": "ember s",
     "test": "ember test",
     "test:server": "ember test --server",
-    "test:node": "ember build && mocha ./dist/test/browserify",
-    "prepublish": "ember build --environment production",
-    "lint": "jshint lib"
+    "test:node": "ember test --launch Mocha",
+    "test:browser": "ember test --launch PhantomJS",
+    "prepublishOnly": "ember build --environment production"
   },
   "repository": {
     "type": "git",
