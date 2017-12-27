@@ -36,7 +36,6 @@
     "broccoli-watchify": "1.0.1",
     "ember-cli": "2.16.2",
     "ember-cli-dependency-checker": "2.1.0",
-    "ember-publisher": "0.0.7",
     "git-repo-version": "1.0.0",
     "json3": "^3.3.2",
     "mocha": "4.0.1",
@@ -48,8 +47,7 @@
     "test": "ember test",
     "test:server": "ember test --server",
     "test:node": "ember test --launch Mocha",
-    "test:browser": "ember test --launch PhantomJS",
-    "prepublishOnly": "ember build --environment production"
+    "test:browser": "ember test --launch PhantomJS"
   },
   "repository": {
     "type": "git",
