@@ -9,7 +9,15 @@ It works in node and the browser (IE9+, all the popular evergreen ones).
 ## downloads
 
 - [rsvp-latest](https://cdn.jsdelivr.net/npm/rsvp/dist/rsvp.js)
+- [rsvp-4.x.y](https://cdn.jsdelivr.net/npm/rsvp@4/dist/rsvp.js)
 - [rsvp-latest (minified)](https://cdn.jsdelivr.net/npm/rsvp/dist/rsvp.min.js)
+- [rsvp-4.x.y (minified)](https://cdn.jsdelivr.net/npm/rsvp@4/dist/rsvp.min.js)
+
+## CDN
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/rsvp@4/dist/rsvp.min.js"></script>
+```
 
 ## Promises
 
