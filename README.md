@@ -8,10 +8,8 @@ It works in node and the browser (IE9+, all the popular evergreen ones).
 
 ## downloads
 
-- [rsvp-latest](https://cdn.jsdelivr.net/npm/rsvp/dist/rsvp.js)
-- [rsvp-4.x.y](https://cdn.jsdelivr.net/npm/rsvp@4/dist/rsvp.js)
-- [rsvp-latest (minified)](https://cdn.jsdelivr.net/npm/rsvp/dist/rsvp.min.js)
-- [rsvp-4.x.y (minified)](https://cdn.jsdelivr.net/npm/rsvp@4/dist/rsvp.min.js)
+- rsvp ([latest](https://cdn.jsdelivr.net/npm/rsvp/dist/rsvp.js) | [4.x](https://cdn.jsdelivr.net/npm/rsvp@4/dist/rsvp.js))
+- rsvp minified ([latest](https://cdn.jsdelivr.net/npm/rsvp/dist/rsvp.min.js) | [4.x](https://cdn.jsdelivr.net/npm/rsvp@4/dist/rsvp.min.js))
 
 ## CDN
 
