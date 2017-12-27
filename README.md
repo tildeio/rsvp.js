@@ -8,8 +8,8 @@ It works in node and the browser (IE9+, all the popular evergreen ones).
 
 ## downloads
 
-- [rsvp-latest](http://rsvpjs-builds.s3.amazonaws.com/rsvp-latest.js)
-- [rsvp-latest (minified)](http://rsvpjs-builds.s3.amazonaws.com/rsvp-latest.min.js)
+- [rsvp-latest](https://cdn.jsdelivr.net/npm/rsvp/dist/rsvp.js)
+- [rsvp-latest (minified)](https://cdn.jsdelivr.net/npm/rsvp/dist/rsvp.min.js)
 
 ## Promises
 
