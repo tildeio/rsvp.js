@@ -1,5 +1,4 @@
 'use strict';
-
 /* jshint node:true, undef:true, unused:true */
 const Rollup   = require('broccoli-rollup');
 const Babel    = require('broccoli-babel-transpiler');
@@ -8,13 +7,10 @@ const uglify   = require('broccoli-uglify-js');
 const version  = require('git-repo-version');
 const watchify = require('broccoli-watchify');
 const concat   = require('broccoli-concat');
-const fs       = require('fs');
-
 const stew   = require('broccoli-stew');
 
 const find   = stew.find;
 const mv     = stew.mv;
-const rename = stew.rename;
 const env    = stew.env;
 const map    = stew.map;
 
@@ -86,7 +82,10 @@ const testBundle = watchify(merge([
   browserify: { debug: true, entries: ['./test/index.js'] }
 });
 
-const header = stew.map(find('config/versionTemplate.txt'), content => content.replace(/VERSION_PLACEHOLDER_STRING/, version()));
+const header = map(
+  find('config/versionTemplate.txt'),
+  content => content.replace(/VERSION_PLACEHOLDER_STRING/, version())
+);
 
 function concatAs(tree, outputFile) {
   return concat(merge([tree, header]), {
