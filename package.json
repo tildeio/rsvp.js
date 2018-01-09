@@ -38,7 +38,6 @@
     "ember-cli": "2.18.0",
     "ember-cli-dependency-checker": "2.1.0",
     "git-repo-version": "1.0.1",
-    "json3": "^3.3.2",
     "mocha": "4.1.0",
     "promises-aplus-tests-phantom": "^2.1.0-revise"
   },
