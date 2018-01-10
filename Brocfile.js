@@ -15,23 +15,16 @@ const map = stew.map;
 
 const lib = funnel('lib', { destDir: 'lib' });
 
-// test stuff
 const testDir = funnel('test', { destDir: 'test' });
 const testFiles = funnel('test', {
   files: ['index.html','worker.js'],
   destDir: 'test'
 });
 
-const json3 = funnel('node_modules/json3/lib', {
-  files: ['json3.js'],
-  destDir: 'test'
-});
 const mocha = funnel('node_modules/mocha', {
   files: ['mocha.css','mocha.js'],
   destDir: 'test'
 });
-
-const testVendor = merge([ json3, mocha ]);
 
 const es5 = new Babel(lib, {
   plugins: [
@@ -97,7 +90,7 @@ const header = map(
 function concatAs(tree, outputFile) {
   return concat(merge([tree, header]), {
     headerFiles: ['config/versionTemplate.txt'],
-    inputFiles:  ['rsvp.js'],
+    inputFiles: ['rsvp.js'],
     outputFile: outputFile
   });
 }
@@ -126,17 +119,17 @@ module.exports = merge([
     development(rsvp, header),
     concat(merge([rsvp, header]), {
       headerFiles: ['config/versionTemplate.txt'],
-      inputFiles:  ['rsvp.es.js'],
+      inputFiles: ['rsvp.es.js'],
       outputFile: 'rsvp.es.js'
     }),
     concat(merge([rsvpES6, header]), {
       headerFiles: ['config/versionTemplate.txt'],
-      inputFiles:  ['es6/rsvp.es.js'],
+      inputFiles: ['es6/rsvp.es.js'],
       outputFile: 'es6/rsvp.es.js'
     })
   ].filter(Boolean)),
   // test stuff
   testFiles,
-  testVendor,
+  mocha,
   funnel(testBundle, { destDir: 'test' })
 ]);
