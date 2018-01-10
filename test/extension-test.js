@@ -751,21 +751,30 @@ describe("RSVP extensions", function() {
       RSVP.hash({}).then(function(results) {
         assert.deepEqual(results, {}, 'expected fulfillment');
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('works with null', function(done) {
       RSVP.hash({foo: null}).then(function(results) {
         assert.deepEqual(results.foo, null);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('works with a truthy value', function(done) {
       RSVP.hash({foo: 1}).then(function(results) {
         assert.deepEqual(results.foo, true);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('works with a mix of promises and thenables and non-promises', function(done) {
@@ -854,7 +863,10 @@ describe("RSVP extensions", function() {
         assert(values.first);
         assert(values.second);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('fulfills correctly when constituent promises reject', function(done) {
@@ -866,28 +878,40 @@ describe("RSVP extensions", function() {
         assert(results.rejectedPromise.state, 'rejected' );
         assert(results.rejectedPromise.reason.message, 'WHOOPS' );
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('resolves an empty hash passed to RSVP.hashSettled()', function(done) {
       RSVP.hashSettled({}).then(function(results) {
         assert.deepEqual(results, {}, 'expected fulfillment');
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('works with null', function(done) {
       RSVP.hashSettled({foo: null}).then(function(results) {
         assert.deepEqual(results.foo, {state: 'fulfilled', value: null} );
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('works with a truthy value', function(done) {
       RSVP.hashSettled({foo: 1}).then(function(results) {
         assert.deepEqual(results.foo, {state: 'fulfilled', value: true} );
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('works with promises, thenables, non-promises and rejected promises', function(done) {
@@ -915,7 +939,10 @@ describe("RSVP extensions", function() {
         assert(results.rejectedPromise.state, 'rejected' );
         assert(results.rejectedPromise.reason.message, 'WHOOPS' );
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
   });
 
@@ -959,7 +986,10 @@ describe("RSVP extensions", function() {
       ]).then(function(result) {
         assert.deepEqual(result, [{}]);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('fulfilled only after all of the other promises are fulfilled', function(done) {
@@ -991,7 +1021,10 @@ describe("RSVP extensions", function() {
         assert(firstResolved);
         assert(secondResolved);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('rejected as soon as a promise is rejected', function(done) {
@@ -1025,7 +1058,10 @@ describe("RSVP extensions", function() {
         assert(firstWasRejected);
         assert(!secondCompleted);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('passes the resolved values of each promise to the callback in the correct order', function(done) {
@@ -1060,14 +1096,20 @@ describe("RSVP extensions", function() {
       all([]).then(function(results) {
         assert(results.length === 0);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('works with null', function(done) {
       all([null]).then(function(results) {
         assert.equal(results[0], null);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it('works with a mix of promises and thenables and non-promises', function(done) {
@@ -1079,7 +1121,10 @@ describe("RSVP extensions", function() {
       all([promise, syncThenable, asyncThenable, nonPromise]).then(function(results) {
         assert.deepEqual(results, [1, 2, 3, 4]);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
   }
 
@@ -1133,7 +1178,10 @@ describe("RSVP extensions", function() {
           assert(results[4].state, "rejected");
           assert(results[4].reason.message, "WHOOPS");
           done();
-        }).catch(done);
+        })
+        .catch(function(e) {
+          done(e || 'promise rejected');
+        });
       }
     );
 
@@ -1166,7 +1214,10 @@ describe("RSVP extensions", function() {
         assert(firstResolved);
         assert(secondResolved);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
   });
@@ -1185,7 +1236,10 @@ describe("RSVP extensions", function() {
       }, function(actualReason){
         assert.equal(reason, actualReason);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
   });
 
@@ -1288,7 +1342,10 @@ describe("RSVP extensions", function() {
       promise.then(null, function(error) {
         assert.equal(error, thrownError, "The handler should handle the error");
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("finally should not 'handle' errors (1)", function(done) {
@@ -1741,7 +1798,10 @@ describe("RSVP extensions", function() {
         wrapped.then(function(value){
           assert(value === expectedValue);
           done();
-        }).catch(done);
+        })
+        .catch(function(e) {
+          done(e || 'promise rejected');
+        });
 
         setTimeout(function(){
           resolver(expectedValue);
@@ -1763,7 +1823,10 @@ describe("RSVP extensions", function() {
         wrapped.then(function(value){
           assert(value === expectedValue);
           done();
-        }).catch(done);
+        })
+        .catch(function(e) {
+          done(e || 'promise rejected');
+        });
       });
 
       it("1.3 If/when x is rejected, reject promise with the same reason.", function(done){
@@ -1781,7 +1844,10 @@ describe("RSVP extensions", function() {
         wrapped.then(null, function(error){
           assert(error === expectedError);
           done();
-        }).catch(done);
+        })
+        .catch(function(e) {
+          done(e || 'promise rejected');
+        });
       });
     });
 
@@ -1836,7 +1902,10 @@ describe("RSVP extensions", function() {
         wrapped.then(null, function(error){
           assert(error === expectedError, 'incorrect exception was thrown');
           done();
-        }).catch(done);
+        })
+        .catch(function(e) {
+          done(e || 'promise rejected');
+        });
       });
 
       describe('2.3. If then is a function, call it with x as this, first argument resolvePromise, and second argument rejectPromise, where', function(){
@@ -1858,7 +1927,10 @@ describe("RSVP extensions", function() {
             assert(calledThis === thenable, 'this must be the thenable');
             assert(success === expectedSuccess, 'rejected promise with x');
             done();
-          }).catch(done);
+          })
+          .catch(function(e) {
+            done(e || 'promise rejected');
+          });
 
           setTimeout(function() {
             resolver(expectedSuccess);
@@ -1883,7 +1955,10 @@ describe("RSVP extensions", function() {
           wrapped.then(null, function(error){
             assert(error === expectedError, 'rejected promise with x');
             done();
-          }).catch(done);
+          })
+          .catch(function(e) {
+            done(e || 'promise rejected');
+          });
 
           setTimeout(function() {
             rejector(expectedError);
@@ -1916,7 +1991,10 @@ describe("RSVP extensions", function() {
             assert(calledResolved === 0, 'never resolved');
             assert(calledRejected === 1, 'rejected only once');
             assert(error === expectedError, 'rejected promise with x');
-          }).catch(done);
+          })
+          .catch(function(e) {
+            done(e || 'promise rejected');
+          });
 
           setTimeout(function() {
             rejector(expectedError);
@@ -1954,7 +2032,10 @@ describe("RSVP extensions", function() {
             wrapped.then(function(success){
               assert(success === expectedSuccess, 'resolved not errored');
               done();
-            }).catch(done);
+            })
+            .catch(function(e) {
+              done(e || 'promise rejected');
+            });
           });
 
           it("2.3.4.2 Otherwise, reject promise with e as the reason.", function(done) {
@@ -1989,7 +2070,10 @@ describe("RSVP extensions", function() {
           callCount++;
           assert(thenable === success, 'fulfilled promise with x');
           done();
-        }).catch(done);
+        })
+        .catch(function(e) {
+          done(e || 'promise rejected');
+        });
 
         assert(callCount === 0, 'expected async, was sync');
       });
@@ -2009,7 +2093,10 @@ describe("RSVP extensions", function() {
           done();
         }, function(a){
           assert(false, 'should not also reject');
-        }).catch(done);
+        })
+        .catch(function(e) {
+          done(e || 'promise rejected');
+        });
 
         assert(callCount === 0, 'expected async, was sync');
       });
@@ -2318,7 +2405,10 @@ describe("RSVP extensions", function() {
           }).then(function(value) {
             assert.equal(fulfillmentValue, value);
             done();
-          }).catch(done);
+          })
+          .catch(function(e) {
+            done(e || 'promise rejected');
+          });
         });
 
         it("preserves the original rejection reason even if the finally callback returns a value", function(done) {
@@ -2330,7 +2420,10 @@ describe("RSVP extensions", function() {
           }).then(undefined, function(reason) {
             assert.equal(rejectionReason, reason);
             done();
-          }).catch(done);
+          })
+          .catch(function(e) {
+            done(e || 'promise rejected');
+          });
         });
       });
 
@@ -2345,7 +2438,10 @@ describe("RSVP extensions", function() {
             }).then(undefined, function(reason) {
               assert.deepEqual(expectedReason, reason);
               done();
-            }).catch(done);
+            })
+            .catch(function(e) {
+              done(e || 'promise rejected');
+            });
           });
 
           it("propagates changes via returned rejected promise", function(done){
@@ -2357,7 +2453,10 @@ describe("RSVP extensions", function() {
             }).then(undefined, function(reason) {
               assert.deepEqual(expectedReason, reason);
               done();
-            }).catch(done);
+            })
+            .catch(function(e) {
+              done(e || 'promise rejected');
+            });
           });
         });
 
@@ -2371,7 +2470,10 @@ describe("RSVP extensions", function() {
             }).then(undefined, function(reason) {
               assert.deepEqual(expectedReason, reason);
               done();
-            }).catch(done);
+            })
+            .catch(function(e) {
+              done(e || 'promise rejected');
+            });
           });
 
           it("propagates changes via returned rejected promise", function(done){
@@ -2383,7 +2485,10 @@ describe("RSVP extensions", function() {
             }).then(undefined, function(reason) {
               assert.deepEqual(expectedReason, reason);
               done();
-            }).catch(done);
+            })
+            .catch(function(e) {
+              done(e || 'promise rejected');
+            });
           });
         });
       });
@@ -2467,7 +2572,10 @@ describe("RSVP extensions", function() {
       RSVP.filter(promises, filterFn).then(function(results){
         assert.deepEqual([2, 3], results);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("filters falsy values correctly 1", function(done){
@@ -2482,7 +2590,10 @@ describe("RSVP extensions", function() {
       RSVP.filter(promises, function(){ return true; }).then(function(results){
         assert.deepEqual([false, undefined, null, 0, ''], results);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("filters falsy values correctly 2", function(done){
@@ -2497,7 +2608,10 @@ describe("RSVP extensions", function() {
       RSVP.filter(promises, function(val){ return val; }).then(function(results){
         assert.equal(results.length, 0);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("filters truthy values correctly", function(done){
@@ -2513,7 +2627,10 @@ describe("RSVP extensions", function() {
       RSVP.filter(promises, function(val){ return val; }).then(function(results){
         assert.deepEqual(results, [true, 1, -10, 'a', {}, []]);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("catches error thrown from filterFn", function(done){
@@ -2528,7 +2645,10 @@ describe("RSVP extensions", function() {
       }, function(e) {
         assert.equal(e.message, 'function error');
         done()
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("eager filter works", function(){
@@ -2580,7 +2700,10 @@ describe("RSVP extensions", function() {
       RSVP.filter(promises, filterFn).then(function(results){
         assert.deepEqual([2, 3], results);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("works with promise that returns an array", function(done){
@@ -2589,7 +2712,10 @@ describe("RSVP extensions", function() {
       RSVP.filter(promise, filterFn).then(function(results){
         assert.deepEqual([2, 3], results);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("works with promise that returns an array of promises", function(done){
@@ -2602,7 +2728,10 @@ describe("RSVP extensions", function() {
       RSVP.filter(promise, filterFn).then(function(results){
         assert.deepEqual([2, 3], results);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("waits if filterFn returns a promise", function(done){
@@ -2636,7 +2765,10 @@ describe("RSVP extensions", function() {
         assert.deepEqual(results1, [1, 2, 3]);
         assert.deepEqual(results2, [ 2, 3 ]);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
   });
 
@@ -2666,7 +2798,10 @@ describe("RSVP extensions", function() {
       RSVP.map(promises, mapFn).then(function(results){
         assert.deepEqual([2, 3, 4], results);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("catches error thrown from mapFn", function(done){
@@ -2681,7 +2816,10 @@ describe("RSVP extensions", function() {
       }, function(e) {
         assert.equal(e.message, 'function error');
         done()
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("works with non-promise values and promises", function(done){
@@ -2691,7 +2829,10 @@ describe("RSVP extensions", function() {
       RSVP.map(values, mapFn).then(function(results){
         assert.deepEqual([2, 3], results);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("becomes rejected with the first promise that becomes rejected", function(done){
@@ -2707,7 +2848,10 @@ describe("RSVP extensions", function() {
       }, function(reason){
         assert(reason.message === "prefix:1");
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("waits if a promise is returned from mapFn", function(done){
@@ -2719,7 +2863,10 @@ describe("RSVP extensions", function() {
       RSVP.map(values, mapFn).then(function(values){
         assert.deepEqual(values, [ 2, 3, 4 ]);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("eager map works", function(){
@@ -2759,7 +2906,10 @@ describe("RSVP extensions", function() {
       RSVP.map(promises, function(val){ return val; }).then(function(results){
         assert.deepEqual([false, undefined, null, 0, ''], results);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
 
     it("becomes rejected if a promise returned from mapFn becomes rejected", function(done){
@@ -2776,7 +2926,10 @@ describe("RSVP extensions", function() {
       }, function (reason) {
         assert(reason.message === expectedErrorMessage);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
   });
 
@@ -2846,7 +2999,10 @@ if (typeof module !== 'undefined' && module.exports) {
       result.then(function(value){
         assert.equal(value, (iters*(iters+1)/2));
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
     });
   });
 
@@ -2909,7 +3065,10 @@ describe("on node 0.10.x, using process.nextTick recursively shows deprecation w
         //console.log('nextTick: final');
         assert.strictEqual(resolved, total);
         done();
-      }).catch(done);
+      })
+      .catch(function(e) {
+        done(e || 'promise rejected');
+      });
   });
 
 });
