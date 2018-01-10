@@ -1,32 +1,35 @@
 'use strict';
-
 /* jshint node:true, undef:true, unused:true */
-const Rollup   = require('broccoli-rollup');
-const Babel    = require('broccoli-babel-transpiler');
-const merge    = require('broccoli-merge-trees');
-const uglify   = require('broccoli-uglify-js');
-const version  = require('git-repo-version');
+const Rollup = require('broccoli-rollup');
+const Babel = require('broccoli-babel-transpiler');
+const merge = require('broccoli-merge-trees');
+const funnel = require('broccoli-funnel');
+const uglify = require('broccoli-uglify-js');
+const version = require('git-repo-version');
 const watchify = require('broccoli-watchify');
-const concat   = require('broccoli-concat');
-const fs       = require('fs');
+const concat = require('broccoli-concat');
+const stew = require('broccoli-stew');
 
-const stew   = require('broccoli-stew');
+const env = stew.env;
+const map = stew.map;
 
-const find   = stew.find;
-const mv     = stew.mv;
-const rename = stew.rename;
-const env    = stew.env;
-const map    = stew.map;
-
-const lib       = find('lib');
+const lib = funnel('lib', { destDir: 'lib' });
 
 // test stuff
-const testDir   = find('test');
-const testFiles = find('test/{index.html,worker.js}');
+const testDir = funnel('test', { destDir: 'test' });
+const testFiles = funnel('test', {
+  files: ['index.html','worker.js'],
+  destDir: 'test'
+});
 
-const json3     = mv(find('node_modules/json3/lib/{json3.js}'), 'node_modules/json3/lib/', 'test/');
-// mocha doesn't browserify correctly
-const mocha     = mv(find('node_modules/mocha/mocha.{js,css}'), 'node_modules/mocha/',    'test/');
+const json3 = funnel('node_modules/json3/lib', {
+  files: ['json3.js'],
+  destDir: 'test'
+});
+const mocha = funnel('node_modules/mocha', {
+  files: ['mocha.css','mocha.js'],
+  destDir: 'test'
+});
 
 const testVendor = merge([ json3, mocha ]);
 
@@ -80,13 +83,16 @@ const rsvpES6 = new Rollup(lib, {
 });
 
 const testBundle = watchify(merge([
-  mv(rsvp, 'test'),
+  funnel(rsvp, { destDir: 'test' }),
   testDir
 ]), {
   browserify: { debug: true, entries: ['./test/index.js'] }
 });
 
-const header = stew.map(find('config/versionTemplate.txt'), content => content.replace(/VERSION_PLACEHOLDER_STRING/, version()));
+const header = map(
+  funnel('config', { files: ['versionTemplate.txt'], destDir: 'config' }),
+  content => content.replace(/VERSION_PLACEHOLDER_STRING/, version())
+);
 
 function concatAs(tree, outputFile) {
   return concat(merge([tree, header]), {
@@ -132,5 +138,5 @@ module.exports = merge([
   // test stuff
   testFiles,
   testVendor,
-  mv(testBundle, 'test')
+  funnel(testBundle, { destDir: 'test' })
 ]);

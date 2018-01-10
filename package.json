@@ -29,6 +29,7 @@
     "babel6-plugin-strip-class-callcheck": "^6.0.0",
     "broccoli-babel-transpiler": "^6.0.0",
     "broccoli-concat": "^3.2.2",
+    "broccoli-funnel": "2.0.1",
     "broccoli-merge-trees": "^2.0.0",
     "broccoli-rollup": "2.0.0",
     "broccoli-stew": "^1.5.0",
