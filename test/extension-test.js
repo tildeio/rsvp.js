@@ -2569,13 +2569,14 @@ describe("RSVP extensions", function() {
         RSVP.resolve(3)
       ];
 
-      RSVP.filter(promises, filterFn).then(function(results){
-        assert.deepEqual([2, 3], results);
-        done();
-      })
-      .catch(function(e) {
-        done(e || 'promise rejected');
-      });
+      RSVP.filter(promises, filterFn)
+        .then(function(results){
+          assert.deepEqual([2, 3], results);
+          done();
+        })
+        .catch(function(e) {
+          done(e || 'promise rejected');
+        });
     });
 
     it("filters falsy values correctly 1", function(done){
