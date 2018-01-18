@@ -1,5 +1,10 @@
 # Master
 
+* reject promise when non-array promise is passed to RSVP.filter 
+* fix issue with registering event callbacks
+* remove publishing to S3 and rely on `npm` and `jsdelivr.com` instead 
+* general cleanup
+
 # 4.7.0
 
 * Release the same code as 4.0.2 but as 4.7.0 (fixes issues with `npm outdated`, `yarn update-interactive`, etc caused by accidental publishing of 4.6.1).
