@@ -6,7 +6,6 @@
 </head>
 <body>
   <div id="mocha"></div>
-  <script src="json3.js"></script>
   <script src="mocha.js"></script>
   <script src="/testem.js"></script>
   <script>
@@ -18,8 +17,7 @@
   </script>
   <script src="browserify.js"></script>
   <script>
-    if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
-    else { mocha.run(); }
+    mocha.run();
   </script>
 </body>
 </html>

@@ -1,34 +1,30 @@
 'use strict';
-
 /* jshint node:true, undef:true, unused:true */
-const Rollup   = require('broccoli-rollup');
-const Babel    = require('broccoli-babel-transpiler');
-const merge    = require('broccoli-merge-trees');
-const uglify   = require('broccoli-uglify-js');
-const version  = require('git-repo-version');
+const Rollup = require('broccoli-rollup');
+const Babel = require('broccoli-babel-transpiler');
+const merge = require('broccoli-merge-trees');
+const funnel = require('broccoli-funnel');
+const uglify = require('broccoli-uglify-js');
+const version = require('git-repo-version');
 const watchify = require('broccoli-watchify');
-const concat   = require('broccoli-concat');
-const fs       = require('fs');
+const concat = require('broccoli-concat');
+const stew = require('broccoli-stew');
 
-const stew   = require('broccoli-stew');
+const env = stew.env;
+const map = stew.map;
 
-const find   = stew.find;
-const mv     = stew.mv;
-const rename = stew.rename;
-const env    = stew.env;
-const map    = stew.map;
+const lib = funnel('lib', { destDir: 'lib' });
 
-const lib       = find('lib');
+const testDir = funnel('test', { destDir: 'test' });
+const testFiles = funnel('test', {
+  files: ['index.html','worker.js'],
+  destDir: 'test'
+});
 
-// test stuff
-const testDir   = find('test');
-const testFiles = find('test/{index.html,worker.js}');
-
-const json3     = mv(find('node_modules/json3/lib/{json3.js}'), 'node_modules/json3/lib/', 'test/');
-// mocha doesn't browserify correctly
-const mocha     = mv(find('node_modules/mocha/mocha.{js,css}'), 'node_modules/mocha/',    'test/');
-
-const testVendor = merge([ json3, mocha ]);
+const mocha = funnel('node_modules/mocha', {
+  files: ['mocha.css','mocha.js'],
+  destDir: 'test'
+});
 
 const es5 = new Babel(lib, {
   plugins: [
@@ -49,18 +45,18 @@ const es5 = new Babel(lib, {
 // build RSVP itself
 const rsvp = new Rollup(es5, {
   rollup: {
-    entry: 'lib/rsvp.js',
-    targets: [
+    input: 'lib/rsvp.js',
+    output: [
       {
         format: 'umd',
-        moduleName: 'RSVP',
-        dest: 'rsvp.js',
-        sourceMap: 'inline'
+        name: 'RSVP',
+        file: 'rsvp.js',
+        sourcemap: 'inline'
       },
       {
         format: 'es',
-        dest: 'rsvp.es.js',
-        sourceMap: 'inline'
+        file: 'rsvp.es.js',
+        sourcemap: 'inline'
       }
     ]
   }
@@ -68,30 +64,33 @@ const rsvp = new Rollup(es5, {
 
 const rsvpES6 = new Rollup(lib, {
   rollup: {
-    entry: 'lib/rsvp.js',
-    targets: [
+    input: 'lib/rsvp.js',
+    output: [
       {
         format: 'es',
-        dest: 'es6/rsvp.es.js',
-        sourceMap: 'inline'
+        file: 'es6/rsvp.es.js',
+        sourcemap: 'inline'
       }
     ]
   }
 });
 
 const testBundle = watchify(merge([
-  mv(rsvp, 'test'),
+  funnel(rsvp, { destDir: 'test' }),
   testDir
 ]), {
   browserify: { debug: true, entries: ['./test/index.js'] }
 });
 
-const header = stew.map(find('config/versionTemplate.txt'), content => content.replace(/VERSION_PLACEHOLDER_STRING/, version()));
+const header = map(
+  funnel('config', { files: ['versionTemplate.txt'], destDir: 'config' }),
+  content => content.replace(/VERSION_PLACEHOLDER_STRING/, version())
+);
 
 function concatAs(tree, outputFile) {
   return concat(merge([tree, header]), {
     headerFiles: ['config/versionTemplate.txt'],
-    inputFiles:  ['rsvp.js'],
+    inputFiles: ['rsvp.js'],
     outputFile: outputFile
   });
 }
@@ -120,17 +119,17 @@ module.exports = merge([
     development(rsvp, header),
     concat(merge([rsvp, header]), {
       headerFiles: ['config/versionTemplate.txt'],
-      inputFiles:  ['rsvp.es.js'],
+      inputFiles: ['rsvp.es.js'],
       outputFile: 'rsvp.es.js'
     }),
     concat(merge([rsvpES6, header]), {
       headerFiles: ['config/versionTemplate.txt'],
-      inputFiles:  ['es6/rsvp.es.js'],
+      inputFiles: ['es6/rsvp.es.js'],
       outputFile: 'es6/rsvp.es.js'
     })
   ].filter(Boolean)),
   // test stuff
   testFiles,
-  testVendor,
-  mv(testBundle, 'test')
+  mocha,
+  funnel(testBundle, { destDir: 'test' })
 ]);
