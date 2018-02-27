@@ -1,14 +1,18 @@
 # Master
 
+# 4.8.2
+
+* restore cast for 4.x
+
 # 4.8.1
 
 * Confuse Webpack (make is easier to pack this module)
 
 # 4.8.0
 
-* reject promise when non-array promise is passed to RSVP.filter 
+* reject promise when non-array promise is passed to RSVP.filter
 * fix issue with registering event callbacks
-* remove publishing to S3 and rely on `npm` and `jsdelivr.com` instead 
+* remove publishing to S3 and rely on `npm` and `jsdelivr.com` instead
 * general cleanup
 
 # 4.7.0
