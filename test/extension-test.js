@@ -2544,21 +2544,21 @@ describe("RSVP extensions", function() {
     it("throws an error if an array is not passed", function(){
       return assertRejection(
         RSVP.filter(),
-        'RSVP.filter expects function as a second argument'
+        'filter expects function as a second argument'
       );
     });
 
     it("throws an error if is non array promise passed", function(){
       return assertRejection(
         RSVP.filter(Promise.resolve({}), function(){}),
-        'RSVP.filter must be called with an array'
+        'filter must be called with an array'
       );
     });
 
     it("throws an error if a filterFn is not passed", function(){
       return assertRejection(
         RSVP.filter([]),
-        'RSVP.filter expects function as a second argument'
+        'filter expects function as a second argument'
       );
     });
 
