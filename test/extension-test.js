@@ -2508,6 +2508,23 @@ describe("RSVP extensions", function() {
           });
         });
       });
+
+      it("preserves the original fulfillment value even if a non-callable callback is given", function(done) {
+        var fulfillmentValue = 1;
+        var promise = Promise.resolve(fulfillmentValue);
+         promise['finally']().then(function(value) {
+          assert.equal(fulfillmentValue, value);
+          done();
+        });
+      });
+       it("preserves the original rejection reason even if a non-callable callback is given", function(done) {
+        var rejectionReason = new Error();
+        var promise = Promise.reject(rejectionReason);
+         promise['finally']().then(undefined, function(reason) {
+          assert.equal(rejectionReason, reason);
+          done();
+        });
+      });
     });
 
     describe("inheritance", function() {
