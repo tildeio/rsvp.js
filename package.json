@@ -28,26 +28,25 @@
     "babel-preset-env": "1.7.0",
     "babel6-plugin-strip-class-callcheck": "^6.0.0",
     "broccoli-babel-transpiler": "6.4.3",
-    "broccoli-concat": "^3.2.2",
+    "broccoli-concat": "^3.7.1",
     "broccoli-funnel": "2.0.1",
-    "broccoli-merge-trees": "^3.0.0",
+    "broccoli-merge-trees": "^3.0.1",
     "broccoli-rollup": "2.1.1",
-    "broccoli-stew": "^1.5.0",
+    "broccoli-stew": "^2.0.0",
     "broccoli-uglify-js": "^0.2.0",
     "broccoli-watchify": "1.0.1",
-    "ember-cli": "3.2.0",
-    "ember-cli-dependency-checker": "2.1.1",
+    "ember-cli": "3.4.2",
+    "ember-cli-dependency-checker": "3.0.0",
     "git-repo-version": "1.0.2",
     "mocha": "5.2.0",
-    "promises-aplus-tests-phantom": "^2.1.0-revise"
+    "promises-aplus-tests": "2.1.2"
   },
   "scripts": {
     "build": "ember build --environment production",
     "start": "ember s",
     "test": "ember test",
     "test:server": "ember test --server",
-    "test:node": "ember test --launch Mocha",
-    "test:browser": "ember test --launch PhantomJS"
+    "test:node": "ember test --launch Mocha"
   },
   "repository": {
     "type": "git",
@@ -67,6 +66,6 @@
   "author": "Tilde, Inc. & Stefan Penner",
   "license": "MIT",
   "engines": {
-    "node": "0.12.* || 4.* || 6.* || >= 7.*"
+    "node": "6.* || >= 7.*"
   }
 }
