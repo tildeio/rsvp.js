@@ -2976,14 +2976,17 @@ describe("RSVP extensions", function() {
     });
   });
 
-  if (typeof Worker !== 'undefined' && navigator.userAgent.indexOf('PhantomJS') < 1) {
+  if (typeof Worker !== 'undefined') {
     describe('web worker', function () {
       it('should work', function (done) {
         var worker = new Worker('./worker.js');
+
         worker.addEventListener('error', function(reason) {
+          worker.terminate();
           console.error(reason);
           done(new Error("Test failed:" + reason));
         });
+
         worker.addEventListener('message', function (e) {
           worker.terminate();
           assert.equal(e.data, 'pong');
@@ -3054,64 +3057,26 @@ if (typeof module !== 'undefined' && module.exports) {
 var Promise = RSVP.Promise;
 // Kudos to @Octane at https://github.com/getify/native-promise-only/issues/5 for this, and @getify for pinging me.
 describe("Thenables should not be able to run code during assimilation", function () {
-    it("resolving to a thenable", function () {
-        var thenCalled = false;
-        var thenable = {
-            then: function () {
-                thenCalled = true;
-            }
-        };
+  it("resolving to a thenable", function () {
+      var thenCalled = false;
+      var thenable = {
+          then: function () {
+              thenCalled = true;
+          }
+      };
 
-        Promise.resolve(thenable);
-        assert.strictEqual(thenCalled, false);
-    });
-
-    it("resolving to an evil promise", function () {
-        var thenCalled = false;
-        var evilPromise = Promise.resolve();
-        evilPromise.then = function () {
-            thenCalled = true;
-        };
-
-        Promise.resolve(evilPromise);
-        assert.strictEqual(thenCalled, false);
-    });
-});
-
-describe("on node 0.10.x, using process.nextTick recursively shows deprecation warning. setImmediate should be used instead.", function() {
-  // (node) warning: Recursive process.nextTick detected. This will break in the next version of node. Please use setImmediate for recursive deferral.
-
-  it("should not cause 'RangeError: Maximum call stack size exceeded'", function (done) {
-    var total = 1000;
-
-    this.timeout(10000);
-    var resolved = 0;
-    var nextTick = function(depth) {
-      if (depth >= total) {
-        return RSVP.resolve();
-      }
-      var d = depth + 1;
-      //console.log('entered:', d);
-      return new RSVP.Promise(function(resolve){
-        process.nextTick(function(){
-          nextTick(d).then(function(){
-            resolved++;
-            //console.log('resolving:', d);
-            resolve();
-          });
-        });
-      });
-    };
-
-    nextTick(0)
-      .then(function(){
-        //console.log('nextTick: final');
-        assert.strictEqual(resolved, total);
-        done();
-      })
-      .catch(function(e) {
-        done(e || 'promise rejected');
-      });
+      Promise.resolve(thenable);
+      assert.strictEqual(thenCalled, false);
   });
 
+  it("resolving to an evil promise", function () {
+      var thenCalled = false;
+      var evilPromise = Promise.resolve();
+      evilPromise.then = function () {
+          thenCalled = true;
+      };
+
+      Promise.resolve(evilPromise);
+      assert.strictEqual(thenCalled, false);
+  });
 });

@@ -1,8 +1,6 @@
 'use strict';
-
 module.exports = {
-  test_page: "test/index.html",
-  parallel: 5,
+  test_page: 'test/index.html',
   frameworks: "mocha",
   launchers: {
     Mocha: {
@@ -11,11 +9,25 @@ module.exports = {
     }
   },
   launch_in_ci:  [
-    "Phantomjs",
+    "Chrome",
     "Mocha"
   ],
   launch_in_dev: [
-    "Phantomjs",
+    "Chrome",
     "Mocha"
   ],
+  browser_args: {
+    Chrome: {
+      mode: 'ci',
+      args: [
+        // --no-sandbox is needed when running Chrome inside a container
+        process.env.TRAVIS ? '--no-sandbox' : null,
+        '--touch-events',
+        '--disable-gpu',
+        '--headless',
+        '--remote-debugging-port=0',
+        '--window-size=1440,900'
+      ].filter(Boolean)
+    }
+  }
 };
