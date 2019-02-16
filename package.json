@@ -1,18 +1,13 @@
 {
   "name": "rsvp",
-  "namespace": "RSVP",
-  "version": "4.8.4",
   "description": "A lightweight library that provides tools for organizing asynchronous code",
-  "main": "dist/rsvp.js",
-  "module": "dist/rsvp.es.js",
-  "jsnext:main": "dist/rsvp.es.js",
-  "files": [
-    "dist",
-    "lib",
-    "!dist/test"
-  ],
-  "directories": {
-    "lib": "lib"
+  "version": "4.8.4",
+  "author": "Tilde, Inc. & Stefan Penner",
+  "browser": {
+    "vertx": false
+  },
+  "bugs": {
+    "url": "https://github.com/tildeio/rsvp.js/issues"
   },
   "devDependencies": {
     "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
@@ -41,31 +36,37 @@
     "mocha": "5.2.0",
     "promises-aplus-tests": "2.1.2"
   },
-  "scripts": {
-    "build": "ember build --environment production",
-    "start": "ember s",
-    "test": "ember test",
-    "test:server": "ember test --server",
-    "test:node": "ember test --launch Mocha"
+  "directories": {
+    "lib": "lib"
   },
+  "engines": {
+    "node": "6.* || >= 7.*"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "!dist/test"
+  ],
+  "homepage": "https://github.com/tildeio/rsvp.js",
+  "jsnext:main": "dist/rsvp.es.js",
+  "keywords": [
+    "futures",
+    "promises"
+  ],
+  "license": "MIT",
+  "main": "dist/rsvp.js",
+  "module": "dist/rsvp.es.js",
+  "namespace": "RSVP",
   "repository": {
     "type": "git",
     "url": "https://github.com/tildeio/rsvp.js.git",
     "dist": "git@github.com:components/rsvp.js.git"
   },
-  "bugs": {
-    "url": "https://github.com/tildeio/rsvp.js/issues"
-  },
-  "browser": {
-    "vertx": false
-  },
-  "keywords": [
-    "promises",
-    "futures"
-  ],
-  "author": "Tilde, Inc. & Stefan Penner",
-  "license": "MIT",
-  "engines": {
-    "node": "6.* || >= 7.*"
+  "scripts": {
+    "build": "ember build --environment production",
+    "start": "ember s",
+    "test": "ember test",
+    "test:node": "ember test --launch Mocha",
+    "test:server": "ember test --server"
   }
 }
