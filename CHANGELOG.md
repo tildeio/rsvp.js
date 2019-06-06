@@ -1,5 +1,10 @@
 # Master
 
+# 4.8.3
+
+* remove try/catch performance hacks, modern runtimes no longer require these tricks
+* internal tooling improvements
+
 # 4.8.2
 
 * restore cast for 4.x
