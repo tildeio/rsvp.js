@@ -1,7 +1,7 @@
 {
   "name": "rsvp",
   "description": "A lightweight library that provides tools for organizing asynchronous code",
-  "version": "4.8.3",
+  "version": "4.8.4",
   "author": "Tilde, Inc. & Stefan Penner",
   "browser": {
     "vertx": false
