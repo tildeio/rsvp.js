@@ -57,7 +57,7 @@
   ],
   "license": "MIT",
   "main": "dist/rsvp.js",
-  "module": "dist/rsvp.es.js",
+  "module": "lib/rsvp.js",
   "namespace": "RSVP",
   "repository": {
     "type": "git",
